@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { waitForAsync } from '@angular/core/testing';
+import { BackendService } from 'src/app/services/backend.service';
 
 @Component({
   selector: 'app-inicio',
@@ -11,7 +12,11 @@ export class InicioComponent implements OnInit {
   static contenido2: string = "";
   contenido: string = "";
 
-  constructor() { }
+  cuerpo:any={
+    consola:''
+  }
+
+  constructor(private servidor:BackendService) { }
 
   ngOnInit(): void {
   }
@@ -55,6 +60,20 @@ const ver2=document.getElementById("consolaa")
       ver2.setAttribute("readOnly","");
     }
   }
+
+  Escaneando(){
+    this.cuerpo.consola=this.contenido;
+    this.servidor.Escaneo(this.cuerpo).subscribe(
+      res=>{
+        alert('Escaneo Finalizado')
+      },
+      err=>{
+        alert('OCURRIO UN ERROR')
+      }
+    )
+
+  }
+
 /*
   GuardarArchivo(){
     

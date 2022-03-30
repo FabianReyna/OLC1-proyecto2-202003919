@@ -1,5 +1,6 @@
 %{
 //CODIGO JS
+const ListaErrores = require("./errores").ListaErrores
 %}
 
 %lex
@@ -42,6 +43,20 @@
 "+"                 return 'MAS';
 "-"                 return 'MENOS';
 "*"                 return 'MULT';
+
+//cometarios
+(\/\/.*[^\n])     {}
+(\/\*([^*/]|[^*]\/|\*[^/])*\*\/)    {}
+
+
+"=="                return 'EQUALS';
+"!="                return 'NOTEQUAL';
+"<="                return 'MENOREQ';
+">="                return 'MAYOREQ';
+"||"                return 'OR';
+"&&"                return 'AND';
+"++"                return 'INCREMENT';
+"--"                return 'DECREMENT';
 "/"                 return 'DIV';
 "^"                 return 'POW'
 "%"                 return 'MOD';
@@ -59,34 +74,28 @@
 ":"                 return 'DOSPUNTOS';
 ";"                 return 'PUNTOCOMA';
 ","                 return 'COMA';
-"=="                return 'EQUALS';
-"!="                return 'NOTEQUAL';
-"<="                return 'MENOREQ';
-">="                return 'MAYOREQ';
-"||"                return 'OR';
-"&&"                return 'AND';
-"++"                return 'INCREMENT';
-"--"                return 'DECREMENT';
+
 
 //adicionales
 [a-z][a-z0-1_]*     return 'ID';
-[0-9]+              return 'ENTERO';
 [0-9]+"."[0-9]+     return 'DECIMAL';
+[0-9]+              return 'ENTERO';
 [\']([^\t\'\"\n]|(\\\")|(\\n)|(\\\')|(\\t)|(\\\\))?[\']         return 'CARACTER';
 [\"]((\\\")|[^\"\n])*[\"]       return 'CADENA';
 
 
-//cometarios
-(\/\/.*[^\n])       {}
-\/\*\/*([^*/]|[^*]\/|\*[^/])*\**\*\/    {}
+
 
 //espacios en blanco
 [\ \r\t\f\t]        {}
 [\ \n]              {}
 
 <<EOF>>             return 'EOF';
-.                   return 'INVALID';
+.                   {ListaErrores.agregarError("Lexico","El caracter "+ yytext+" no pertenece al lenguaje",yylloc.first_line,yylloc.first_column)}
 
+%{
+
+%}
 /lex
 //Precedencia
 %left 'OR'
@@ -107,6 +116,7 @@ INICIO : INSTRUCCIONES EOF
 
 INSTRUCCIONES : INSTRUCCIONES INSTRUCCION
                 | INSTRUCCION
+                | error PUNTOCOMA {ListaErrores.agregarError("Sintactico",yytext,@1.first_line,@1.first_column)}
 ;
 
 INSTRUCCION : DECLARACION
@@ -125,8 +135,7 @@ INSTRUCCION : DECLARACION
             | METODS
             | LLAMADA
             | PRINTT
-            | PRINTLNN
-            | INVALID
+            | PRINTLNN            
 ;
 
 //Expresiones
