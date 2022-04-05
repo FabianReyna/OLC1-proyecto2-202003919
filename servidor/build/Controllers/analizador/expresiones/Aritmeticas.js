@@ -73,7 +73,7 @@ class Aritmeticas extends Instruccion_1.Instruccion {
             case Operadores.NEG:
                 return this.neg(Unico);
             default:
-                return new Errores_1.default('Semantico', 'Operador Invalido', this.linea, this.col);
+                return new Errores_1.default('Semantico', 'Operador Aritmetico Invalido', this.linea, this.col);
         }
     }
     suma(op1, op2) {

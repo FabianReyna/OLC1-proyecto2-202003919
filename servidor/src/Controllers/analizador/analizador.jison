@@ -3,8 +3,12 @@
 const ListaErrores= require('../indexController').listaErrores;
 const errores= require('./Excepciones/Errores');
 const Tipo=require('./simbolo/Tipo')
+//expresiones
 const Nativo=require('./expresiones/Nativo')
 const Aritmeticas=require('./expresiones/Aritmeticas')
+const Relacionales=require('./expresiones/Relacionales')
+const Logicas=require('./expresiones/Logicas')
+//instrucciones
 const Print=require('./instrucciones/Print')
 const PrintLn=require('./instrucciones/Println')
 %}
@@ -153,16 +157,16 @@ EXP : EXP MAS EXP                           {$$=new Aritmeticas.default(Aritmeti
     | EXP POW EXP                           {$$=new Aritmeticas.default(Aritmeticas.Operadores.POW,@1.first_line,@1.first_column,$1,$3);}
     | EXP MOD EXP                           {$$=new Aritmeticas.default(Aritmeticas.Operadores.MOD,@1.first_line,@1.first_column,$1,$3);}
     | MENOS EXP %prec UMENOS                {$$=new Aritmeticas.default(Aritmeticas.Operadores.NEG,@1.first_line,@1.first_column,$2);}
-    | EXP EQUALS EXP
-    | EXP NOTEQUAL EXP
-    | EXP MENOR EXP
-    | EXP MENOREQ EXP
-    | EXP MAYOR EXP
-    | EXP MAYOREQ EXP
-    | EXP OR EXP
-    | EXP AND EXP
-    | NOT EXP
-    | PAR1 EXP PAR2
+    | EXP EQUALS EXP                        {$$=new Relacionales.default(Relacionales.Relacional.EQUALS,@1.first_line,@1.first_column,$1,$3);}
+    | EXP NOTEQUAL EXP                      {$$=new Relacionales.default(Relacionales.Relacional.NOTEQUAL,@1.first_line,@1.first_column,$1,$3);}
+    | EXP MENOR EXP                         {$$=new Relacionales.default(Relacionales.Relacional.MENOR,@1.first_line,@1.first_column,$1,$3);}
+    | EXP MENOREQ EXP                       {$$=new Relacionales.default(Relacionales.Relacional.MENOREQ,@1.first_line,@1.first_column,$1,$3);}
+    | EXP MAYOR EXP                         {$$=new Relacionales.default(Relacionales.Relacional.MAYOR,@1.first_line,@1.first_column,$1,$3);}
+    | EXP MAYOREQ EXP                       {$$=new Relacionales.default(Relacionales.Relacional.MAYOREQ,@1.first_line,@1.first_column,$1,$3);}
+    | EXP OR EXP                            {$$=new Logicas.default(Logicas.Logica.OR,@1.first_line,@1.first_column,$1,$3);}
+    | EXP AND EXP                           {$$=new Logicas.default(Logicas.Logica.AND,@1.first_line,@1.first_column,$1,$3);}
+    | NOT EXP                               {$$=new Logicas.default(Logicas.Logica.NOT,@1.first_line,@1.first_column,$2);}
+    | PAR1 EXP PAR2                         {$$=$2;}
     | EXP INCREMENT
     | EXP DECREMENT
     | ID COR1 EXP COR2 

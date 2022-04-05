@@ -48,7 +48,7 @@ export default class Aritmeticas extends Instruccion {
             case Operadores.NEG:
                 return this.neg(Unico);
             default:
-                return new Errores('Semantico', 'Operador Invalido', this.linea, this.col);
+                return new Errores('Semantico', 'Operador Aritmetico Invalido', this.linea, this.col);
         }
     }
 
