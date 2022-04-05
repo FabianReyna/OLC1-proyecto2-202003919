@@ -1,6 +1,12 @@
 %{
 //CODIGO JS
-const ListaErrores = require("./errores").ListaErrores
+const ListaErrores= require('../indexController').listaErrores;
+const errores= require('./Excepciones/Errores');
+const Tipo=require('./simbolo/Tipo')
+const Nativo=require('./expresiones/Nativo')
+const Aritmeticas=require('./expresiones/Aritmeticas')
+const Print=require('./instrucciones/Print')
+const PrintLn=require('./instrucciones/Println')
 %}
 
 %lex
@@ -39,10 +45,6 @@ const ListaErrores = require("./errores").ListaErrores
 "false"             return 'FALSE';
 "void"              return 'VOID';
 
-//simbolos
-"+"                 return 'MAS';
-"-"                 return 'MENOS';
-"*"                 return 'MULT';
 
 //cometarios
 (\/\/.*[^\n])     {}
@@ -74,24 +76,28 @@ const ListaErrores = require("./errores").ListaErrores
 ":"                 return 'DOSPUNTOS';
 ";"                 return 'PUNTOCOMA';
 ","                 return 'COMA';
+//simbolos
+"+"                 return 'MAS';
+"-"                 return 'MENOS';
+"*"                 return 'MULT';
 
 
 //adicionales
-[a-z][a-z0-1_]*     return 'ID';
+[a-z][a-z0-9_]*     return 'ID';
 [0-9]+"."[0-9]+     return 'DECIMAL';
 [0-9]+              return 'ENTERO';
-[\']([^\t\'\"\n]|(\\\")|(\\n)|(\\\')|(\\t)|(\\\\))?[\']         return 'CARACTER';
-[\"]((\\\")|[^\"\n])*[\"]       return 'CADENA';
+[\']([^\t\'\"\n]|(\\\")|(\\n)|(\\\')|(\\t)|(\\\\))?[\']         {yytext=yytext.substr(1,yyleng-2); return 'CARACTER';}
+[\"]((\\\")|[^\"\n])*[\"]       {yytext=yytext.substr(1,yyleng-2); return 'CADENA';}
 
 
 
 
 //espacios en blanco
-[\ \r\t\f\t]        {}
-[\ \n]              {}
+[\ \r\t\f\t]        {};
+[\ \n]              {};
 
 <<EOF>>             return 'EOF';
-.                   {ListaErrores.agregarError("Lexico","El caracter "+ yytext+" no pertenece al lenguaje",yylloc.first_line,yylloc.first_column)}
+.                   {ListaErrores.push(new errores.default("Lexico","El caracter "+ yytext+" no pertenece al lenguaje",this._$.first_line,this._$.first_column));}
 
 %{
 
@@ -105,18 +111,18 @@ const ListaErrores = require("./errores").ListaErrores
 %left 'MAS' 'MENOS'
 %left 'MULT' 'DIV'
 %nonassoc 'POW'
-%right 'MENOS'
+%right 'UMENOS'
 
 //Simbolo Inicial
 %start INICIO
 %%
 
-INICIO : INSTRUCCIONES EOF
+INICIO : INSTRUCCIONES EOF      {return $1;}
 ;
 
-INSTRUCCIONES : INSTRUCCIONES INSTRUCCION
-                | INSTRUCCION
-                | error PUNTOCOMA {ListaErrores.agregarError("Sintactico",yytext,@1.first_line,@1.first_column)}
+INSTRUCCIONES : INSTRUCCIONES INSTRUCCION {$1.push($2);$$=$1;}
+                | INSTRUCCION {$$=[$1];}
+                | error PUNTOCOMA {ListaErrores.push(new errores.default("Sintactico",yytext,@1.first_line,@1.first_column));}
 ;
 
 INSTRUCCION : DECLARACION
@@ -134,18 +140,19 @@ INSTRUCCION : DECLARACION
             | FUNCS
             | METODS
             | LLAMADA
-            | PRINTT
-            | PRINTLNN            
+            | PRINTT        {$$=$1;}
+            | PRINTLNN      {$$=$1;}
+            | RUNN            
 ;
 
 //Expresiones
-EXP : EXP MAS EXP
-    | EXP MENOS EXP
-    | EXP MULT EXP
-    | EXP DIV EXP
-    | EXP POW EXP
-    | EXP MOD EXP
-    | MENOS EXP
+EXP : EXP MAS EXP                           {$$=new Aritmeticas.default(Aritmeticas.Operadores.SUMA,@1.first_line,@1.first_column,$1,$3);}   
+    | EXP MENOS EXP                         {$$=new Aritmeticas.default(Aritmeticas.Operadores.RESTA,@1.first_line,@1.first_column,$1,$3);}   
+    | EXP MULT EXP                          {$$=new Aritmeticas.default(Aritmeticas.Operadores.MULT,@1.first_line,@1.first_column,$1,$3);}
+    | EXP DIV EXP                           {$$=new Aritmeticas.default(Aritmeticas.Operadores.DIV,@1.first_line,@1.first_column,$1,$3);}
+    | EXP POW EXP                           {$$=new Aritmeticas.default(Aritmeticas.Operadores.POW,@1.first_line,@1.first_column,$1,$3);}
+    | EXP MOD EXP                           {$$=new Aritmeticas.default(Aritmeticas.Operadores.MOD,@1.first_line,@1.first_column,$1,$3);}
+    | MENOS EXP %prec UMENOS                {$$=new Aritmeticas.default(Aritmeticas.Operadores.NEG,@1.first_line,@1.first_column,$2);}
     | EXP EQUALS EXP
     | EXP NOTEQUAL EXP
     | EXP MENOR EXP
@@ -158,7 +165,6 @@ EXP : EXP MAS EXP
     | PAR1 EXP PAR2
     | EXP INCREMENT
     | EXP DECREMENT
-    | ID
     | ID COR1 EXP COR2 
     | ID COR1 EXP COR2 COR1 EXP COR2
     | LLAMADA
@@ -168,13 +174,13 @@ EXP : EXP MAS EXP
     | LENGTHH
     | TYPEOFF
     | TOSTRINGG
-    | TOCHARARRAYY
-    | ENTERO
-    | DECIMAL
-    | TRUE
-    | FALSE
-    | CARACTER
-    | CADENA
+    | ENTERO                                {$$=new Nativo.default(new Tipo.default(Tipo.tipoDato.ENTERO),$1,@1.first_line,@1.first_column);}
+    | DECIMAL                               {$$=new Nativo.default(new Tipo.default(Tipo.tipoDato.DECIMAL),$1,@1.first_line,@1.first_column);}
+    | TRUE                                  {$$=new Nativo.default(new Tipo.default(Tipo.tipoDato.BOOL),$1,@1.first_line,@1.first_column);}
+    | FALSE                                 {$$=new Nativo.default(new Tipo.default(Tipo.tipoDato.BOOL),$1,@1.first_line,@1.first_column);}
+    | CARACTER                              {$$=new Nativo.default(new Tipo.default(Tipo.tipoDato.CARACTER),$1,@1.first_line,@1.first_column);}
+    | CADENA                                {$$=new Nativo.default(new Tipo.default(Tipo.tipoDato.CADENA),$1,@1.first_line,@1.first_column);}
+    | ID
 ;
 
 //tipos de datos
@@ -207,7 +213,7 @@ CAST: PAR1 TIPOS PAR2 EXP
 ;
 
 //declaracion de vectores
-VEC : TIPOS ID COR1 COR2 VEC2 DECV PUNTOCOMA
+VEC : TIPOS ID COR1 COR2 VEC2 DECV
 ;
 
 VEC2 : COR1 COR2 IGUAL
@@ -215,19 +221,22 @@ VEC2 : COR1 COR2 IGUAL
 ;
 
 DECV : NEW TIPOS COR1 EXP COR2 DECV2
-    | COR1 LISTVEC COR2
+    | COR1 LISTVEC COR2 PUNTOCOMA
+    | TOCHARARRAYY
 ;
 
 DECV2 : PUNTOCOMA
     | COR1 EXP COR2 PUNTOCOMA
 ;
 
-LISTVEC : LISTVEC EXP
+LISTVEC : LISTVEC COMA EXP
+        | LISTVEC COMA COR1 LISTVEC COR2
+        | COR1 LISTVEC COR2
         | EXP
 ;
 
 //modifica vectores
-MVEC : ID COR1 EXP COR2 VEC2 MVEC2 EXP PUNTOCOMA
+MVEC : ID COR1 EXP COR2 MVEC2 EXP PUNTOCOMA
 ;
 
 MVEC2 : COR1 EXP COR2 IGUAL
@@ -255,7 +264,7 @@ SDEF : DEFAULT DOSPUNTOS INSTRUCCIONES
 ;
 
 //while
-CWHILE : WHILE PAR1 EXP COR2 LLAVE1 INSTRUCCIONES LLAVE2
+CWHILE : WHILE PAR1 EXP PAR2 LLAVE1 INSTRUCCIONES LLAVE2
 ;
 
 //for
@@ -284,11 +293,12 @@ TCONTINUE : CONTINUE PUNTOCOMA
 
 // return
 TRETURN : RETURN PUNTOCOMA
-        | RETURN EXP
+        | RETURN EXP PUNTOCOMA
 ;
 
 // Funciones
 FUNCS : ID PAR1 PARAMS PAR2 DOSPUNTOS TIPOS LLAVE1 INSTRUCCIONES LLAVE2
+    |   ID PAR1  PAR2 DOSPUNTOS TIPOS LLAVE1 INSTRUCCIONES LLAVE2
 ;
 
 PARAMS : PARAMS COMA TIPOS ID
@@ -296,40 +306,41 @@ PARAMS : PARAMS COMA TIPOS ID
 ;
 
 //Metodos
-METODS : ID PAR1 PARAMS PAR2 DOSPUNTOS VOID LLAVE1 INSTRUCCIONES LLAVE1
+METODS : ID PAR1 PARAMS PAR2 DOSPUNTOS VOID LLAVE1 INSTRUCCIONES LLAVE2
+    |   ID PAR1 PAR2 DOSPUNTOS VOID LLAVE1 INSTRUCCIONES LLAVE2
 ;
 
 // llamadas
-LLAMADA : ID PAR1 PARAMSCALL PAR2
-        | ID PAR1 PAR2
+LLAMADA : ID PAR1 PARAMSCALL PAR2 PUNTOCOMA
+        | ID PAR1 PAR2 PUNTOCOMA
 ;
 
-PARAMSCALL : PARAMSCALL COMA ID
-            | ID
+PARAMSCALL : PARAMSCALL COMA EXP
+            | EXP
 ;
 
 // print
-PRINTT : PRINT PAR1 EXP PAR2 PUNTOCOMA
+PRINTT : PRINT PAR1 EXP PAR2 PUNTOCOMA {$$=new Print.default($3,@1.first_line,@1.first_column);}
 ;
 
 // println
-PRINTLNN : PRINTLN PAR1 EXP PAR2 PUNTOCOMA
+PRINTLNN : PRINTLN PAR1 EXP PAR2 PUNTOCOMA {$$=new PrintLn.default($3,@1.first_line,@1.first_column);}
 ;
 
 // tolower
-TOLOW : TOLOWER PAR1 EXP PAR2 PUNTOCOMA
+TOLOW : TOLOWER PAR1 EXP PAR2 
 ;
 
 // toupper
-TOUP : TOUPPER PAR1 EXP PAR2 PUNTOCOMA
+TOUP : TOUPPER PAR1 EXP PAR2 
 ;
 
  // round
-ROUNDD : ROUND PAR1 DECIMAL PAR2 PUNTOCOMA
+ROUNDD : ROUND PAR1 DECIMAL PAR2 
 ;
 
 // length
-LENGTHH : LENGTH PAR1 VALENG PAR2 PUNTOCOMA
+LENGTHH : LENGTH PAR1 VALENG PAR2 
 ;
 
 VALENG : ID 
@@ -338,15 +349,15 @@ VALENG : ID
 ;
 
 //typeof
-TYPEOFF : TYPEOF PAR1 EXP PAR2 PUNTOCOMA
+TYPEOFF : TYPEOF PAR1 EXP PAR2 
 ;
 
 // tostring
-TOSTRINGG : TOSTRING PAR1 EXP PAR2 PUNTOCOMA
+TOSTRINGG : TOSTRING PAR1 EXP PAR2 
 ;
 
 // to char array
-TOCHARARRAYY : TOCHARARRAY PAR1 EXP PAR2 PUNTOCOMA
+TOCHARARRAYY : TOCHARARRAY PAR1 CADENA PAR2 PUNTOCOMA
 ;
 
 // RUN
