@@ -11,6 +11,9 @@ const Logicas=require('./expresiones/Logicas')
 //instrucciones
 const Print=require('./instrucciones/Print')
 const PrintLn=require('./instrucciones/Println')
+const DeclaracionVar=require('./instrucciones/DeclaracionVar')
+const AccesoVar=require('./instrucciones/AccesoVar')
+const DeclaracionArray=require('./instrucciones/DeclaracionArray')
 %}
 
 %lex
@@ -129,9 +132,9 @@ INSTRUCCIONES : INSTRUCCIONES INSTRUCCION {$1.push($2);$$=$1;}
                 | error PUNTOCOMA {ListaErrores.push(new errores.default("Sintactico",yytext,@1.first_line,@1.first_column));}
 ;
 
-INSTRUCCION : DECLARACION
+INSTRUCCION : DECLARACION   {$$=$1;}
             | CAST
-            | VEC
+            | VEC           {$$=$1;}
             | MVEC
             | SIF
             | SSWITCH
@@ -184,27 +187,27 @@ EXP : EXP MAS EXP                           {$$=new Aritmeticas.default(Aritmeti
     | FALSE                                 {$$=new Nativo.default(new Tipo.default(Tipo.tipoDato.BOOL),$1,@1.first_line,@1.first_column);}
     | CARACTER                              {$$=new Nativo.default(new Tipo.default(Tipo.tipoDato.CARACTER),$1,@1.first_line,@1.first_column);}
     | CADENA                                {$$=new Nativo.default(new Tipo.default(Tipo.tipoDato.CADENA),$1,@1.first_line,@1.first_column);}
-    | ID
+    | ID                                    {$$=new AccesoVar.default($1,@1.first_line,@1.first_column);}
 ;
 
 //tipos de datos
-TIPOS: INT
-    | DOUBLE
-    | BOOL
-    | CHAR
-    | STRING
+TIPOS: INT          {$$=new Tipo.default(Tipo.tipoDato.ENTERO);}
+    | DOUBLE        {$$=new Tipo.default(Tipo.tipoDato.DECIMAL);}
+    | BOOL          {$$=new Tipo.default(Tipo.tipoDato.BOOL);}
+    | CHAR          {$$=new Tipo.default(Tipo.tipoDato.CARACTER);}
+    | STRING        {$$=new Tipo.default(Tipo.tipoDato.CADENA);}
 ;
 
 //declaracion de variables simples
-DECLARACION : TIPOS LISTD DEC2
+DECLARACION : TIPOS LISTD DEC2      {$$=new DeclaracionVar.default($1,@1.first_line,@1.first_column,$2,$3);}
 ;
 
-LISTD : LISTD COMA ID
-    | ID
+LISTD : LISTD COMA ID       {$1.push($3);$$=$1;}
+    | ID                    {$$=[$1];}
 ;
 
-DEC2 : PUNTOCOMA
-    |   IGUAL EXP PUNTOCOMA
+DEC2 : PUNTOCOMA                {$$=null;}
+    |   IGUAL EXP PUNTOCOMA     {$$=$2;}
 ;
 
 //asignacion
@@ -212,31 +215,29 @@ ASI : ID IGUAL EXP PUNTOCOMA
 
 ;
 
-//casteo
-CAST: PAR1 TIPOS PAR2 EXP
-;
-
 //declaracion de vectores
-VEC : TIPOS ID COR1 COR2 VEC2 DECV
+/*
+VEC:  DOS DIMENSIONES VACIO
+    | DOS DIMENSIONES INICIALIZADO
+    | UNA DIMENSION VACIO
+    | UNA DIMENSION INICIALIZADO
+    | ARRAYCHAR (UNA DIMENSION)
+*/  
+                                                  //                                            $$=new DeclaracionArray.default(tipo, id, linea, col, dimension, valor, size1, size2);}                                         
+VEC : TIPOS ID COR1 COR2 COR1 COR2 IGUAL NEW TIPOS COR1 EXP COR2 COR1 EXP COR2 PUNTOCOMA        {$$=new DeclaracionArray.default($1,$2,@1.first_line,@1.first_column,2,null,$11,$14);}
+    | TIPOS ID COR1 COR2 COR1 COR2 IGUAL COR1 LISTVEC2 COR2 PUNTOCOMA                           {$$=new DeclaracionArray.default($1,$2,@1.first_line,@1.first_column,2,$9,0,0);}
+    | TIPOS ID COR1 COR2 IGUAL NEW TIPOS COR1 EXP COR2 PUNTOCOMA                                {$$=new DeclaracionArray.default($1,$2,@1.first_line,@1.first_column,1,null,$9,0);}
+    | TIPOS ID COR1 COR2 IGUAL COR1 LISTVEC COR2 PUNTOCOMA                                      {$$=new DeclaracionArray.default($1,$2,@1.first_line,@1.first_column,1,$7,0,0);}
+    | TIPOS ID COR1 COR2 IGUAL TOCHARARRAYY                                                     {$$=new DeclaracionArray.default($1,$2,@1.first_line,@1.first_column,1,$6,0,0);}
 ;
 
-VEC2 : COR1 COR2 IGUAL
-    | IGUAL
+
+LISTVEC : LISTVEC COMA EXP      {$1.push($3);$$=$1;}
+        | EXP                   {$$=[$1];}
 ;
 
-DECV : NEW TIPOS COR1 EXP COR2 DECV2
-    | COR1 LISTVEC COR2 PUNTOCOMA
-    | TOCHARARRAYY
-;
-
-DECV2 : PUNTOCOMA
-    | COR1 EXP COR2 PUNTOCOMA
-;
-
-LISTVEC : LISTVEC COMA EXP
-        | LISTVEC COMA COR1 LISTVEC COR2
-        | COR1 LISTVEC COR2
-        | EXP
+LISTVEC2 : LISTVEC2 COMA COR1 LISTVEC COR2      {$1.push($4); $$=$1;}
+        | COR1 LISTVEC COR2                     {$$=[$2];}
 ;
 
 //modifica vectores
@@ -361,7 +362,7 @@ TOSTRINGG : TOSTRING PAR1 EXP PAR2
 ;
 
 // to char array
-TOCHARARRAYY : TOCHARARRAY PAR1 CADENA PAR2 PUNTOCOMA
+TOCHARARRAYY : TOCHARARRAY PAR1 EXP PAR2 PUNTOCOMA
 ;
 
 // RUN

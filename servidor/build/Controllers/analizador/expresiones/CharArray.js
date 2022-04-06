@@ -27,18 +27,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Instruccion_1 = require("../abstracto/Instruccion");
-const Tipo_1 = __importStar(require("../simbolo/Tipo"));
 const Errores_1 = __importDefault(require("../excepciones/Errores"));
-class Print extends Instruccion_1.Instruccion {
-    constructor(expresion, linea, col) {
-        super(new Tipo_1.default(Tipo_1.tipoDato.CADENA), linea, col);
-        this.expresion = expresion;
+const Tipo_1 = __importStar(require("../simbolo/Tipo"));
+class CharArray extends Instruccion_1.Instruccion {
+    constructor(cadena, linea, col) {
+        super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, col);
+        this.cadena = cadena;
     }
     interpretar(arbol, tabla) {
-        let valor = this.expresion.interpretar(arbol, tabla);
-        if (valor instanceof Errores_1.default)
-            return valor;
-        arbol.Println(valor);
+        if (this.cadena.tipoDato.getTipo() != Tipo_1.tipoDato.CADENA)
+            return new Errores_1.default('Semantico', 'Solo cadenas pueden convertirse en char array', this.linea, this.col);
+        let verificacion = this.cadena.interpretar(arbol, tabla);
+        if (verificacion instanceof Errores_1.default)
+            return verificacion;
+        return Array.from(verificacion);
     }
 }
-exports.default = Print;
+exports.default = CharArray;

@@ -18,7 +18,7 @@ class Simbolo {
     setId(id) {
         this.id = id;
     }
-    getValor(valor) {
+    getValor() {
         return this.valor;
     }
     setValor(valor) {

@@ -15,6 +15,5 @@ export default class Print extends Instruccion{
         let valor=this.expresion.interpretar(arbol,tabla)
         if(valor instanceof Errores) return valor;
         arbol.Print(valor)
-        console.log(valor)
     }
 }

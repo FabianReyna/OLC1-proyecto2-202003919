@@ -39,7 +39,6 @@ class Print extends Instruccion_1.Instruccion {
         if (valor instanceof Errores_1.default)
             return valor;
         arbol.Print(valor);
-        console.log(valor);
     }
 }
 exports.default = Print;

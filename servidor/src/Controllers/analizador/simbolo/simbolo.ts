@@ -27,7 +27,7 @@ export default class Simbolo{
         this.id=id
     }
 
-    public getValor(valor:any):any{
+    public getValor():any{
         return this.valor
     }
 

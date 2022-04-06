@@ -27,18 +27,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Instruccion_1 = require("../abstracto/Instruccion");
-const Tipo_1 = __importStar(require("../simbolo/Tipo"));
 const Errores_1 = __importDefault(require("../excepciones/Errores"));
-class Print extends Instruccion_1.Instruccion {
-    constructor(expresion, linea, col) {
-        super(new Tipo_1.default(Tipo_1.tipoDato.CADENA), linea, col);
-        this.expresion = expresion;
+const Tipo_1 = __importStar(require("../simbolo/Tipo"));
+class AccesoVar extends Instruccion_1.Instruccion {
+    constructor(id, linea, col) {
+        super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, col);
+        this.id = id.toLowerCase();
     }
     interpretar(arbol, tabla) {
-        let valor = this.expresion.interpretar(arbol, tabla);
-        if (valor instanceof Errores_1.default)
-            return valor;
-        arbol.Println(valor);
+        let valor = tabla.getVariable(this.id);
+        console.log(valor);
+        if (valor == null)
+            return new Errores_1.default("Semantico", "Variable no existente", this.linea, this.col);
+        this.tipoDato = valor.getTipo();
+        return valor.getValor();
     }
 }
-exports.default = Print;
+exports.default = AccesoVar;

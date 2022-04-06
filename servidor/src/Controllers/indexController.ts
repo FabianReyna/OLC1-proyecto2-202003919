@@ -12,7 +12,6 @@ class IndexController{
     }
 
     public escaneo(req:Request,res:Response){
-        console.log(req.body.consola)
         listaErrores=new Array<Errores>();
         let parser = require("./analizador/analizador");
         
@@ -31,7 +30,8 @@ class IndexController{
                 }
             }
         tree=ast;
-        res.send({"consola":ast.getConsola()})
+        console.log(ast.getTablaGlobal().getTabla())
+        res.json({consola:ast.getConsola()})
         }catch(err){
             res.send({"ERROR":"ALGO SALIO MAL :("})
 

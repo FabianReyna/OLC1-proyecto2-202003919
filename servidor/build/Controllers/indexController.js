@@ -13,7 +13,6 @@ class IndexController {
         res.json({ "funciona": "la api" });
     }
     escaneo(req, res) {
-        console.log(req.body.consola);
         exports.listaErrores = new Array();
         let parser = require("./analizador/analizador");
         try {
@@ -32,7 +31,8 @@ class IndexController {
                 }
             }
             tree = ast;
-            res.send({ "consola": ast.getConsola() });
+            console.log(ast.getTablaGlobal().getTabla());
+            res.json({ consola: ast.getConsola() });
         }
         catch (err) {
             res.send({ "ERROR": "ALGO SALIO MAL :(" });

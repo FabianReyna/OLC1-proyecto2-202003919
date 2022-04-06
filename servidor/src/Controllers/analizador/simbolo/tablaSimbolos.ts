@@ -1,3 +1,4 @@
+import Errores from "../excepciones/Errores";
 import Simbolo from "./simbolo";
 import Tipo, { tipoDato } from "./Tipo";
 
@@ -40,12 +41,13 @@ export default class tablaSimbolo {
         return null;
     }
 
-    public setVariable(simbolo: Simbolo): void {
+    public setVariable(simbolo: Simbolo) {
         let verificacion: any = this.getVariable(simbolo.getId());
-        if (verificacion != null) {
+        if (verificacion == null) {
             this.tablaActual.set(simbolo.getId().toLowerCase(), simbolo);
+            return true;
         }
-        return;
+        return false;
     }
 
     public getNombre(): string {

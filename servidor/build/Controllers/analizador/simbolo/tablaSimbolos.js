@@ -54,10 +54,11 @@ class tablaSimbolo {
     }
     setVariable(simbolo) {
         let verificacion = this.getVariable(simbolo.getId());
-        if (verificacion != null) {
+        if (verificacion == null) {
             this.tablaActual.set(simbolo.getId().toLowerCase(), simbolo);
+            return true;
         }
-        return;
+        return false;
     }
     getNombre() {
         return this.nombreDato;

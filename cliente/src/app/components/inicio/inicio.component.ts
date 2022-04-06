@@ -12,23 +12,23 @@ export class InicioComponent implements OnInit {
   static contenido2: string = "";
   contenido: string = "";
 
-  cuerpo:any={
-    consola:''
+  cuerpo: any = {
+    consola: ''
   }
 
-  constructor(private servidor:BackendService) { }
+  constructor(private servidor: BackendService) { }
 
   ngOnInit(): void {
   }
-/*
-añadir cosas a la consola
-const ver2=document.getElementById("consolaa")
-    if(ver2) {
-      ver2.removeAttribute("readOnly");
-      ver2.innerHTML="hola a todos y a todas";
-      ver2.setAttribute("readOnly","");
-    }
-*/
+  /*
+  añadir cosas a la consola
+  const ver2=document.getElementById("consolaa")
+      if(ver2) {
+        ver2.removeAttribute("readOnly");
+        ver2.innerHTML="hola a todos y a todas";
+        ver2.setAttribute("readOnly","");
+      }
+  */
 
   AjusteEntrada() {
     this.contenido = InicioComponent.contenido2;
@@ -51,40 +51,47 @@ const ver2=document.getElementById("consolaa")
     }
   }
 
-  CrearArchivo(){
-    this.contenido="";
-    const ver2=document.getElementById("consolaa")
-    if(ver2) {
+  CrearArchivo() {
+    this.contenido = "";
+    const ver2 = document.getElementById("consolaa")
+    if (ver2) {
       ver2.removeAttribute("readOnly");
-      ver2.innerHTML="";
-      ver2.setAttribute("readOnly","");
+      ver2.innerHTML = "";
+      ver2.setAttribute("readOnly", "");
     }
   }
 
-  Escaneando(){
-    this.cuerpo.consola=this.contenido;
+  Escaneando() {
+    this.cuerpo.consola = this.contenido;
     this.servidor.Escaneo(this.cuerpo).subscribe(
-      res=>{
+      res => {
+        var data2 = JSON.parse(JSON.stringify(res));
+        const ver2 = document.getElementById("consolaa")
+        if (ver2) {
+          ver2.removeAttribute("readOnly");
+          ver2.innerHTML = data2.consola;
+          ver2.setAttribute("readOnly", "");
+        }
         alert('Escaneo Finalizado')
       },
-      err=>{
+      err => {
         alert('OCURRIO UN ERROR')
       }
     )
 
   }
 
-/*
-  GuardarArchivo(){
-    
-    const binaryData=[];
-    binaryData.push(this.contenido);
-    const archivo=window.URL.createObjectURL(new Blob(binaryData,{type:'.cst'}))
-    const descarga=document.createElement('a')
-    descarga.href=archivo
-    descarga.setAttribute('download',"prueba")
-    document.body.appendChild(descarga)
-    descarga.click();
-  }
-  */
+  /*
+    GuardarArchivo(){
+      
+      const binaryData=[];
+      binaryData.push(this.contenido);
+      const archivo=window.URL.createObjectURL(new Blob(binaryData,{type:'.cst'}))
+      const descarga=document.createElement('a')
+      descarga.href=archivo
+      descarga.setAttribute('download',"prueba")
+      document.body.appendChild(descarga)
+      descarga.click();
+    }
+    */
 }
