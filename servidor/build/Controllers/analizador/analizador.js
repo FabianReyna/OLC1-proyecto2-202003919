@@ -195,16 +195,16 @@ case 69:
 this.$=new DeclaracionArray1.default($$[$0-15],$$[$0-7],$$[$0-14],$$[$0-5],2,_$[$0-15].first_line,_$[$0-15].first_column,$$[$0-2]);
 break;
 case 70:
-this.$=new DeclaracionArray2.default($$[$0-10],$$[$0-9],2,$$[$0-2],_$[$0-10].first_line,_$[$0-10].first_column)
+this.$=new DeclaracionArray2.default($$[$0-10],$$[$0-9],2,$$[$0-2],_$[$0-10].first_line,_$[$0-10].first_column);
 break;
 case 71:
 this.$=new DeclaracionArray1.default($$[$0-10],$$[$0-4],$$[$0-9],$$[$0-2],1,_$[$0-10].first_line,_$[$0-10].first_column);
 break;
 case 72:
-this.$=new DeclaracionArray2.default($$[$0-8],$$[$0-7],1,$$[$0-2],_$[$0-8].first_line,_$[$0-8].first_column)
+this.$=new DeclaracionArray2.default($$[$0-8],$$[$0-7],1,$$[$0-2],_$[$0-8].first_line,_$[$0-8].first_column);
 break;
 case 73:
-this.$=new DeclaracionArray2.default($$[$0-6],$$[$0-5],1,$$[$0-1],_$[$0-6].first_line,_$[$0-6].first_column)
+this.$=new DeclaracionArray2.default($$[$0-6],$$[$0-5],1,[],_$[$0-6].first_line,_$[$0-6].first_column,$$[$0-1]);
 break;
 case 76:
 $$[$0-4].push($$[$0-1]); this.$=$$[$0-4];
@@ -217,6 +217,9 @@ this.$=new Print.default($$[$0-2],_$[$0-4].first_line,_$[$0-4].first_column);
 break;
 case 112:
 this.$=new PrintLn.default($$[$0-2],_$[$0-4].first_line,_$[$0-4].first_column);
+break;
+case 122:
+this.$=new CharArray.default($$[$0-1],_$[$0-3].first_line,_$[$0-3].first_column);
 break;
 }
 },
@@ -479,6 +482,7 @@ const Nativo=require('./expresiones/Nativo')
 const Aritmeticas=require('./expresiones/Aritmeticas')
 const Relacionales=require('./expresiones/Relacionales')
 const Logicas=require('./expresiones/Logicas')
+const CharArray=require('./expresiones/CharArray')
 //instrucciones
 const Print=require('./instrucciones/Print')
 const PrintLn=require('./instrucciones/Println')

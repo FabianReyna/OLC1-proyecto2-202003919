@@ -35,11 +35,12 @@ class CharArray extends Instruccion_1.Instruccion {
         this.cadena = cadena;
     }
     interpretar(arbol, tabla) {
-        if (this.cadena.tipoDato.getTipo() != Tipo_1.tipoDato.CADENA)
-            return new Errores_1.default('Semantico', 'Solo cadenas pueden convertirse en char array', this.linea, this.col);
         let verificacion = this.cadena.interpretar(arbol, tabla);
         if (verificacion instanceof Errores_1.default)
             return verificacion;
+        if (this.cadena.tipoDato.getTipo() != Tipo_1.tipoDato.CADENA)
+            return new Errores_1.default('Semantico', 'Solo cadenas pueden convertirse en char array', this.linea, this.col);
+        this.tipoDato.setTipo(Tipo_1.tipoDato.CARACTER);
         return Array.from(verificacion);
     }
 }

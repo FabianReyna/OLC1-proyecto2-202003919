@@ -27,9 +27,9 @@ export default class DeclaracionArray1 extends Instruccion {
     interpretar(arbol: Arbol, tabla: tablaSimbolo) {
         if (this.tipoDato.getTipo() != this.tipoAux.getTipo()) return new Errores("Semantico", "TEl vector solo debe tener un mismo tipo de dato", this.linea, this.col);
         if (this.dimension == 1) {
-            if (this.size1.tipoDato.getTipo() != tipoDato.ENTERO) return new Errores("Semantico", "Los tamaños de los arreglos deben de ser enteros", this.linea, this.col);
             let tamanio = this.size1.interpretar(arbol, tabla);
             if (tamanio instanceof Errores) return tamanio;
+            if (this.size1.tipoDato.getTipo() != tipoDato.ENTERO) return new Errores("Semantico", "Los tamaños de los arreglos deben de ser enteros", this.linea, this.col);
             this.valor = [];
             for (let i = 0; i < tamanio; i++) {
                 switch (this.tipoDato.getTipo()) {
@@ -54,14 +54,14 @@ export default class DeclaracionArray1 extends Instruccion {
             }
             if (!(tabla.setVariable(new Simbolo(this.tipoDato, this.id, this.valor)))) return new Errores("Semantico", "Declaracion de variable '" + this.id + "' ya existente en el ambito", this.linea, this.col);
         } else {
-            if (this.size1.tipoDato.getTipo() != tipoDato.ENTERO) return new Errores("Semantico", "Los tamaños de los arreglos deben de ser enteros", this.linea, this.col);
             let tamanio = this.size1.interpretar(arbol, tabla);
             if (tamanio instanceof Errores) return tamanio;
+            if (this.size1.tipoDato.getTipo() != tipoDato.ENTERO) return new Errores("Semantico", "Los tamaños de los arreglos deben de ser enteros", this.linea, this.col);
 
             if (!this.size2) return new Errores("Semantico", "Tamaño no definido en el arreglo", this.linea, this.col);
-            if (this.size2.tipoDato.getTipo() != tipoDato.ENTERO) return new Errores("Semantico", "Los tamaños de los arreglos deben de ser enteros", this.linea, this.col);
             let tamanio2 = this.size2.interpretar(arbol, tabla);
             if (tamanio2 instanceof Errores) return tamanio2;
+            if (this.size2.tipoDato.getTipo() != tipoDato.ENTERO) return new Errores("Semantico", "Los tamaños de los arreglos deben de ser enteros", this.linea, this.col);
 
             this.valor = [];
             for (let i = 0; i < tamanio; i++) {

@@ -13,9 +13,10 @@ export default class CharArray extends Instruccion {
     }
 
     interpretar(arbol: Arbol, tabla: tablaSimbolo) {
-        if (this.cadena.tipoDato.getTipo() != tipoDato.CADENA) return new Errores('Semantico', 'Solo cadenas pueden convertirse en char array', this.linea, this.col);
         let verificacion = this.cadena.interpretar(arbol, tabla);
         if (verificacion instanceof Errores) return verificacion;
+        if (this.cadena.tipoDato.getTipo() != tipoDato.CADENA) return new Errores('Semantico', 'Solo cadenas pueden convertirse en char array', this.linea, this.col);
+        this.tipoDato.setTipo(tipoDato.CARACTER)
         return Array.from(verificacion);
     }
 }
