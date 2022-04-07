@@ -8,12 +8,13 @@ const Nativo=require('./expresiones/Nativo')
 const Aritmeticas=require('./expresiones/Aritmeticas')
 const Relacionales=require('./expresiones/Relacionales')
 const Logicas=require('./expresiones/Logicas')
+const AccesoVar=require('./expresiones/AccesoVar')
 const CharArray=require('./expresiones/CharArray')
+const AccesoVec=require('./expresiones/AccesoVec')
 //instrucciones
 const Print=require('./instrucciones/Print')
 const PrintLn=require('./instrucciones/Println')
 const DeclaracionVar=require('./instrucciones/DeclaracionVar')
-const AccesoVar=require('./instrucciones/AccesoVar')
 const DeclaracionArray1=require('./instrucciones/DeclaracionArray1')
 const DeclaracionArray2=require('./instrucciones/DeclaracionArray2')
 %}
@@ -173,9 +174,9 @@ EXP : EXP MAS EXP                           {$$=new Aritmeticas.default(Aritmeti
     | NOT EXP                               {$$=new Logicas.default(Logicas.Logica.NOT,@1.first_line,@1.first_column,$2);}
     | PAR1 EXP PAR2                         {$$=$2;}
     | EXP INCREMENT
-    | EXP DECREMENT
-    | ID COR1 EXP COR2 
-    | ID COR1 EXP COR2 COR1 EXP COR2
+    | EXP DECREMENT                         //id, dimension, index1, linea, col, index2
+    | ID COR1 EXP COR2 COR1 EXP COR2        {$$=new AccesoVec.default($1,2,$3,@1.first_line,@1.first_column,$6);}
+    | ID COR1 EXP COR2                      {$$=new AccesoVec.default($1,1,$3,@1.first_line,@1.first_column);}
     | LLAMADA
     | TOLOW
     | TOUP

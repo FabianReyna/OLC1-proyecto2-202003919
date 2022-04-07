@@ -114,7 +114,6 @@ export default class DeclaracionArray2 extends Instruccion {
                     aux.push(data);
                 }
                 this.valor = aux;
-                console.log(this.valor)
                 if (!(tabla.setVariable(new Simbolo(this.tipoDato, this.id, this.valor)))) return new Errores("Semantico", "Declaracion de variable '" + this.id + "' ya existente en el ambito", this.linea, this.col);
 
             }
