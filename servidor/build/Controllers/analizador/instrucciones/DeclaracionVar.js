@@ -48,7 +48,7 @@ class DeclaracionVar extends Instruccion_1.Instruccion {
         else {
             let valorInterpretado = this.valor.interpretar(arbol, tabla);
             if (valorInterpretado instanceof Errores_1.default)
-                return new Errores_1.default("Semantico", "Asigancion de valor no valido", this.linea, this.col);
+                return valorInterpretado;
             if (this.tipoDato.getTipo() != this.valor.tipoDato.getTipo())
                 return new Errores_1.default("Semantico", "Tipo de variable y de valor diferentes", this.linea, this.col);
             else {

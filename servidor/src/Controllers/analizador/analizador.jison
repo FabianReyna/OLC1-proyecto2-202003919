@@ -13,7 +13,8 @@ const Print=require('./instrucciones/Print')
 const PrintLn=require('./instrucciones/Println')
 const DeclaracionVar=require('./instrucciones/DeclaracionVar')
 const AccesoVar=require('./instrucciones/AccesoVar')
-const DeclaracionArray=require('./instrucciones/DeclaracionArray')
+const DeclaracionArray1=require('./instrucciones/DeclaracionArray1')
+const DeclaracionArray2=require('./instrucciones/DeclaracionArray2')
 %}
 
 %lex
@@ -223,12 +224,12 @@ VEC:  DOS DIMENSIONES VACIO
     | UNA DIMENSION INICIALIZADO
     | ARRAYCHAR (UNA DIMENSION)
 */  
-                                                  //                                            $$=new DeclaracionArray.default(tipo, id, linea, col, dimension, valor, size1, size2);}                                         
-VEC : TIPOS ID COR1 COR2 COR1 COR2 IGUAL NEW TIPOS COR1 EXP COR2 COR1 EXP COR2 PUNTOCOMA        {$$=new DeclaracionArray.default($1,$2,@1.first_line,@1.first_column,2,null,$11,$14);}
-    | TIPOS ID COR1 COR2 COR1 COR2 IGUAL COR1 LISTVEC2 COR2 PUNTOCOMA                           {$$=new DeclaracionArray.default($1,$2,@1.first_line,@1.first_column,2,$9,0,0);}
-    | TIPOS ID COR1 COR2 IGUAL NEW TIPOS COR1 EXP COR2 PUNTOCOMA                                {$$=new DeclaracionArray.default($1,$2,@1.first_line,@1.first_column,1,null,$9,0);}
-    | TIPOS ID COR1 COR2 IGUAL COR1 LISTVEC COR2 PUNTOCOMA                                      {$$=new DeclaracionArray.default($1,$2,@1.first_line,@1.first_column,1,$7,0,0);}
-    | TIPOS ID COR1 COR2 IGUAL TOCHARARRAYY                                                     {$$=new DeclaracionArray.default($1,$2,@1.first_line,@1.first_column,1,$6,0,0);}
+                                                  //                                            tipo, id, dimension, valor, linear, col               
+VEC : TIPOS ID COR1 COR2 COR1 COR2 IGUAL NEW TIPOS COR1 EXP COR2 COR1 EXP COR2 PUNTOCOMA        {$$=new DeclaracionArray1.default($1,$9,$2,$11,2,@1.first_line,@1.first_column,$14);}
+    | TIPOS ID COR1 COR2 COR1 COR2 IGUAL COR1 LISTVEC2 COR2 PUNTOCOMA                           {$$=new DeclaracionArray2.default($1,$2,2,$9,@1.first_line,@1.first_column)}
+    | TIPOS ID COR1 COR2 IGUAL NEW TIPOS COR1 EXP COR2 PUNTOCOMA                                {$$=new DeclaracionArray1.default($1,$7,$2,$9,1,@1.first_line,@1.first_column);}
+    | TIPOS ID COR1 COR2 IGUAL COR1 LISTVEC COR2 PUNTOCOMA                                      {$$=new DeclaracionArray2.default($1,$2,1,$7,@1.first_line,@1.first_column)}
+    | TIPOS ID COR1 COR2 IGUAL TOCHARARRAYY PUNTOCOMA                                           {$$=new DeclaracionArray2.default($1,$2,1,$6,@1.first_line,@1.first_column)}
 ;
 
 
@@ -362,7 +363,7 @@ TOSTRINGG : TOSTRING PAR1 EXP PAR2
 ;
 
 // to char array
-TOCHARARRAYY : TOCHARARRAY PAR1 EXP PAR2 PUNTOCOMA
+TOCHARARRAYY : TOCHARARRAY PAR1 EXP PAR2 
 ;
 
 // RUN
