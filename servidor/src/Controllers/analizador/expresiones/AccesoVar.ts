@@ -6,7 +6,7 @@ import tablaSimbolo from "../simbolo/tablaSimbolos";
 import Tipo, { tipoDato } from "../simbolo/Tipo";
 
 export default class AccesoVar extends Instruccion {
-    private id: string;
+    public id: string;
 
     constructor(id: string, linea: number, col: number) {
         super(new Tipo(tipoDato.VOID), linea, col);

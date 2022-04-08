@@ -11,12 +11,14 @@ const Logicas=require('./expresiones/Logicas')
 const AccesoVar=require('./expresiones/AccesoVar')
 const CharArray=require('./expresiones/CharArray')
 const AccesoVec=require('./expresiones/AccesoVec')
+
 //instrucciones
 const Print=require('./instrucciones/Print')
 const PrintLn=require('./instrucciones/Println')
 const DeclaracionVar=require('./instrucciones/DeclaracionVar')
 const DeclaracionArray1=require('./instrucciones/DeclaracionArray1')
 const DeclaracionArray2=require('./instrucciones/DeclaracionArray2')
+const IncDec=require('./instrucciones/IncDec')
 %}
 
 %lex
@@ -135,10 +137,12 @@ INSTRUCCIONES : INSTRUCCIONES INSTRUCCION {$1.push($2);$$=$1;}
                 | error PUNTOCOMA {ListaErrores.push(new errores.default("Sintactico",yytext,@1.first_line,@1.first_column));}
 ;
 
-INSTRUCCION : DECLARACION   {$$=$1;}
+INSTRUCCION : DECLARACION                       {$$=$1;}
             | CAST
-            | VEC           {$$=$1;}
-            | MVEC
+            | VEC                               {$$=$1;}
+            | MVEC                              {$$=$1;}
+            | INCREMENTO                        {$$=$1;}
+            | DECREMENTO                        {$$=$1;}
             | SIF
             | SSWITCH
             | CWHILE
@@ -150,8 +154,8 @@ INSTRUCCION : DECLARACION   {$$=$1;}
             | FUNCS
             | METODS
             | LLAMADA
-            | PRINTT        {$$=$1;}
-            | PRINTLNN      {$$=$1;}
+            | PRINTT                            {$$=$1;}
+            | PRINTLNN                          {$$=$1;}
             | RUNN            
 ;
 
@@ -173,8 +177,6 @@ EXP : EXP MAS EXP                           {$$=new Aritmeticas.default(Aritmeti
     | EXP AND EXP                           {$$=new Logicas.default(Logicas.Logica.AND,@1.first_line,@1.first_column,$1,$3);}
     | NOT EXP                               {$$=new Logicas.default(Logicas.Logica.NOT,@1.first_line,@1.first_column,$2);}
     | PAR1 EXP PAR2                         {$$=$2;}
-    | EXP INCREMENT
-    | EXP DECREMENT                         //id, dimension, index1, linea, col, index2
     | ID COR1 EXP COR2 COR1 EXP COR2        {$$=new AccesoVec.default($1,2,$3,@1.first_line,@1.first_column,$6);}
     | ID COR1 EXP COR2                      {$$=new AccesoVec.default($1,1,$3,@1.first_line,@1.first_column);}
     | LLAMADA
@@ -241,6 +243,12 @@ MVEC2 : COR1 EXP COR2 IGUAL
     | IGUAL
 ;
 
+//Incremento y decremento
+INCREMENTO: EXP INCREMENT PUNTOCOMA     {$$=new IncDec.default($1,1,@1.first_line,@1.first_column);}
+;
+
+DECREMENTO: EXP DECREMENT PUNTOCOMA           {$$=new IncDec.default($1,0,@1.first_line,@1.first_column);}
+;
 
 //if
 SIF : IF PAR1 EXP PAR2 LLAVE1 INSTRUCCIONES LLAVE2

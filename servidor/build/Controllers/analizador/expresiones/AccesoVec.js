@@ -69,9 +69,8 @@ class AccesoVec extends Instruccion_1.Instruccion {
                     return new Errores_1.default("Semantico", "Los indices de los arreglos deben de ser enteros", this.linea, this.col);
                 let valor = arreglo.getValor();
                 try {
-                    if (!valor[parseInt(indice1)][parseInt(indice2)])
+                    if (valor[parseInt(indice1)][parseInt(indice2)] == undefined)
                         return new Errores_1.default("Semantico", "Index fuera del rango", this.linea, this.col);
-                    this.tipoDato = valor.tip.getTipo();
                     return valor[parseInt(indice1)][parseInt(indice2)];
                 }
                 catch (err) {
