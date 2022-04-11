@@ -19,6 +19,8 @@ const DeclaracionVar=require('./instrucciones/DeclaracionVar')
 const DeclaracionArray1=require('./instrucciones/DeclaracionArray1')
 const DeclaracionArray2=require('./instrucciones/DeclaracionArray2')
 const IncDec=require('./instrucciones/IncDec')
+const Casteo=require('./instrucciones/Casteo')
+const ModVec=require('./instrucciones/ModVec')
 %}
 
 %lex
@@ -138,7 +140,6 @@ INSTRUCCIONES : INSTRUCCIONES INSTRUCCION {$1.push($2);$$=$1;}
 ;
 
 INSTRUCCION : DECLARACION                       {$$=$1;}
-            | CAST
             | VEC                               {$$=$1;}
             | MVEC                              {$$=$1;}
             | INCREMENTO                        {$$=$1;}
@@ -176,6 +177,7 @@ EXP : EXP MAS EXP                           {$$=new Aritmeticas.default(Aritmeti
     | EXP OR EXP                            {$$=new Logicas.default(Logicas.Logica.OR,@1.first_line,@1.first_column,$1,$3);}
     | EXP AND EXP                           {$$=new Logicas.default(Logicas.Logica.AND,@1.first_line,@1.first_column,$1,$3);}
     | NOT EXP                               {$$=new Logicas.default(Logicas.Logica.NOT,@1.first_line,@1.first_column,$2);}
+    | PAR1 TIPOS PAR2 EXP                   {$$=new Casteo.default($4,$2,@1.first_line,@1.first_column);}
     | PAR1 EXP PAR2                         {$$=$2;}
     | ID COR1 EXP COR2 COR1 EXP COR2        {$$=new AccesoVec.default($1,2,$3,@1.first_line,@1.first_column,$6);}
     | ID COR1 EXP COR2                      {$$=new AccesoVec.default($1,1,$3,@1.first_line,@1.first_column);}
@@ -236,12 +238,10 @@ LISTVEC2 : LISTVEC2 COMA COR1 LISTVEC COR2      {$1.push($4); $$=$1;}
 ;
 
 //modifica vectores
-MVEC : ID COR1 EXP COR2 MVEC2 EXP PUNTOCOMA
+MVEC : ID COR1 EXP COR2 COR1 EXP COR2 IGUAL EXP PUNTOCOMA           {$$=new ModVec.default($1,2,$9,@1.first_line,@1.first_column,$3,$6);}
+    |  ID COR1 EXP COR2 IGUAL EXP PUNTOCOMA                         {$$=new ModVec.default($1,1,$6,@1.first_line,@1.first_column,$3);}
 ;
 
-MVEC2 : COR1 EXP COR2 IGUAL
-    | IGUAL
-;
 
 //Incremento y decremento
 INCREMENTO: EXP INCREMENT PUNTOCOMA     {$$=new IncDec.default($1,1,@1.first_line,@1.first_column);}
