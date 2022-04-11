@@ -9,8 +9,8 @@ const Aritmeticas=require('./expresiones/Aritmeticas')
 const Relacionales=require('./expresiones/Relacionales')
 const Logicas=require('./expresiones/Logicas')
 const AccesoVar=require('./expresiones/AccesoVar')
-const CharArray=require('./expresiones/CharArray')
 const AccesoVec=require('./expresiones/AccesoVec')
+const FuncNativas=require('./expresiones/FuncNativas')
 
 //instrucciones
 const Print=require('./instrucciones/Print')
@@ -180,12 +180,12 @@ EXP : EXP MAS EXP                           {$$=new Aritmeticas.default(Aritmeti
     | ID COR1 EXP COR2 COR1 EXP COR2        {$$=new AccesoVec.default($1,2,$3,@1.first_line,@1.first_column,$6);}
     | ID COR1 EXP COR2                      {$$=new AccesoVec.default($1,1,$3,@1.first_line,@1.first_column);}
     | LLAMADA
-    | TOLOW
-    | TOUP
-    | ROUNDD
-    | LENGTHH
-    | TYPEOFF
-    | TOSTRINGG
+    | TOLOW                                 {$$=$1;}
+    | TOUP                                  {$$=$1;}
+    | ROUNDD                                {$$=$1;}
+    | LENGTHH                               {$$=$1;}
+    | TYPEOFF                               {$$=$1;}
+    | TOSTRINGG                             {$$=$1;}
     | ENTERO                                {$$=new Nativo.default(new Tipo.default(Tipo.tipoDato.ENTERO),$1,@1.first_line,@1.first_column);}
     | DECIMAL                               {$$=new Nativo.default(new Tipo.default(Tipo.tipoDato.DECIMAL),$1,@1.first_line,@1.first_column);}
     | TRUE                                  {$$=new Nativo.default(new Tipo.default(Tipo.tipoDato.BOOL),$1,@1.first_line,@1.first_column);}
@@ -334,36 +334,31 @@ PRINTLNN : PRINTLN PAR1 EXP PAR2 PUNTOCOMA {$$=new PrintLn.default($3,@1.first_l
 ;
 
 // tolower
-TOLOW : TOLOWER PAR1 EXP PAR2 
+TOLOW : TOLOWER PAR1 EXP PAR2                   {$$=new FuncNativas.default($3,FuncNativas.Funciones.TOLOWER,@1.first_line,@1.first_column);}
 ;
 
 // toupper
-TOUP : TOUPPER PAR1 EXP PAR2 
+TOUP : TOUPPER PAR1 EXP PAR2                    {$$=new FuncNativas.default($3,FuncNativas.Funciones.TOUPPER,@1.first_line,@1.first_column);}
 ;
 
  // round
-ROUNDD : ROUND PAR1 DECIMAL PAR2 
+ROUNDD : ROUND PAR1 EXP PAR2                    {$$=new FuncNativas.default($3,FuncNativas.Funciones.ROUND,@1.first_line,@1.first_column);}
 ;
 
 // length
-LENGTHH : LENGTH PAR1 VALENG PAR2 
-;
-
-VALENG : ID 
-        | ID COR1 EXP COR2
-        | CADENA
+LENGTHH : LENGTH PAR1 EXP PAR2                  {$$=new FuncNativas.default($3,FuncNativas.Funciones.LENGTH,@1.first_line,@1.first_column);}
 ;
 
 //typeof
-TYPEOFF : TYPEOF PAR1 EXP PAR2 
+TYPEOFF : TYPEOF PAR1 EXP PAR2                  {$$=new FuncNativas.default($3,FuncNativas.Funciones.TYPEOF,@1.first_line,@1.first_column);} 
 ;
 
 // tostring
-TOSTRINGG : TOSTRING PAR1 EXP PAR2 
+TOSTRINGG : TOSTRING PAR1 EXP PAR2              {$$=new FuncNativas.default($3,FuncNativas.Funciones.TOSTRING,@1.first_line,@1.first_column);} 
 ;
 
 // to char array
-TOCHARARRAYY : TOCHARARRAY PAR1 EXP PAR2        {$$=new CharArray.default($3,@1.first_line,@1.first_column);}
+TOCHARARRAYY : TOCHARARRAY PAR1 EXP PAR2        {$$=new FuncNativas.default($3,FuncNativas.Funciones.TOCHARARRAY,@1.first_line,@1.first_column);}
 ;
 
 // RUN

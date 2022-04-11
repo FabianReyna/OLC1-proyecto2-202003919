@@ -36,7 +36,6 @@ class AccesoVar extends Instruccion_1.Instruccion {
     }
     interpretar(arbol, tabla) {
         let valor = tabla.getVariable(this.id);
-        console.log(valor);
         if (valor == null)
             return new Errores_1.default("Semantico", "Variable no existente", this.linea, this.col);
         this.tipoDato = valor.getTipo();
