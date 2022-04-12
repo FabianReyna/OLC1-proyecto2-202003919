@@ -66,6 +66,8 @@ class If extends Instruccion_1.Instruccion {
                     let resultado = i.interpretar(arbol, NewTabla1);
                     if (resultado instanceof Errores_1.default)
                         indexController_1.listaErrores.push(resultado);
+                    if (i instanceof BreakContinue_1.default)
+                        return i;
                 }
             }
             else {
@@ -81,6 +83,8 @@ class If extends Instruccion_1.Instruccion {
                         let resultado = i.interpretar(arbol, NewTabla1);
                         if (resultado instanceof Errores_1.default)
                             indexController_1.listaErrores.push(resultado);
+                        if (i instanceof BreakContinue_1.default)
+                            return i;
                     }
                 }
             }

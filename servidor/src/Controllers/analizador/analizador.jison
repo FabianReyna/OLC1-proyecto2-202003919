@@ -26,6 +26,7 @@ const If=require('./instrucciones/If')
 const Ternario=require('./instrucciones/Ternario')
 const While=require('./instrucciones/While')
 const For=require('./instrucciones/For')
+const DoWhile=require('./instrucciones/DoWhile')
 %}
 
 %lex
@@ -151,11 +152,11 @@ INSTRUCCION : DECLARACION                       {$$=$1;}
             | MVEC                              {$$=$1;}
             | INCREMENTO                        {$$=$1;}
             | DECREMENTO                        {$$=$1;}
-            | SIF
+            | SIF                               {$$=$1;}
             | SSWITCH                           
             | CWHILE                            {$$=$1;}
-            | CFOR
-            | CDOW
+            | CFOR                              {$$=$1;}
+            | CDOW                              {$$=$1;}
             | TBREAK                            {$$=$1;}
             | TCONTINUE                         {$$=$1;}
             | TRETURN
@@ -299,7 +300,7 @@ ACTUALIZACION : EXP INCREMENT       {$$=new IncDec.default($1,1,@1.first_line,@1
 ;
 
 //do.while
-CDOW : DO LLAVE1 INSTRUCCIONES LLAVE2 WHILE PAR1 EXP PAR2 PUNTOCOMA
+CDOW : DO LLAVE1 INSTRUCCIONES LLAVE2 WHILE PAR1 EXP PAR2 PUNTOCOMA     {$$=new DoWhile.default($7,$3,@1.first_line,@1.first_column);}
 ; 
 
 // break

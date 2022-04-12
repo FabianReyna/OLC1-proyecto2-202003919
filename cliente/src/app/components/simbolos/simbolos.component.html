@@ -16,17 +16,19 @@
                         <th scope="col">Entorno</th>
                         <th scope="col">Linea</th>
                         <th scope="col">Columna</th>
+                        <th scope="col">Valor</th>
                     </tr>
                 </thead>
-                <!-- <tbody>
-                    <tr *ngFor="let info of errors; let i=index">
-                        <td>{{i+1}}</td>
-                        <td>{{info.tipo}}</td>
-                        <td>{{info.desc}}</td>
-                        <td>{{info.fila}}</td>
-                        <td>{{info.col}}</td>
+                <tbody>
+                    <tr *ngFor="let i of simbols">
+                        <td>{{i.id}}</td>
+                        <td>{{i.tipo}}</td>
+                        <td>{{i.entorno}}</td>
+                        <td>{{i.linea}}</td>
+                        <td>{{i.col}}</td>
+                        <td>{{i.valor}}</td>
                     </tr>
-                </tbody> -->
+                </tbody>
             </table>
         </div>
     </div>

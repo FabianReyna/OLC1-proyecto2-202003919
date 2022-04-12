@@ -1,68 +1,88 @@
 import tablaSimbolo from "./tablaSimbolos";
 import { Instruccion } from "../abstracto/Instruccion";
 import Errores from "../excepciones/Errores";
+import RepSimbolos from "../reportes/RepSimbolo";
 
-export default class Arbol{
-    private instrucciones:Array<Instruccion>
-    private funciones:Array<Instruccion>;
-    private consola:string
-    private tablaGlobal:tablaSimbolo
-    private errores:Array<Errores>
+export default class Arbol {
+    private instrucciones: Array<Instruccion>
+    private funciones: Array<Instruccion>;
+    private consola: string
+    private tablaGlobal: tablaSimbolo
+    private errores: Array<Errores>
+    private simbolos: Array<RepSimbolos>;
 
-    constructor(instrucciones:Array<Instruccion>){
-        this.instrucciones=instrucciones;
-        this.funciones=new Array<Instruccion>();
-        this.consola="";
-        this.tablaGlobal=new tablaSimbolo();
-        this.errores=new Array<Errores>();
+    constructor(instrucciones: Array<Instruccion>) {
+        this.instrucciones = instrucciones;
+        this.funciones = new Array<Instruccion>();
+        this.consola = "";
+        this.tablaGlobal = new tablaSimbolo();
+        this.errores = new Array<Errores>();
+        this.simbolos = new Array<RepSimbolos>();
     }
 
-    public getConsola():string{
+    public getConsola(): string {
         return this.consola
     }
 
-    public setConsola(console:string):void{
-        this.consola=console
+    public setConsola(console: string): void {
+        this.consola = console
     }
 
-    public Print(console:string):void{
-        this.consola=`${this.consola}${console}`;
+    public Print(console: string): void {
+        this.consola = `${this.consola}${console}`;
     }
 
-    public Println(console:string):void{
-        this.consola=`${this.consola}\n${console}`;
+    public Println(console: string): void {
+        this.consola = `${this.consola}\n${console}`;
     }
 
-    public getInstrucciones():Array<Instruccion>{
+    public getInstrucciones(): Array<Instruccion> {
         return this.instrucciones
     }
 
-    public setInstrucciones(instrucciones:Array<Instruccion>):void{
-        this.instrucciones=instrucciones
+    public setInstrucciones(instrucciones: Array<Instruccion>): void {
+        this.instrucciones = instrucciones
     }
 
-    public getTablaGlobal():tablaSimbolo{
+    public getTablaGlobal(): tablaSimbolo {
         return this.tablaGlobal
     }
 
-    public setTablaGlobal(tabla:tablaSimbolo){
-        this.tablaGlobal=tabla
+    public setTablaGlobal(tabla: tablaSimbolo) {
+        this.tablaGlobal = tabla
     }
 
-    public getErrores():any{
+    public getErrores(): any {
         return this.errores
     }
 
-    public getFunciones():Array<Instruccion>{
+    public getFunciones(): Array<Instruccion> {
         return this.funciones
     }
 
-    public setFunciones(funciones:Array<Instruccion>):void{
-        this.funciones=funciones;
+    public setFunciones(funciones: Array<Instruccion>): void {
+        this.funciones = funciones;
     }
 
-    public addFunciones(ins:Instruccion):void{
+    public addFunciones(ins: Instruccion): void {
         this.funciones.push(ins)
+    }
+
+    public addSimbolo(id: string, tipo: string, entorno: string, linea: number, col: number, val: any) {
+        this.simbolos.push(new RepSimbolos(id, tipo, entorno, linea, col, val));
+    }
+
+    public updateSimbolo(id: string, entorno: string, val: any) {
+        for (let i of this.simbolos) {
+            if (i.id == id && i.entorno == entorno) {
+                i.valor = val;
+                break;
+            }
+        }
+    }
+
+    public getSimbolos(){
+        return this.simbolos;
     }
 
 }

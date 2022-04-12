@@ -46,6 +46,7 @@ class ModVar extends Instruccion_1.Instruccion {
             return new Errores_1.default("Semantico", "Tipo de dato no compartible en la asignacion", this.linea, this.col);
         this.tipoDato = valor.getTipo();
         valor.setValor(NewValor);
+        arbol.updateSimbolo(this.id, tabla.getNombre(), "" + NewValor);
     }
 }
 exports.default = ModVar;

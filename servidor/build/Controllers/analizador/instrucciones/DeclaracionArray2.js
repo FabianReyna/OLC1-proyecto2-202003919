@@ -23,6 +23,7 @@ class DeclaracionArray2 extends Instruccion_1.Instruccion {
             else {
                 if (!(tabla.setVariable(new simbolo_1.default(this.tipoDato, this.id, verificado))))
                     return new Errores_1.default("Semantico", "Declaracion de variable '" + this.id + "' ya existente en el ambito", this.linea, this.col);
+                arbol.addSimbolo(this.id, "VECTOR", tabla.getNombre(), this.linea, this.col, "[" + verificado.toString() + "]");
             }
         }
         else {
@@ -78,11 +79,13 @@ class DeclaracionArray2 extends Instruccion_1.Instruccion {
                 this.valor = data;
                 if (!(tabla.setVariable(new simbolo_1.default(this.tipoDato, this.id, this.valor))))
                     return new Errores_1.default("Semantico", "Declaracion de variable '" + this.id + "' ya existente en el ambito", this.linea, this.col);
+                arbol.addSimbolo(this.id, "VECTOR", tabla.getNombre(), this.linea, this.col, "[" + this.valor.toString() + "]");
             }
             else {
                 let data = [];
                 let aux = [];
                 let verificacion;
+                let valorAux = "[";
                 for (let i = 0; i < this.valor.length; i++) {
                     data = [];
                     for (let j = 0; j < this.valor[i].length; j++) {
@@ -131,11 +134,17 @@ class DeclaracionArray2 extends Instruccion_1.Instruccion {
                                 return new Errores_1.default("Semantico", "Tipo de dato invalido", this.linea, this.col);
                         }
                     }
+                    if (i == 0)
+                        valorAux = valorAux + "[" + data.toString() + "]";
+                    else
+                        valorAux = valorAux + ",[" + data.toString() + "]";
                     aux.push(data);
                 }
+                valorAux += "]";
                 this.valor = aux;
                 if (!(tabla.setVariable(new simbolo_1.default(this.tipoDato, this.id, this.valor))))
                     return new Errores_1.default("Semantico", "Declaracion de variable '" + this.id + "' ya existente en el ambito", this.linea, this.col);
+                arbol.addSimbolo(this.id, "VECTOR", tabla.getNombre(), this.linea, this.col, valorAux);
             }
         }
     }

@@ -53,6 +53,7 @@ export default class DeclaracionArray1 extends Instruccion {
                 }
             }
             if (!(tabla.setVariable(new Simbolo(this.tipoDato, this.id, this.valor)))) return new Errores("Semantico", "Declaracion de variable '" + this.id + "' ya existente en el ambito", this.linea, this.col);
+            arbol.addSimbolo(this.id, "VECTOR", tabla.getNombre(), this.linea, this.col, "[" + this.valor.toString() + "]");
         } else {
             let tamanio = this.size1.interpretar(arbol, tabla);
             if (tamanio instanceof Errores) return tamanio;
@@ -64,6 +65,7 @@ export default class DeclaracionArray1 extends Instruccion {
             if (this.size2.tipoDato.getTipo() != tipoDato.ENTERO) return new Errores("Semantico", "Los tamaños de los arreglos deben de ser enteros", this.linea, this.col);
 
             this.valor = [];
+            let valorAux = "[";
             for (let i = 0; i < tamanio; i++) {
                 let aux = [];
                 for (let j = 0; j < tamanio2; j++) {
@@ -86,10 +88,16 @@ export default class DeclaracionArray1 extends Instruccion {
                         default:
                             return new Errores("Semantico", "Tipo de dato invalido", this.linea, this.col);
                     }
+
+
                 }
+                if (i == 0) valorAux = valorAux + "[" + aux.toString() + "]"
+                else valorAux = valorAux + ",[" + aux.toString() + "]"
                 this.valor.push(aux);
             }
+            valorAux += "]";
             if (!(tabla.setVariable(new Simbolo(this.tipoDato, this.id, this.valor)))) return new Errores("Semantico", "Declaracion de variable '" + this.id + "' ya existente en el ambito", this.linea, this.col);
+            arbol.addSimbolo(this.id, "VECTOR", tabla.getNombre(), this.linea, this.col, valorAux);
         }
     }
 }

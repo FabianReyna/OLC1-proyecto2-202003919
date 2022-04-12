@@ -54,14 +54,10 @@ class While extends Instruccion_1.Instruccion {
                     indexController_1.listaErrores.push(resultado);
                 if (resultado instanceof BreakContinue_1.default) {
                     if (resultado.opcion == BreakContinue_1.Opcion.BREAK)
-                        break;
+                        return;
                     if (resultado.opcion == BreakContinue_1.Opcion.CONTINUE)
                         break;
                 }
-            }
-            if (resultado instanceof BreakContinue_1.default) {
-                if (resultado.opcion == BreakContinue_1.Opcion.BREAK)
-                    break;
             }
         }
     }

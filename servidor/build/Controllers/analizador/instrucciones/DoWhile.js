@@ -32,26 +32,22 @@ const tablaSimbolos_1 = __importDefault(require("../simbolo/tablaSimbolos"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
 const indexController_1 = require("../../indexController");
 const BreakContinue_1 = __importStar(require("./BreakContinue"));
-class For extends Instruccion_1.Instruccion {
-    constructor(variable, condicion, actualizacion, expresiones, linea, col) {
+class DoWhile extends Instruccion_1.Instruccion {
+    constructor(condicion, expresiones, linea, col) {
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, col);
-        this.variable = variable;
         this.condicion = condicion;
-        this.actualizacion = actualizacion;
         this.expresiones = expresiones;
     }
     interpretar(arbol, tabla) {
         let NewTabla = new tablaSimbolos_1.default(tabla);
-        NewTabla.setNombre(tabla.getNombre() + "FOR-");
-        let declaracion = this.variable.interpretar(arbol, NewTabla);
-        if (declaracion instanceof Errores_1.default)
-            return declaracion;
+        NewTabla.setNombre(tabla.getNombre() + "DO_WHILE-");
         let cond = this.condicion.interpretar(arbol, NewTabla);
         if (cond instanceof Errores_1.default)
             return cond;
         if (this.condicion.tipoDato.getTipo() != Tipo_1.tipoDato.BOOL)
             return new Errores_1.default("Semantico", "La condicion debe de ser de tipo boolean", this.linea, this.col);
-        while (this.condicion.interpretar(arbol, NewTabla)) {
+        do {
+            console.log(this.condicion.interpretar(arbol, NewTabla));
             let resultado;
             for (let i of this.expresiones) {
                 resultado = i.interpretar(arbol, NewTabla);
@@ -64,10 +60,7 @@ class For extends Instruccion_1.Instruccion {
                         break;
                 }
             }
-            let actualiza = this.actualizacion.interpretar(arbol, NewTabla);
-            if (actualiza instanceof Errores_1.default)
-                return actualiza;
-        }
+        } while (this.condicion.interpretar(arbol, NewTabla));
     }
 }
-exports.default = For;
+exports.default = DoWhile;

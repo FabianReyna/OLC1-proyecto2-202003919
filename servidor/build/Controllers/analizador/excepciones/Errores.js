@@ -22,5 +22,8 @@ class Errores {
     getErrores() {
         return { "tipo": this.tipoError, "desc": this.desc, "linea": this.fila, "col": this.col };
     }
+    toString() {
+        return "----- Error " + this.tipoError + ": " + this.desc + " en la linea " + this.fila + " y columna " + this.col + " ----";
+    }
 }
 exports.default = Errores;

@@ -8,27 +8,27 @@ import { BackendService } from 'src/app/services/backend.service';
 })
 export class ErroresComponent implements OnInit {
 
-  constructor(private servidor:BackendService) {
+  constructor(private servidor: BackendService) {
     this.verErrores();
-   }
+  }
 
-  errors:any=[]
+  errors: any = []
 
   ngOnInit(): void {
   }
 
-  verErrores(){
+  verErrores() {
     this.servidor.Errores().subscribe(
-      res=>{
-        var js=JSON.stringify(res)
-        var data=JSON.parse(js).Errores
+      res => {
+        var js = JSON.stringify(res)
+        var data = JSON.parse(js).Errores
         console.log(data)
-        let longitud=data.length
-        for(let i=0;i<longitud;i++){
+        let longitud = data.length
+        for (let i = 0; i < longitud; i++) {
           this.errors.push(data[i])
         }
       },
-      err=>{}
+      err => { }
     )
 
 

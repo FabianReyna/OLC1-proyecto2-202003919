@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const tablaSimbolos_1 = __importDefault(require("./tablaSimbolos"));
+const RepSimbolo_1 = __importDefault(require("../reportes/RepSimbolo"));
 class Arbol {
     constructor(instrucciones) {
         this.instrucciones = instrucciones;
@@ -11,6 +12,7 @@ class Arbol {
         this.consola = "";
         this.tablaGlobal = new tablaSimbolos_1.default();
         this.errores = new Array();
+        this.simbolos = new Array();
     }
     getConsola() {
         return this.consola;
@@ -47,6 +49,20 @@ class Arbol {
     }
     addFunciones(ins) {
         this.funciones.push(ins);
+    }
+    addSimbolo(id, tipo, entorno, linea, col, val) {
+        this.simbolos.push(new RepSimbolo_1.default(id, tipo, entorno, linea, col, val));
+    }
+    updateSimbolo(id, entorno, val) {
+        for (let i of this.simbolos) {
+            if (i.id == id && i.entorno == entorno) {
+                i.valor = val;
+                break;
+            }
+        }
+    }
+    getSimbolos() {
+        return this.simbolos;
     }
 }
 exports.default = Arbol;

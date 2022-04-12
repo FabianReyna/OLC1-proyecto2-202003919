@@ -15,18 +15,18 @@ export default class IncDec extends Instruccion {
         super(new Tipo(tipoDato.VOID), linea, col);
         this.expresion = expresion;
         this.operacion = operacion;
-        
+
     }
 
     interpretar(arbol: Arbol, tabla: tablaSimbolo) {
-        
+
 
         if (this.expresion instanceof AccesoVar) {
             let variable = tabla.getVariable(this.expresion.id);
-            
+
             if (variable == null) return new Errores("Semantico", "La variable" + this.expresion + " no existe", this.linea, this.col);
             if (variable.getTipo().getTipo() != tipoDato.ENTERO && variable.getTipo().getTipo() != tipoDato.DECIMAL) return new Errores("Semantico", "La variable" + this.expresion + " debe ser numerica (int o double)", this.linea, this.col);
-            
+
             this.tipoDato.setTipo(variable.getTipo().getTipo())
             let valor = variable.getValor();
             if (this.operacion == 0) {
@@ -35,6 +35,7 @@ export default class IncDec extends Instruccion {
                 valor++;
             }
             variable.setValor(valor);
+            arbol.updateSimbolo(this.expresion.id, tabla.getNombre(), "" + valor)
 
         } else if (this.expresion instanceof AccesoVec) {
             let variable = tabla.getVariable(this.expresion.id);
@@ -53,6 +54,7 @@ export default class IncDec extends Instruccion {
                     valor[parseInt(indice1)]++;
                 }
                 variable.setValor(valor);
+                arbol.updateSimbolo(this.expresion.id, tabla.getNombre(), "[" + valor.toString() + "]")
             } else {
                 if (!this.expresion.index2) return new Errores("Semantico", "Index Invalido", this.linea, this.col);
                 else {
@@ -72,6 +74,17 @@ export default class IncDec extends Instruccion {
                             valor[parseInt(indice1)][parseInt(indice2)]++;
                         }
                         variable.setValor(valor);
+                        let valorAux = "[";
+                        for (let i = 0; i < valor.length; i++) {
+                            let aux = [];
+                            for (let j = 0; j < valor[0].length; j++) {
+                                aux.push(valor[i][j]);
+                            }
+                            if (i == 0) valorAux = valorAux + "[" + aux.toString() + "]";
+                            else valorAux = valorAux + ",[" + aux.toString() + "]";
+                        }
+                        valorAux+="]";
+                        arbol.updateSimbolo(this.expresion.id, tabla.getNombre(), valorAux)
                     } catch (err) {
                         return new Errores("Semantico", "Index fuera del rango", this.linea, this.col);
                     }

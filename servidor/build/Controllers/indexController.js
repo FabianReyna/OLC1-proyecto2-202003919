@@ -18,6 +18,7 @@ class IndexController {
         try {
             let ast = new Arbol_1.default(parser.parse(req.body.consola));
             var tabla = new tablaSimbolos_1.default();
+            tabla.setNombre("");
             ast.setTablaGlobal(tabla);
             for (let i of ast.getInstrucciones()) {
                 if (i instanceof Errores_1.default) {
@@ -30,8 +31,12 @@ class IndexController {
                     }
                 }
             }
+            for (let i of exports.listaErrores) {
+                ast.Println(i.toString());
+            }
             tree = ast;
             console.log(ast.getTablaGlobal().getTabla());
+            //console.log(ast.getSimbolos())
             res.json({ consola: ast.getConsola() });
         }
         catch (err) {
@@ -39,13 +44,12 @@ class IndexController {
         }
     }
     ast(req, res) {
-        res.send({ "AST": "" });
     }
     errores(req, res) {
         res.json({ Errores: exports.listaErrores });
     }
     simbolos(req, res) {
-        res.send({ "SIMBOLOS": "" });
+        res.json({ Simbolos: tree.getSimbolos() });
     }
 }
 exports.indexController = new IndexController();

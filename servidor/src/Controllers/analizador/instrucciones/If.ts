@@ -41,6 +41,7 @@ export default class If extends Instruccion {
                 for (let i of this.InsIf) {
                     let resultado = i.interpretar(arbol, NewTabla1);
                     if (resultado instanceof Errores) listaErrores.push(resultado);
+                    if(i instanceof BreakContinue) return i;
                 }
             } else {
                 if (this.InsElse instanceof If) {
@@ -53,6 +54,7 @@ export default class If extends Instruccion {
                     for (let i of this.InsElse) {
                         let resultado = i.interpretar(arbol, NewTabla1);
                         if (resultado instanceof Errores) listaErrores.push(resultado);
+                        if(i instanceof BreakContinue) return i;
                     }
                 }
             }

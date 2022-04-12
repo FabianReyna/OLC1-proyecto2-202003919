@@ -37,14 +37,11 @@ export default class For extends Instruccion {
                 resultado = i.interpretar(arbol, NewTabla);
                 if (resultado instanceof Errores) listaErrores.push(resultado);
                 if (resultado instanceof BreakContinue) {
-                    if (resultado.opcion == Opcion.BREAK) break;
+                    if (resultado.opcion == Opcion.BREAK) return;
                     if (resultado.opcion == Opcion.CONTINUE) break;
                 }
             }
-            if (resultado instanceof BreakContinue) {
-                if (resultado.opcion == Opcion.BREAK) break;
-                
-            }
+
             let actualiza = this.actualizacion.interpretar(arbol, NewTabla);
             if (actualiza instanceof Errores) return actualiza;
         }
