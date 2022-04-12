@@ -43,7 +43,7 @@ class IndexController{
     }
 
     public errores(req:Request,res:Response){
-        res.send({"Errores":""});
+        res.json({Errores:listaErrores});
     }
 
     public simbolos(req:Request,res:Response){

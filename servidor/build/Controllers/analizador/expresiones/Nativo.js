@@ -11,6 +11,10 @@ class Nativo extends Instruccion_1.Instruccion {
         if (this.tipoDato.getTipo() == Tipo_1.tipoDato.BOOL) {
             return this.valor == "true" ? true : false;
         }
+        if (this.tipoDato.getTipo() == Tipo_1.tipoDato.CADENA) {
+            let val = this.valor.toString();
+            this.valor = val.replace('\\n', '\n').replace('\\t', '\t').replace('\\r', '\r').replace('\\\\', '\\').replace("\\'", "'").replace('\\"', '"');
+        }
         return this.valor;
     }
 }

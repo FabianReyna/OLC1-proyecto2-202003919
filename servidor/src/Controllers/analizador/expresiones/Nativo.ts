@@ -15,6 +15,10 @@ export default class Nativo extends Instruccion {
         if (this.tipoDato.getTipo() == tipoDato.BOOL) {
             return this.valor == "true" ? true : false;
         }
+        if (this.tipoDato.getTipo() == tipoDato.CADENA) {
+            let val = this.valor.toString();
+            this.valor = val.replace('\\n', '\n').replace('\\t', '\t').replace('\\r', '\r').replace('\\\\', '\\').replace("\\'", "'").replace('\\"', '"');
+        }
         return this.valor
     }
 

@@ -46,9 +46,7 @@ class IncDec extends Instruccion_1.Instruccion {
             if (variable.getTipo().getTipo() != Tipo_1.tipoDato.ENTERO && variable.getTipo().getTipo() != Tipo_1.tipoDato.DECIMAL)
                 return new Errores_1.default("Semantico", "La variable" + this.expresion + " debe ser numerica (int o double)", this.linea, this.col);
             this.tipoDato.setTipo(variable.getTipo().getTipo());
-            console.log("pasamos la actualizacion ");
             let valor = variable.getValor();
-            console.log(this.operacion);
             if (this.operacion == 0) {
                 valor--;
             }

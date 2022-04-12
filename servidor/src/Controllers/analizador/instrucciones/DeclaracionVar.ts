@@ -23,22 +23,27 @@ export default class DeclaracionVar extends Instruccion {
                     for (let i = 0; i < this.identificadores.length; i++) {
                         if (!(tabla.setVariable(new Simbolo(this.tipoDato, this.identificadores[i], 0)))) return new Errores("Semantico", "Declaracion de variable '" + this.identificadores[i] + "' ya existente en el ambito", this.linea, this.col);
                     }
+                    break;
                 case tipoDato.DECIMAL:
                     for (let i = 0; i < this.identificadores.length; i++) {
                         if (!(tabla.setVariable(new Simbolo(this.tipoDato, this.identificadores[i], 0.0)))) return new Errores("Semantico", "Declaracion de variable '" + this.identificadores[i] + "' ya existente en el ambito", this.linea, this.col);
                     }
+                    break;
                 case tipoDato.BOOL:
                     for (let i = 0; i < this.identificadores.length; i++) {
                         if (!(tabla.setVariable(new Simbolo(this.tipoDato, this.identificadores[i], true)))) return new Errores("Semantico", "Declaracion de variable '" + this.identificadores[i] + "' ya existente en el ambito", this.linea, this.col);
                     }
+                    break;
                 case tipoDato.CARACTER:
                     for (let i = 0; i < this.identificadores.length; i++) {
                         if (!(tabla.setVariable(new Simbolo(this.tipoDato, this.identificadores[i], '\u0000')))) return new Errores("Semantico", "Declaracion de variable '" + this.identificadores[i] + "' ya existente en el ambito", this.linea, this.col);
                     }
+                    break;
                 case tipoDato.CADENA:
                     for (let i = 0; i < this.identificadores.length; i++) {
                         if (!(tabla.setVariable(new Simbolo(this.tipoDato, this.identificadores[i], "")))) return new Errores("Semantico", "Declaracion de variable '" + this.identificadores[i] + "' ya existente en el ambito", this.linea, this.col);
                     }
+                    break;
                 default:
                     return new Errores("Semantico", "Asigancion de no valida", this.linea, this.col);
             }
@@ -52,22 +57,27 @@ export default class DeclaracionVar extends Instruccion {
                         for (let i = 0; i < this.identificadores.length; i++) {
                             if (!(tabla.setVariable(new Simbolo(this.tipoDato, this.identificadores[i], parseInt(valorInterpretado))))) return new Errores("Semantico", "Declaracion de variable '" + this.identificadores[i] + "' ya existente en el ambito", this.linea, this.col);
                         }
+                        break;
                     case tipoDato.DECIMAL:
                         for (let i = 0; i < this.identificadores.length; i++) {
                             if (!(tabla.setVariable(new Simbolo(this.tipoDato, this.identificadores[i], parseFloat(valorInterpretado))))) return new Errores("Semantico", "Declaracion de variable '" + this.identificadores[i] + "' ya existente en el ambito", this.linea, this.col);
                         }
+                        break;
                     case tipoDato.BOOL:
                         for (let i = 0; i < this.identificadores.length; i++) {
                             if (!(tabla.setVariable(new Simbolo(this.tipoDato, this.identificadores[i], valorInterpretado)))) return new Errores("Semantico", "Declaracion de variable '" + this.identificadores[i] + "' ya existente en el ambito", this.linea, this.col);
                         }
+                        break;
                     case tipoDato.CARACTER:
                         for (let i = 0; i < this.identificadores.length; i++) {
                             if (!(tabla.setVariable(new Simbolo(this.tipoDato, this.identificadores[i], valorInterpretado)))) return new Errores("Semantico", "Declaracion de variable '" + this.identificadores[i] + "' ya existente en el ambito", this.linea, this.col);
                         }
+                        break;
                     case tipoDato.CADENA:
                         for (let i = 0; i < this.identificadores.length; i++) {
                             if (!(tabla.setVariable(new Simbolo(this.tipoDato, this.identificadores[i], valorInterpretado)))) return new Errores("Semantico", "Declaracion de variable '" + this.identificadores[i] + "' ya existente en el ambito", this.linea, this.col);
                         }
+                        break;
                     default:
                         return new Errores("Semantico", "Asigancion de no valida", this.linea, this.col);
                 }

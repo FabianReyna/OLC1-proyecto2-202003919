@@ -1,6 +1,6 @@
 %{
 //CODIGO JS
-const ListaErrores= require('../indexController').listaErrores;
+const ListaErrores= require('../indexController');
 const errores= require('./Excepciones/Errores');
 const Tipo=require('./simbolo/Tipo')
 //expresiones
@@ -11,7 +11,7 @@ const Logicas=require('./expresiones/Logicas')
 const AccesoVar=require('./expresiones/AccesoVar')
 const AccesoVec=require('./expresiones/AccesoVec')
 const FuncNativas=require('./expresiones/FuncNativas')
-
+const Casteo=require('./expresiones/Casteo')
 //instrucciones
 const Print=require('./instrucciones/Print')
 const PrintLn=require('./instrucciones/Println')
@@ -19,8 +19,13 @@ const DeclaracionVar=require('./instrucciones/DeclaracionVar')
 const DeclaracionArray1=require('./instrucciones/DeclaracionArray1')
 const DeclaracionArray2=require('./instrucciones/DeclaracionArray2')
 const IncDec=require('./instrucciones/IncDec')
-const Casteo=require('./instrucciones/Casteo')
 const ModVec=require('./instrucciones/ModVec')
+const ModVar=require('./instrucciones/ModVar')
+const BreakContinue=require('./instrucciones/BreakContinue')
+const If=require('./instrucciones/If')
+const Ternario=require('./instrucciones/Ternario')
+const While=require('./instrucciones/While')
+const For=require('./instrucciones/For')
 %}
 
 %lex
@@ -111,13 +116,14 @@ const ModVec=require('./instrucciones/ModVec')
 [\ \n]              {};
 
 <<EOF>>             return 'EOF';
-.                   {ListaErrores.push(new errores.default("Lexico","El caracter "+ yytext+" no pertenece al lenguaje",this._$.first_line,this._$.first_column));}
+.                   {ListaErrores.listaErrores.push(new errores.default("Lexico","El caracter "+ yytext+" no pertenece al lenguaje",yylloc.first_line,yylloc.first_column));}
 
 %{
 
 %}
 /lex
 //Precedencia
+%right 'TERNARIO'
 %left 'OR'
 %left 'AND'
 %right 'NOT'
@@ -136,21 +142,22 @@ INICIO : INSTRUCCIONES EOF      {return $1;}
 
 INSTRUCCIONES : INSTRUCCIONES INSTRUCCION {$1.push($2);$$=$1;}
                 | INSTRUCCION {$$=[$1];}
-                | error PUNTOCOMA {ListaErrores.push(new errores.default("Sintactico",yytext,@1.first_line,@1.first_column));}
+                | error PUNTOCOMA,EOF {ListaErrores.listaErrores.push(new errores.default("Sintactico",yytext,@1.first_line,@1.first_column));}
 ;
 
 INSTRUCCION : DECLARACION                       {$$=$1;}
+            | ASI                               {$$=$1;}
             | VEC                               {$$=$1;}
             | MVEC                              {$$=$1;}
             | INCREMENTO                        {$$=$1;}
             | DECREMENTO                        {$$=$1;}
             | SIF
-            | SSWITCH
-            | CWHILE
+            | SSWITCH                           
+            | CWHILE                            {$$=$1;}
             | CFOR
             | CDOW
-            | TBREAK
-            | TCONTINUE
+            | TBREAK                            {$$=$1;}
+            | TCONTINUE                         {$$=$1;}
             | TRETURN
             | FUNCS
             | METODS
@@ -168,6 +175,7 @@ EXP : EXP MAS EXP                           {$$=new Aritmeticas.default(Aritmeti
     | EXP POW EXP                           {$$=new Aritmeticas.default(Aritmeticas.Operadores.POW,@1.first_line,@1.first_column,$1,$3);}
     | EXP MOD EXP                           {$$=new Aritmeticas.default(Aritmeticas.Operadores.MOD,@1.first_line,@1.first_column,$1,$3);}
     | MENOS EXP %prec UMENOS                {$$=new Aritmeticas.default(Aritmeticas.Operadores.NEG,@1.first_line,@1.first_column,$2);}
+    | TERNAR                                {$$=$1;}
     | EXP EQUALS EXP                        {$$=new Relacionales.default(Relacionales.Relacional.EQUALS,@1.first_line,@1.first_column,$1,$3);}
     | EXP NOTEQUAL EXP                      {$$=new Relacionales.default(Relacionales.Relacional.NOTEQUAL,@1.first_line,@1.first_column,$1,$3);}
     | EXP MENOR EXP                         {$$=new Relacionales.default(Relacionales.Relacional.MENOR,@1.first_line,@1.first_column,$1,$3);}
@@ -218,7 +226,7 @@ DEC2 : PUNTOCOMA                {$$=null;}
 ;
 
 //asignacion
-ASI : ID IGUAL EXP PUNTOCOMA
+ASI : ID IGUAL EXP PUNTOCOMA        {$$=new ModVar.default($1,$3,@1.first_line,@1.first_column);}
 ;
              
 VEC : TIPOS ID COR1 COR2 COR1 COR2 IGUAL NEW TIPOS COR1 EXP COR2 COR1 EXP COR2 PUNTOCOMA        {$$=new DeclaracionArray1.default($1,$9,$2,$11,2,@1.first_line,@1.first_column,$14);}
@@ -250,10 +258,14 @@ INCREMENTO: EXP INCREMENT PUNTOCOMA     {$$=new IncDec.default($1,1,@1.first_lin
 DECREMENTO: EXP DECREMENT PUNTOCOMA           {$$=new IncDec.default($1,0,@1.first_line,@1.first_column);}
 ;
 
+//ternario
+TERNAR : EXP TERNARIO EXP DOSPUNTOS EXP         {$$=new Ternario.default($1,$3,$5,@1.first_line,@1.first_column);}
+;
+
 //if
-SIF : IF PAR1 EXP PAR2 LLAVE1 INSTRUCCIONES LLAVE2
-    | IF PAR1 EXP PAR2 LLAVE1 INSTRUCCIONES LLAVE2 ELSE LLAVE1 INSTRUCCIONES LLAVE2
-    | IF PAR1 EXP PAR2 LLAVE1 INSTRUCCIONES LLAVE2 ELSE SIF
+SIF : IF PAR1 EXP PAR2 LLAVE1 INSTRUCCIONES LLAVE2 ELSE LLAVE1 INSTRUCCIONES LLAVE2         {$$=new If.default($3,$6,@1.first_line,@1.first_column,$10);}
+    | IF PAR1 EXP PAR2 LLAVE1 INSTRUCCIONES LLAVE2 ELSE SIF                                 {$$=new If.default($3,$6,@1.first_line,@1.first_column,$9);}
+    | IF PAR1 EXP PAR2 LLAVE1 INSTRUCCIONES LLAVE2                                          {$$=new If.default($3,$6,@1.first_line,@1.first_column);}
 ;
 
 //switch
@@ -270,19 +282,20 @@ SDEF : DEFAULT DOSPUNTOS INSTRUCCIONES
 ;
 
 //while
-CWHILE : WHILE PAR1 EXP PAR2 LLAVE1 INSTRUCCIONES LLAVE2
+CWHILE : WHILE PAR1 EXP PAR2 LLAVE1 INSTRUCCIONES LLAVE2        {$$=new While.default($3,$6,@1.first_line,@1.first_column);}
 ;
 
 //for
-CFOR : FOR PAR1 S_DEC_ASI EXP PUNTOCOMA ID ACTUALIZACION PAR2 LLAVE1 INSTRUCCIONES LLAVE2
+CFOR : FOR PAR1 S_DEC_ASI EXP PUNTOCOMA ACTUALIZACION PAR2 LLAVE1 INSTRUCCIONES LLAVE2       {$$=new For.default($3,$4,$6,$9,@1.first_line,@1.first_column);}
 ;
 
-S_DEC_ASI : DECLARACION
-        | ASI
+S_DEC_ASI : DECLARACION         {$$=$1;}
+        | ASI                   {$$=$1;}
 ;
 
-ACTUALIZACION : INCREMENT
-            | DECREMENT
+ACTUALIZACION : EXP INCREMENT       {$$=new IncDec.default($1,1,@1.first_line,@1.first_column);}
+            | EXP DECREMENT         {$$=new IncDec.default($1,0,@1.first_line,@1.first_column);}
+            | ID IGUAL EXP          {$$=new ModVar.default($1,$3,@1.first_line,@1.first_column);}
 ;
 
 //do.while
@@ -290,11 +303,11 @@ CDOW : DO LLAVE1 INSTRUCCIONES LLAVE2 WHILE PAR1 EXP PAR2 PUNTOCOMA
 ; 
 
 // break
-TBREAK : BREAK PUNTOCOMA
+TBREAK : BREAK PUNTOCOMA        {$$=new BreakContinue.default(BreakContinue.Opcion.BREAK,@1.first_line,@1.first_column)}
 ;
 
 // continue
-TCONTINUE : CONTINUE PUNTOCOMA
+TCONTINUE : CONTINUE PUNTOCOMA  {$$=new BreakContinue.default(BreakContinue.Opcion.CONTINUE,@1.first_line,@1.first_column)}
 ;
 
 // return

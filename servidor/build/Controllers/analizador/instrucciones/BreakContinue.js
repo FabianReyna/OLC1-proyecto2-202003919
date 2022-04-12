@@ -22,25 +22,25 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Opcion = void 0;
 const Instruccion_1 = require("../abstracto/Instruccion");
-const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
-class AccesoVar extends Instruccion_1.Instruccion {
-    constructor(id, linea, col) {
+class BreakContinue extends Instruccion_1.Instruccion {
+    constructor(option, linea, col) {
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, col);
-        this.id = id.toLowerCase();
+        this.opcion = option;
     }
     interpretar(arbol, tabla) {
-        let valor = tabla.getVariable(this.id);
-        console.log(valor);
-        if (valor == null)
-            return new Errores_1.default("Semantico", "Variable no existente", this.linea, this.col);
-        this.tipoDato = valor.getTipo();
-        return valor.getValor();
+        if (this.opcion == Opcion.BREAK)
+            return;
+        if (this.opcion == Opcion.CONTINUE)
+            return;
     }
 }
-exports.default = AccesoVar;
+exports.default = BreakContinue;
+var Opcion;
+(function (Opcion) {
+    Opcion[Opcion["BREAK"] = 0] = "BREAK";
+    Opcion[Opcion["CONTINUE"] = 1] = "CONTINUE";
+})(Opcion = exports.Opcion || (exports.Opcion = {}));

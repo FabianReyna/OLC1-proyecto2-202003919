@@ -42,7 +42,7 @@ class IndexController {
         res.send({ "AST": "" });
     }
     errores(req, res) {
-        res.send({ "Errores": "" });
+        res.json({ Errores: exports.listaErrores });
     }
     simbolos(req, res) {
         res.send({ "SIMBOLOS": "" });
