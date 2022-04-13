@@ -148,5 +148,7 @@ class DeclaracionArray2 extends Instruccion_1.Instruccion {
             }
         }
     }
+    generarDot(anterior) {
+    }
 }
 exports.default = DeclaracionArray2;

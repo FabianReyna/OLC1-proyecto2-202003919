@@ -129,5 +129,7 @@ class IncDec extends Instruccion_1.Instruccion {
             return new Errores_1.default("Semantico", "Variable no valida", this.linea, this.col);
         }
     }
+    generarDot(anterior) {
+    }
 }
 exports.default = IncDec;

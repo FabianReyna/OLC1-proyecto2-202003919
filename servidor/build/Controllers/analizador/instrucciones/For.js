@@ -69,5 +69,7 @@ class For extends Instruccion_1.Instruccion {
                 return actualiza;
         }
     }
+    generarDot(anterior) {
+    }
 }
 exports.default = For;

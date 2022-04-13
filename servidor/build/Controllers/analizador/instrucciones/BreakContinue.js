@@ -37,6 +37,8 @@ class BreakContinue extends Instruccion_1.Instruccion {
         if (this.opcion == Opcion.CONTINUE)
             return;
     }
+    generarDot(anterior) {
+    }
 }
 exports.default = BreakContinue;
 var Opcion;

@@ -61,5 +61,7 @@ class While extends Instruccion_1.Instruccion {
             }
         }
     }
+    generarDot(anterior) {
+    }
 }
 exports.default = While;

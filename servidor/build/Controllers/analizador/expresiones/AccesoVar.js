@@ -26,6 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const indexController_1 = require("../../indexController");
 const Instruccion_1 = require("../abstracto/Instruccion");
 const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
@@ -40,6 +41,14 @@ class AccesoVar extends Instruccion_1.Instruccion {
             return new Errores_1.default("Semantico", "Variable no existente", this.linea, this.col);
         this.tipoDato = valor.getTipo();
         return valor.getValor();
+    }
+    generarDot(anterior) {
+        let cadena = "";
+        let nodo1 = "n" + (indexController_1.numeroNodo.no + 1);
+        indexController_1.numeroNodo.no += 1;
+        cadena += nodo1 + "[label=\"ID\"];\n";
+        cadena += anterior + "->" + nodo1 + ";\n";
+        return cadena;
     }
 }
 exports.default = AccesoVar;

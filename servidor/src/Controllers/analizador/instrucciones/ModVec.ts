@@ -107,4 +107,8 @@ export default class ModVec extends Instruccion {
             }
         }
     }
+
+    generarDot(anterior: string) {
+        
+    }
 }

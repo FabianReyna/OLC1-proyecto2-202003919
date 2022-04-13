@@ -95,4 +95,8 @@ export default class DeclaracionVar extends Instruccion {
             }
         }
     }
+
+    generarDot(anterior: string) {
+        
+    }
 }

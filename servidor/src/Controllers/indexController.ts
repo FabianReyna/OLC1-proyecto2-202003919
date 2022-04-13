@@ -4,7 +4,9 @@ import Arbol from './analizador/simbolo/Arbol';
 import tablaSimbolo from './analizador/simbolo/tablaSimbolos';
 
 export let listaErrores: Array<Errores>;
+export let numeroNodo = { no: 10 as number };
 let tree: Arbol;
+let graphAST: string;
 
 class IndexController {
     public prueba(req: Request, res: Response) {
@@ -12,6 +14,7 @@ class IndexController {
     }
 
     public escaneo(req: Request, res: Response) {
+        numeroNodo.no = 0;
         listaErrores = new Array<Errores>();
         let parser = require("./analizador/analizador");
 
@@ -30,11 +33,24 @@ class IndexController {
                     }
                 }
             }
+            let cadena = "digraph ast {\n";
+            cadena += "nINICIO [label=\"INICIO\"];\n";
+            cadena += "nINSTRUCCIONES [label=\"INSTRUCCIONES\"];\n"
+            cadena += "nINICIO->nINSTRUCCIONES;\n";
+            for (let i of ast.getInstrucciones()) {
+                if (i instanceof Errores) continue;
+                else {
+                    cadena += i.generarDot("nINSTRUCCIONES");
+                }
+            }
+            cadena += "\n}"
+            graphAST = cadena;
+            console.log(graphAST)
             for (let i of listaErrores) {
                 ast.Println(i.toString());
             }
             tree = ast;
-            console.log(ast.getTablaGlobal().getTabla())
+            //console.log(ast.getTablaGlobal().getTabla())
             //console.log(ast.getSimbolos())
             res.json({ consola: ast.getConsola() })
         } catch (err) {
@@ -44,7 +60,7 @@ class IndexController {
     }
 
     public ast(req: Request, res: Response) {
-        
+
     }
 
     public errores(req: Request, res: Response) {
@@ -52,7 +68,7 @@ class IndexController {
     }
 
     public simbolos(req: Request, res: Response) {
-        res.json({Simbolos:tree.getSimbolos()});
+        res.json({ Simbolos: tree.getSimbolos() });
     }
 }
 

@@ -40,5 +40,7 @@ class Print extends Instruccion_1.Instruccion {
             return valor;
         arbol.Println(valor);
     }
+    generarDot(anterior) {
+    }
 }
 exports.default = Print;

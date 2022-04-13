@@ -1,3 +1,4 @@
+import { numeroNodo } from '../../indexController'
 import { Instruccion } from '../abstracto/Instruccion'
 import Arbol from '../simbolo/Arbol'
 import tablaSimbolo from '../simbolo/tablaSimbolos'
@@ -20,6 +21,18 @@ export default class Nativo extends Instruccion {
             this.valor = val.replace('\\n', '\n').replace('\\t', '\t').replace('\\r', '\r').replace('\\\\', '\\').replace("\\'", "'").replace('\\"', '"');
         }
         return this.valor
+    }
+
+    generarDot(anterior: string) {
+        let nodoNativo = "n" + (numeroNodo.no + 1);
+        let nodoNativo2 = "n" + (numeroNodo.no + 2);
+        let cadena = "";
+        cadena += nodoNativo + "[label=\"NATIVO\"];\n";
+        cadena += anterior + "->" + nodoNativo+";\n";
+        cadena += nodoNativo2 + "[label=\"" + this.valor + "\"]\n";
+        cadena += nodoNativo + "->" + nodoNativo2 + ";\n";
+        numeroNodo.no += 2;
+        return cadena;
     }
 
 }

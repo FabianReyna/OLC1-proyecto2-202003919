@@ -38,4 +38,8 @@ export default class Ternario extends Instruccion {
 
 
     }
+
+    generarDot(anterior: string) {
+        
+    }
 }

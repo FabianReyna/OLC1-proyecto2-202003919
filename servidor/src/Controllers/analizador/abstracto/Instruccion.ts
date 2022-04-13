@@ -13,5 +13,6 @@ export abstract class Instruccion{
         this.col=col
     }
 
-    abstract interpretar(arbol:Arbol,tabla:tablaSimbolo):any
+    abstract interpretar(arbol:Arbol,tabla:tablaSimbolo):any;
+    abstract generarDot(anterior:string):any;
 }

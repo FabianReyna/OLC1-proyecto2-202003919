@@ -101,6 +101,10 @@ export default class FuncNativas extends Instruccion {
         return verificacion.toUpperCase();
     }
 
+    generarDot(anterior: string) {
+        
+    }
+
 }
 
 export enum Funciones {

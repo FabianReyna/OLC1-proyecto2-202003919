@@ -27,4 +27,8 @@ export default class ModVar extends Instruccion {
         valor.setValor(NewValor);
         arbol.updateSimbolo(this.id,tabla.getNombre(),""+NewValor);
     }
+
+    generarDot(anterior: string) {
+        
+    }
 }

@@ -16,4 +16,8 @@ export default class Print extends Instruccion{
         if(valor instanceof Errores) return valor;
         arbol.Println(valor)
     }
+    
+    generarDot(anterior: string) {
+        
+    }
 }

@@ -104,5 +104,7 @@ class DeclaracionVar extends Instruccion_1.Instruccion {
             }
         }
     }
+    generarDot(anterior) {
+    }
 }
 exports.default = DeclaracionVar;

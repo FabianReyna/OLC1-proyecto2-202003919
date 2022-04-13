@@ -19,8 +19,6 @@ export default class IncDec extends Instruccion {
     }
 
     interpretar(arbol: Arbol, tabla: tablaSimbolo) {
-
-
         if (this.expresion instanceof AccesoVar) {
             let variable = tabla.getVariable(this.expresion.id);
 
@@ -94,5 +92,9 @@ export default class IncDec extends Instruccion {
             return new Errores("Semantico", "Variable no valida", this.linea, this.col);
         }
 
+    }
+
+    generarDot(anterior: string) {
+        
     }
 }

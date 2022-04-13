@@ -60,6 +60,10 @@ export default class If extends Instruccion {
             }
         }
     }
+
+    generarDot(anterior: string) {
+        
+    }
 }
 
 /*

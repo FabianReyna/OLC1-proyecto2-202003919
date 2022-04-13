@@ -120,6 +120,8 @@ class FuncNativas extends Instruccion_1.Instruccion {
         this.tipoDato.setTipo(Tipo_1.tipoDato.CADENA);
         return verificacion.toUpperCase();
     }
+    generarDot(anterior) {
+    }
 }
 exports.default = FuncNativas;
 var Funciones;

@@ -57,5 +57,7 @@ class Ternario extends Instruccion_1.Instruccion {
             return valor2;
         }
     }
+    generarDot(anterior) {
+    }
 }
 exports.default = Ternario;

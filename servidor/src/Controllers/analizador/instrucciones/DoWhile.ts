@@ -38,4 +38,8 @@ export default class DoWhile extends Instruccion {
 
     }
 
+    generarDot(anterior: string) {
+        
+    }
+
 }

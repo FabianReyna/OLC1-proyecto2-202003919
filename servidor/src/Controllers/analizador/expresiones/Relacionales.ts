@@ -1,3 +1,4 @@
+import { numeroNodo } from "../../indexController";
 import { Instruccion } from "../abstracto/Instruccion";
 import Errores from "../excepciones/Errores";
 import Arbol from "../simbolo/Arbol";
@@ -545,6 +546,42 @@ export default class Relacionales extends Instruccion {
                 return new Errores('Semantico', 'Tipo Dato Invalido', this.linea, this.col);
 
         }
+    }
+
+    generarDot(anterior: string) {
+        let cadena = "";
+        let nodo1 = "n" + (numeroNodo.no + 1);
+        let nodo2 = "n" + (numeroNodo.no + 2);
+        let nodo3 = "n" + (numeroNodo.no + 3);
+        numeroNodo.no += 3;
+        cadena += nodo1 + "[label=\"EXP\"];\n";
+        switch (this.relacional) {
+            case Relacional.EQUALS:
+                cadena += nodo2 + "[label=\"==\"];\n";
+                break;
+            case Relacional.NOTEQUAL:
+                cadena += nodo2 + "[label=\"!=\"];\n";
+                break;
+            case Relacional.MENOR:
+                cadena += nodo2 + "[label=\"<\"];\n";
+                break;
+            case Relacional.MENOREQ:
+                cadena += nodo2 + "[label=\"<=\"];\n";
+                break;
+            case Relacional.MAYOR:
+                cadena += nodo2 + "[label=\">\"];\n";
+                break;
+            case Relacional.MAYOREQ:
+                cadena += nodo2 + "[label=\">=\"];\n";
+                break;
+        }
+        cadena += nodo3 + "[label=\"EXP\"];\n";
+        cadena += anterior + "->" + nodo1 + ";\n";
+        cadena += anterior + "->" + nodo2 + ";\n";
+        cadena += anterior + "->" + nodo3 + ";\n";
+        cadena += this.cond1?.generarDot(nodo1);
+        cadena += this.cond2?.generarDot(nodo3);
+        return cadena;
     }
 
 }

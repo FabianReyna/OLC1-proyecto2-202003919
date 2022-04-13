@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const indexController_1 = require("../../indexController");
 const Instruccion_1 = require("../abstracto/Instruccion");
 const Tipo_1 = require("../simbolo/Tipo");
 class Nativo extends Instruccion_1.Instruccion {
@@ -16,6 +17,17 @@ class Nativo extends Instruccion_1.Instruccion {
             this.valor = val.replace('\\n', '\n').replace('\\t', '\t').replace('\\r', '\r').replace('\\\\', '\\').replace("\\'", "'").replace('\\"', '"');
         }
         return this.valor;
+    }
+    generarDot(anterior) {
+        let nodoNativo = "n" + (indexController_1.numeroNodo.no + 1);
+        let nodoNativo2 = "n" + (indexController_1.numeroNodo.no + 2);
+        let cadena = "";
+        cadena += nodoNativo + "[label=\"NATIVO\"];\n";
+        cadena += anterior + "->" + nodoNativo + ";\n";
+        cadena += nodoNativo2 + "[label=\"" + this.valor + "\"]\n";
+        cadena += nodoNativo + "->" + nodoNativo2 + ";\n";
+        indexController_1.numeroNodo.no += 2;
+        return cadena;
     }
 }
 exports.default = Nativo;

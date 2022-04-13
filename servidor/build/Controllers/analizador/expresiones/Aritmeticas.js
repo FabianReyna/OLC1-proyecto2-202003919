@@ -27,6 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Operadores = void 0;
+const indexController_1 = require("../../indexController");
 const Instruccion_1 = require("../abstracto/Instruccion");
 const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
@@ -700,6 +701,55 @@ class Aritmeticas extends Instruccion_1.Instruccion {
                 return new Errores_1.default('Semantico', 'Negacion Unaria invalida ', this.linea, this.col);
             default:
                 return new Errores_1.default('Semantico', 'Tipo Dato Invalido', this.linea, this.col);
+        }
+    }
+    generarDot(anterior) {
+        var _a, _b;
+        let cadena = "";
+        if (this.opU != null) {
+            let nodo1 = "n" + (indexController_1.numeroNodo.no + 1);
+            let nodo2 = "n" + (indexController_1.numeroNodo.no + 2);
+            indexController_1.numeroNodo.no += 2;
+            cadena += nodo1 + "[label=\"-\"];\n";
+            cadena += nodo2 + "[label=\"EXP\"];\n";
+            cadena += anterior + "->" + nodo1 + ";\n";
+            cadena += anterior + "->" + nodo2 + ";\n";
+            cadena += this.opU.generarDot(nodo2);
+            return cadena;
+        }
+        else {
+            let nodo1 = "n" + (indexController_1.numeroNodo.no + 1);
+            let nodo2 = "n" + (indexController_1.numeroNodo.no + 2);
+            let nodo3 = "n" + (indexController_1.numeroNodo.no + 3);
+            indexController_1.numeroNodo.no += 3;
+            cadena += nodo1 + "[label=\"EXP\"];\n";
+            switch (this.operacion) {
+                case Operadores.SUMA:
+                    cadena += nodo2 + "[label=\"+\"];\n";
+                    break;
+                case Operadores.RESTA:
+                    cadena += nodo2 + "[label=\"-\"];\n";
+                    break;
+                case Operadores.MULT:
+                    cadena += nodo2 + "[label=\"*\"];\n";
+                    break;
+                case Operadores.DIV:
+                    cadena += nodo2 + "[label=\"/\"];\n";
+                    break;
+                case Operadores.POW:
+                    cadena += nodo2 + "[label=\"^\"];\n";
+                    break;
+                case Operadores.MOD:
+                    cadena += nodo2 + "[label=\"%\"];\n";
+                    break;
+            }
+            cadena += nodo3 + "[label=\"EXP\"];\n";
+            cadena += anterior + "->" + nodo1 + ";\n";
+            cadena += anterior + "->" + nodo2 + ";\n";
+            cadena += anterior + "->" + nodo3 + ";\n";
+            cadena += (_a = this.op1) === null || _a === void 0 ? void 0 : _a.generarDot(nodo1);
+            cadena += (_b = this.op2) === null || _b === void 0 ? void 0 : _b.generarDot(nodo3);
+            return cadena;
         }
     }
 }

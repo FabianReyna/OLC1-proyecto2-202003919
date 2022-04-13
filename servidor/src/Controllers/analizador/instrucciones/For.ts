@@ -45,7 +45,9 @@ export default class For extends Instruccion {
             let actualiza = this.actualizacion.interpretar(arbol, NewTabla);
             if (actualiza instanceof Errores) return actualiza;
         }
+    }
 
-
+    generarDot(anterior: string) {
+        
     }
 }

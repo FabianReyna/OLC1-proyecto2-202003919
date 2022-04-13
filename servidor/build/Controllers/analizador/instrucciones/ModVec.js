@@ -135,5 +135,7 @@ class ModVec extends Instruccion_1.Instruccion {
             }
         }
     }
+    generarDot(anterior) {
+    }
 }
 exports.default = ModVec;

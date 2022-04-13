@@ -50,4 +50,7 @@ export default class AccesoVec extends Instruccion {
             }
         }
     }
+
+    generarDot(anterior: string) { 
+    }
 }

@@ -27,6 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Logica = void 0;
+const indexController_1 = require("../../indexController");
 const Instruccion_1 = require("../abstracto/Instruccion");
 const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
@@ -97,6 +98,43 @@ class Logicas extends Instruccion_1.Instruccion {
             return new Errores_1.default('Semantico', 'Solo Booleanos se pueden comparar logicamente', this.linea, this.col);
         else {
             return !logU;
+        }
+    }
+    generarDot(anterior) {
+        var _a, _b;
+        let cadena = "";
+        if (this.logicU != null) {
+            let nodo1 = "n" + (indexController_1.numeroNodo.no + 1);
+            let nodo2 = "n" + (indexController_1.numeroNodo.no + 2);
+            indexController_1.numeroNodo.no += 2;
+            cadena += nodo1 + "[label=\"!\"];\n";
+            cadena += nodo2 + "[label=\"EXP\"];\n";
+            cadena += anterior + "->" + nodo1 + ";\n";
+            cadena += anterior + "->" + nodo2 + ";\n";
+            cadena += this.logicU.generarDot(nodo2);
+            return cadena;
+        }
+        else {
+            let nodo1 = "n" + (indexController_1.numeroNodo.no + 1);
+            let nodo2 = "n" + (indexController_1.numeroNodo.no + 2);
+            let nodo3 = "n" + (indexController_1.numeroNodo.no + 3);
+            indexController_1.numeroNodo.no += 3;
+            cadena += nodo1 + "[label=\"EXP\"];\n";
+            switch (this.logica) {
+                case Logica.AND:
+                    cadena += nodo2 + "[label=\"&&\"];\n";
+                    break;
+                case Logica.OR:
+                    cadena += nodo2 + "[label=\"||\"];\n";
+                    break;
+            }
+            cadena += nodo3 + "[label=\"EXP\"];\n";
+            cadena += anterior + "->" + nodo1 + ";\n";
+            cadena += anterior + "->" + nodo2 + ";\n";
+            cadena += anterior + "->" + nodo3 + ";\n";
+            cadena += (_a = this.logic1) === null || _a === void 0 ? void 0 : _a.generarDot(nodo1);
+            cadena += (_b = this.logic2) === null || _b === void 0 ? void 0 : _b.generarDot(nodo3);
+            return cadena;
         }
     }
 }

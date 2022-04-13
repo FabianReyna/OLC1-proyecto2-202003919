@@ -27,6 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Relacional = void 0;
+const indexController_1 = require("../../indexController");
 const Instruccion_1 = require("../abstracto/Instruccion");
 const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
@@ -555,6 +556,42 @@ class Relacionales extends Instruccion_1.Instruccion {
             default:
                 return new Errores_1.default('Semantico', 'Tipo Dato Invalido', this.linea, this.col);
         }
+    }
+    generarDot(anterior) {
+        var _a, _b;
+        let cadena = "";
+        let nodo1 = "n" + (indexController_1.numeroNodo.no + 1);
+        let nodo2 = "n" + (indexController_1.numeroNodo.no + 2);
+        let nodo3 = "n" + (indexController_1.numeroNodo.no + 3);
+        indexController_1.numeroNodo.no += 3;
+        cadena += nodo1 + "[label=\"EXP\"];\n";
+        switch (this.relacional) {
+            case Relacional.EQUALS:
+                cadena += nodo2 + "[label=\"==\"];\n";
+                break;
+            case Relacional.NOTEQUAL:
+                cadena += nodo2 + "[label=\"!=\"];\n";
+                break;
+            case Relacional.MENOR:
+                cadena += nodo2 + "[label=\"<\"];\n";
+                break;
+            case Relacional.MENOREQ:
+                cadena += nodo2 + "[label=\"<=\"];\n";
+                break;
+            case Relacional.MAYOR:
+                cadena += nodo2 + "[label=\">\"];\n";
+                break;
+            case Relacional.MAYOREQ:
+                cadena += nodo2 + "[label=\">=\"];\n";
+                break;
+        }
+        cadena += nodo3 + "[label=\"EXP\"];\n";
+        cadena += anterior + "->" + nodo1 + ";\n";
+        cadena += anterior + "->" + nodo2 + ";\n";
+        cadena += anterior + "->" + nodo3 + ";\n";
+        cadena += (_a = this.cond1) === null || _a === void 0 ? void 0 : _a.generarDot(nodo1);
+        cadena += (_b = this.cond2) === null || _b === void 0 ? void 0 : _b.generarDot(nodo3);
+        return cadena;
     }
 }
 exports.default = Relacionales;

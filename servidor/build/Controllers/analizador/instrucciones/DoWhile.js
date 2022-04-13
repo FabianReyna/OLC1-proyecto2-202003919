@@ -62,5 +62,7 @@ class DoWhile extends Instruccion_1.Instruccion {
             }
         } while (this.condicion.interpretar(arbol, NewTabla));
     }
+    generarDot(anterior) {
+    }
 }
 exports.default = DoWhile;

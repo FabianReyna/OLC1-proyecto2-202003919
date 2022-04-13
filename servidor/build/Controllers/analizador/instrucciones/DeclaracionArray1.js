@@ -102,5 +102,7 @@ class DeclaracionArray1 extends Instruccion_1.Instruccion {
             arbol.addSimbolo(this.id, "VECTOR", tabla.getNombre(), this.linea, this.col, valorAux);
         }
     }
+    generarDot(anterior) {
+    }
 }
 exports.default = DeclaracionArray1;

@@ -130,4 +130,8 @@ export default class DeclaracionArray2 extends Instruccion {
 
 
     }
+    
+    generarDot(anterior: string) {
+        
+    }
 }

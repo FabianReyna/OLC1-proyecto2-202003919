@@ -37,4 +37,8 @@ export default class While extends Instruccion {
             }
         }
     }
+    
+    generarDot(anterior: string) {
+        
+    }
 }

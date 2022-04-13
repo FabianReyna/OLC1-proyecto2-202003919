@@ -1,3 +1,4 @@
+import { numeroNodo } from "../../indexController";
 import { Instruccion } from "../abstracto/Instruccion";
 import Errores from "../excepciones/Errores";
 import Arbol from "../simbolo/Arbol";
@@ -73,6 +74,43 @@ export default class Logicas extends Instruccion {
         if (logicandoUnico != tipoDato.BOOL) return new Errores('Semantico', 'Solo Booleanos se pueden comparar logicamente', this.linea, this.col);
         else {
             return !logU;
+        }
+    }
+
+    generarDot(anterior: string) {
+        let cadena = "";
+        if (this.logicU != null) {
+            let nodo1 = "n" + (numeroNodo.no + 1);
+            let nodo2 = "n" + (numeroNodo.no + 2);
+            numeroNodo.no += 2;
+            cadena += nodo1 + "[label=\"!\"];\n";
+            cadena += nodo2 + "[label=\"EXP\"];\n";
+            cadena += anterior + "->" + nodo1 + ";\n";
+            cadena += anterior + "->" + nodo2 + ";\n";
+            cadena += this.logicU.generarDot(nodo2);
+            return cadena;
+        } else {
+            let nodo1 = "n" + (numeroNodo.no + 1);
+            let nodo2 = "n" + (numeroNodo.no + 2);
+            let nodo3 = "n" + (numeroNodo.no + 3);
+            numeroNodo.no += 3;
+            cadena += nodo1 + "[label=\"EXP\"];\n";
+            switch (this.logica) {
+                case Logica.AND:
+                    cadena += nodo2 + "[label=\"&&\"];\n";
+                    break;
+                case Logica.OR:
+                    cadena += nodo2 + "[label=\"||\"];\n";
+                    break;
+            }
+            cadena += nodo3 + "[label=\"EXP\"];\n";
+            cadena += anterior + "->" + nodo1 + ";\n";
+            cadena += anterior + "->" + nodo2 + ";\n";
+            cadena += anterior + "->" + nodo3 + ";\n";
+            cadena += this.logic1?.generarDot(nodo1);
+            cadena += this.logic2?.generarDot(nodo3);
+            return cadena;
+
         }
     }
 }

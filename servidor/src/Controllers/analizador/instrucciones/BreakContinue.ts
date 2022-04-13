@@ -16,6 +16,9 @@ export default class BreakContinue extends Instruccion {
         if (this.opcion == Opcion.BREAK) return;
         if (this.opcion == Opcion.CONTINUE) return;
     }
+    generarDot(anterior: string) {
+        
+    }
 }
 
 export enum Opcion {
