@@ -27,6 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Funciones = void 0;
+const indexController_1 = require("../../indexController");
 const Instruccion_1 = require("../abstracto/Instruccion");
 const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
@@ -121,6 +122,53 @@ class FuncNativas extends Instruccion_1.Instruccion {
         return verificacion.toUpperCase();
     }
     generarDot(anterior) {
+        let cadena = "";
+        let nodo1 = "n" + (indexController_1.numeroNodo.no + 1);
+        let nodo2 = "n" + (indexController_1.numeroNodo.no + 2);
+        let nodo3 = "n" + (indexController_1.numeroNodo.no + 3);
+        let nodo4 = "n" + (indexController_1.numeroNodo.no + 4);
+        let nodo5 = "n" + (indexController_1.numeroNodo.no + 5);
+        indexController_1.numeroNodo.no += 5;
+        switch (this.funcion) {
+            case Funciones.TOCHARARRAY:
+                cadena += nodo1 + "[label=\"TOCHARARRAYY\"];\n";
+                cadena += nodo2 + "[label=\"tochararray\"];\n";
+                break;
+            case Funciones.TOSTRING:
+                cadena += nodo1 + "[label=\"TOSTRINGG\"];\n";
+                cadena += nodo2 + "[label=\"tostring\"];\n";
+                break;
+            case Funciones.TYPEOF:
+                cadena += nodo1 + "[label=\"TYPEOFF\"];\n";
+                cadena += nodo2 + "[label=\"typeof\"];\n";
+                break;
+            case Funciones.LENGTH:
+                cadena += nodo1 + "[label=\"LENGTHH\"];\n";
+                cadena += nodo2 + "[label=\"length\"];\n";
+                break;
+            case Funciones.ROUND:
+                cadena += nodo1 + "[label=\"ROUNDD\"];\n";
+                cadena += nodo2 + "[label=\"round\"];\n";
+                break;
+            case Funciones.TOLOWER:
+                cadena += nodo1 + "[label=\"TOLOW\"];\n";
+                cadena += nodo2 + "[label=\"tolower\"];\n";
+                break;
+            case Funciones.TOUPPER:
+                cadena += nodo1 + "[label=\"TOUP\"];\n";
+                cadena += nodo2 + "[label=\"toupper\"];\n";
+                break;
+        }
+        cadena += nodo3 + "[label=\"(\"];\n";
+        cadena += nodo4 + "[label=\"EXP\"];\n";
+        cadena += nodo5 + "[label=\")\"];\n";
+        cadena += anterior + "->" + nodo1 + ";\n";
+        cadena += nodo1 + "->" + nodo2 + ";\n";
+        cadena += nodo1 + "->" + nodo3 + ";\n";
+        cadena += nodo1 + "->" + nodo4 + ";\n";
+        cadena += nodo1 + "->" + nodo5 + ";\n";
+        cadena += this.expresion.generarDot(nodo4);
+        return cadena;
     }
 }
 exports.default = FuncNativas;

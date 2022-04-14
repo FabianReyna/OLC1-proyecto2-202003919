@@ -24,9 +24,14 @@ export default class AccesoVar extends Instruccion {
     generarDot(anterior: string) {
         let cadena = "";
         let nodo1 = "n" + (numeroNodo.no + 1);
-        numeroNodo.no += 1;
+        let nodo2 = "n" + (numeroNodo.no + 2);
+
+        numeroNodo.no += 2;
         cadena += nodo1 + "[label=\"ID\"];\n";
+        cadena += nodo1 + "[label=\""+this.id+"\"];\n";
         cadena += anterior + "->" + nodo1 + ";\n";
+        cadena += nodo1 + "->" + nodo2 + ";\n";
+
         return cadena;
 
     }

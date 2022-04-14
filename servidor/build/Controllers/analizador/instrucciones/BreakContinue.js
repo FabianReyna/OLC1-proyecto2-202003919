@@ -26,6 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Opcion = void 0;
 const Instruccion_1 = require("../abstracto/Instruccion");
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
+const indexController_1 = require("../../indexController");
 class BreakContinue extends Instruccion_1.Instruccion {
     constructor(option, linea, col) {
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, col);
@@ -38,6 +39,24 @@ class BreakContinue extends Instruccion_1.Instruccion {
             return;
     }
     generarDot(anterior) {
+        let cadena = "";
+        let nodo1 = "n" + (indexController_1.numeroNodo.no + 1);
+        let nodo2 = "n" + (indexController_1.numeroNodo.no + 2);
+        let nodo3 = "n" + (indexController_1.numeroNodo.no + 2);
+        indexController_1.numeroNodo.no += 3;
+        if (this.opcion == Opcion.BREAK) {
+            cadena += nodo1 + "[label=\"TBREAK\"];\n";
+            cadena += nodo2 + "[label=\"break\"];\n";
+        }
+        else {
+            cadena += nodo1 + "[label=\"TCONTINUE\"];\n";
+            cadena += nodo2 + "[label=\"continue\"];\n";
+        }
+        cadena += nodo3 + "[label=\";\"];\n";
+        cadena += anterior + "->" + nodo1 + ";\n";
+        cadena += nodo1 + "->" + nodo2 + ";\n";
+        cadena += nodo1 + "->" + nodo3 + ";\n";
+        return cadena;
     }
 }
 exports.default = BreakContinue;
