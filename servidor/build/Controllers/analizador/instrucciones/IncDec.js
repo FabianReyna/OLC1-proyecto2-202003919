@@ -31,6 +31,7 @@ const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
 const AccesoVar_1 = __importDefault(require("../expresiones/AccesoVar"));
 const AccesoVec_1 = __importDefault(require("../expresiones/AccesoVec"));
+const indexController_1 = require("../../indexController");
 class IncDec extends Instruccion_1.Instruccion {
     //1 para incremento - 0 para decremento
     constructor(expresion, operacion, linea, col) {
@@ -130,6 +131,38 @@ class IncDec extends Instruccion_1.Instruccion {
         }
     }
     generarDot(anterior) {
+        let cadena = "";
+        let nodo1 = "n" + (indexController_1.numeroNodo.no + 1);
+        let nodo2 = "n" + (indexController_1.numeroNodo.no + 2);
+        let nodo3 = "n" + (indexController_1.numeroNodo.no + 3);
+        let nodo4 = "n" + (indexController_1.numeroNodo.no + 4);
+        let nodo5 = "n" + (indexController_1.numeroNodo.no + 5);
+        indexController_1.numeroNodo.no += 5;
+        if (this.operacion == 0) {
+            cadena += nodo1 + "[label=\"DECREMENTO\"];\n";
+            cadena += nodo2 + "[label=\"EXP\"];\n";
+            cadena += nodo3 + "[label=\"DECREMENT\"];\n";
+            cadena += nodo4 + "[label=\";\"];\n";
+            cadena += nodo5 + "[label=\"--\"];\n";
+        }
+        else {
+            cadena += nodo1 + "[label=\"INCREMENTO\"];\n";
+            cadena += nodo2 + "[label=\"EXP\"];\n";
+            cadena += nodo3 + "[label=\"INCREMENT\"];\n";
+            cadena += nodo4 + "[label=\";\"];\n";
+            cadena += nodo5 + "[label=\"++\"];\n";
+        }
+        cadena += anterior + "->" + nodo1 + ";\n";
+        cadena += nodo1 + "->" + nodo2 + ";\n";
+        cadena += nodo1 + "->" + nodo3 + ";\n";
+        cadena += nodo1 + "->" + nodo4 + ";\n";
+        cadena += nodo3 + "->" + nodo5 + ";\n";
+        cadena += this.expresion.generarDot(nodo2);
+        return cadena;
     }
 }
 exports.default = IncDec;
+/*
+operacion 0 es --
+operacion 1 es -++
+*/

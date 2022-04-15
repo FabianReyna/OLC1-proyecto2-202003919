@@ -3,7 +3,7 @@ import Errores from '../excepciones/Errores'
 import Arbol from '../simbolo/Arbol'
 import tablaSimbolo from '../simbolo/tablaSimbolos'
 import Tipo, { tipoDato } from '../simbolo/Tipo'
-import { listaErrores } from '../../indexController'
+import { listaErrores, numeroNodo } from '../../indexController'
 import BreakContinue, { Opcion } from './BreakContinue'
 
 export default class For extends Instruccion {
@@ -48,6 +48,53 @@ export default class For extends Instruccion {
     }
 
     generarDot(anterior: string) {
-        
+        let cadena = "";
+        let nodo1 = "n" + (numeroNodo.no + 1);
+        let nodo2 = "n" + (numeroNodo.no + 2);
+        let nodo3 = "n" + (numeroNodo.no + 3);
+        let nodo4 = "n" + (numeroNodo.no + 4);
+        let nodo5 = "n" + (numeroNodo.no + 5);
+        let nodo6 = "n" + (numeroNodo.no + 6);
+        let nodo7 = "n" + (numeroNodo.no + 7);
+        let nodo8 = "n" + (numeroNodo.no + 8);
+        let nodo9 = "n" + (numeroNodo.no + 9);
+        let nodo10 = "n" + (numeroNodo.no + 10);
+        let nodo11 = "n" + (numeroNodo.no + 11);
+        numeroNodo.no += 11;
+
+        cadena += nodo1 + "[label=\"CFOR\"];\n";
+        cadena += nodo2 + "[label=\"for\"];\n";
+        cadena += nodo3 + "[label=\"(\"];\n";
+        cadena += nodo4 + "[label=\"S_DEC_ASI\"];\n";
+        cadena += nodo5 + "[label=\"EXP\"];\n";
+        cadena += nodo6 + "[label=\";\"];\n";
+        cadena += nodo7 + "[label=\"ACTUALIZACION\"];\n";
+        cadena += nodo8 + "[label=\")\"];\n";
+        cadena += nodo9 + "[label=\"{\"];\n";
+        cadena += nodo10 + "[label=\"INSTRUCCIONES\"];\n";
+        cadena += nodo11 + "[label=\"}\"];\n";
+
+        cadena += anterior + "->" + nodo1 + ";\n";
+        cadena += nodo1 + "->" + nodo2 + ";\n";
+        cadena += nodo1 + "->" + nodo3 + ";\n";
+        cadena += nodo1 + "->" + nodo4 + ";\n";
+        cadena += nodo1 + "->" + nodo5 + ";\n";
+        cadena += nodo1 + "->" + nodo6 + ";\n";
+        cadena += nodo1 + "->" + nodo7 + ";\n";
+        cadena += nodo1 + "->" + nodo8 + ";\n";
+        cadena += nodo1 + "->" + nodo9 + ";\n";
+        cadena += nodo1 + "->" + nodo10 + ";\n";
+        cadena += nodo1 + "->" + nodo11 + ";\n";
+
+        cadena += this.variable.generarDot(nodo4);
+        cadena += this.condicion.generarDot(nodo5);
+        cadena += this.actualizacion.generarDot(nodo7);
+
+        for (let i of this.expresiones) {
+            if (!(i instanceof Errores)) cadena += i.generarDot(nodo10);
+        }
+        return cadena;
+
+
     }
 }

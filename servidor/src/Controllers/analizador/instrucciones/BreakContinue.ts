@@ -21,7 +21,7 @@ export default class BreakContinue extends Instruccion {
         let cadena = "";
         let nodo1 = "n" + (numeroNodo.no + 1);
         let nodo2 = "n" + (numeroNodo.no + 2);
-        let nodo3 = "n" + (numeroNodo.no + 2);
+        let nodo3 = "n" + (numeroNodo.no + 3);
         numeroNodo.no += 3;
 
         if (this.opcion == Opcion.BREAK) {

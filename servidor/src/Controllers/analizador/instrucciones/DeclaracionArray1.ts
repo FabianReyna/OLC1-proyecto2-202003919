@@ -102,7 +102,7 @@ export default class DeclaracionArray1 extends Instruccion {
         }
     }
 
-    generarDot(anterior: string) {/*
+    generarDot(anterior: string) {
         let cadena = "";
         if (this.dimension == 1) {
             let nodo1 = "n" + (numeroNodo.no + 1);
@@ -266,6 +266,6 @@ export default class DeclaracionArray1 extends Instruccion {
             return cadena;
 
         }
-    */}
+    }
 
 }

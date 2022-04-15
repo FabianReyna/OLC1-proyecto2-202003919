@@ -42,7 +42,7 @@ class BreakContinue extends Instruccion_1.Instruccion {
         let cadena = "";
         let nodo1 = "n" + (indexController_1.numeroNodo.no + 1);
         let nodo2 = "n" + (indexController_1.numeroNodo.no + 2);
-        let nodo3 = "n" + (indexController_1.numeroNodo.no + 2);
+        let nodo3 = "n" + (indexController_1.numeroNodo.no + 3);
         indexController_1.numeroNodo.no += 3;
         if (this.opcion == Opcion.BREAK) {
             cadena += nodo1 + "[label=\"TBREAK\"];\n";

@@ -48,7 +48,7 @@ class AccesoVar extends Instruccion_1.Instruccion {
         let nodo2 = "n" + (indexController_1.numeroNodo.no + 2);
         indexController_1.numeroNodo.no += 2;
         cadena += nodo1 + "[label=\"ID\"];\n";
-        cadena += nodo1 + "[label=\"" + this.id + "\"];\n";
+        cadena += nodo2 + "[label=\"" + this.id + "\"];\n";
         cadena += anterior + "->" + nodo1 + ";\n";
         cadena += nodo1 + "->" + nodo2 + ";\n";
         return cadena;

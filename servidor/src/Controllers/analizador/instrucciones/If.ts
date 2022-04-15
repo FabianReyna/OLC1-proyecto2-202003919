@@ -3,7 +3,7 @@ import Errores from '../excepciones/Errores'
 import Arbol from '../simbolo/Arbol'
 import tablaSimbolo from '../simbolo/tablaSimbolos'
 import Tipo, { tipoDato } from '../simbolo/Tipo'
-import { listaErrores } from '../../indexController'
+import { listaErrores, numeroNodo } from '../../indexController'
 import BreakContinue from './BreakContinue'
 
 export default class If extends Instruccion {
@@ -30,7 +30,7 @@ export default class If extends Instruccion {
                 for (let i of this.InsIf) {
                     let resultado = i.interpretar(arbol, NewTabla);
                     if (resultado instanceof Errores) listaErrores.push(resultado);
-                    if(i instanceof BreakContinue) return i;
+                    if (i instanceof BreakContinue) return i;
                 }
             }
         } else {
@@ -41,7 +41,7 @@ export default class If extends Instruccion {
                 for (let i of this.InsIf) {
                     let resultado = i.interpretar(arbol, NewTabla1);
                     if (resultado instanceof Errores) listaErrores.push(resultado);
-                    if(i instanceof BreakContinue) return i;
+                    if (i instanceof BreakContinue) return i;
                 }
             } else {
                 if (this.InsElse instanceof If) {
@@ -54,7 +54,7 @@ export default class If extends Instruccion {
                     for (let i of this.InsElse) {
                         let resultado = i.interpretar(arbol, NewTabla1);
                         if (resultado instanceof Errores) listaErrores.push(resultado);
-                        if(i instanceof BreakContinue) return i;
+                        if (i instanceof BreakContinue) return i;
                     }
                 }
             }
@@ -62,13 +62,79 @@ export default class If extends Instruccion {
     }
 
     generarDot(anterior: string) {
-        
+        let cadena = "";
+        let nodo1 = "n" + (numeroNodo.no + 1);
+        let nodo2 = "n" + (numeroNodo.no + 2);
+        let nodo3 = "n" + (numeroNodo.no + 3);
+        let nodo4 = "n" + (numeroNodo.no + 4);
+        let nodo5 = "n" + (numeroNodo.no + 5);
+        let nodo6 = "n" + (numeroNodo.no + 6);
+        let nodo7 = "n" + (numeroNodo.no + 7);
+        let nodo8 = "n" + (numeroNodo.no + 8);
+        numeroNodo.no += 8;
+
+        cadena += nodo1 + "[label=\"SIF\"];\n";
+        cadena += nodo2 + "[label=\"if\"];\n";
+        cadena += nodo3 + "[label=\"(\"];\n";
+        cadena += nodo4 + "[label=\"EXP\"];\n";
+        cadena += nodo5 + "[label=\")\"];\n";
+        cadena += nodo6 + "[label=\"{\"];\n";
+        cadena += nodo7 + "[label=\"INSTRUCCIONES\"];\n";
+        cadena += nodo8 + "[label=\"}\"];\n";
+
+        cadena += anterior + "->" + nodo1 + ";\n";
+        cadena += nodo1 + "->" + nodo2 + ";\n";
+        cadena += nodo1 + "->" + nodo3 + ";\n";
+        cadena += nodo1 + "->" + nodo4 + ";\n";
+        cadena += nodo1 + "->" + nodo5 + ";\n";
+        cadena += nodo1 + "->" + nodo6 + ";\n";
+        cadena += nodo1 + "->" + nodo7 + ";\n";
+        cadena += nodo1 + "->" + nodo8 + ";\n";
+
+        if (!this.InsElse) {
+            return cadena;
+        } else if (this.InsElse instanceof If) {
+            let nodo9 = "n" + (numeroNodo.no + 1);
+            let nodo10 = "n" + (numeroNodo.no + 2);
+            numeroNodo.no += 2;
+
+            cadena += nodo9 + "[label=\"ELSE\"];\n";
+            cadena += nodo10 + "[label=\"SIF\"];\n";
+
+
+            cadena += nodo1 + "->" + nodo9 + ";\n";
+            cadena += nodo1 + "->" + nodo10 + ";\n";
+
+            cadena += this.InsElse.generarDot(nodo10);
+            return cadena;
+        } else {
+            let nodo9 = "n" + (numeroNodo.no + 1);
+            let nodo10 = "n" + (numeroNodo.no + 2);
+            let nodo11 = "n" + (numeroNodo.no + 3);
+            let nodo12 = "n" + (numeroNodo.no + 4);
+            numeroNodo.no += 4;
+
+            cadena += nodo9 + "[label=\"ELSE\"];\n";
+            cadena += nodo10 + "[label=\"{\"];\n";
+            cadena += nodo11 + "[label=\"INSTRUCCIONES\"];\n";
+            cadena += nodo12 + "[label=\"}\"];\n";
+
+            cadena += nodo1 + "->" + nodo9 + ";\n";
+            cadena += nodo1 + "->" + nodo10 + ";\n";
+            cadena += nodo1 + "->" + nodo11 + ";\n";
+            cadena += nodo1 + "->" + nodo12 + ";\n";
+
+            for (let i of this.InsElse) {
+                if (!(i instanceof Errores)) cadena += i.generarDot(nodo11);
+            }
+            return cadena;
+        }
     }
 }
 
 /*
 si InsElse es undefined 
-    significa que viene un if simple [IF(EXP){INS}], ka bandera no importa
+    significa que viene un if simple [IF(EXP){INS}]
 Si InsElse no es undefined
     Si InsElse es no es Instancia de If
         Arreglo de Instrucciones en el else[]

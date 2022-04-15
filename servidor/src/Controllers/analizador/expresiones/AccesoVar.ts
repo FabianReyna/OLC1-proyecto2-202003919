@@ -25,10 +25,10 @@ export default class AccesoVar extends Instruccion {
         let cadena = "";
         let nodo1 = "n" + (numeroNodo.no + 1);
         let nodo2 = "n" + (numeroNodo.no + 2);
-
         numeroNodo.no += 2;
+
         cadena += nodo1 + "[label=\"ID\"];\n";
-        cadena += nodo1 + "[label=\""+this.id+"\"];\n";
+        cadena += nodo2 + "[label=\""+this.id+"\"];\n";
         cadena += anterior + "->" + nodo1 + ";\n";
         cadena += nodo1 + "->" + nodo2 + ";\n";
 

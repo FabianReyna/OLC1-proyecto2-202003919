@@ -5,6 +5,7 @@ import tablaSimbolo from "../simbolo/tablaSimbolos";
 import Tipo, { tipoDato } from "../simbolo/Tipo";
 import AccesoVar from "../expresiones/AccesoVar";
 import AccesoVec from "../expresiones/AccesoVec";
+import { numeroNodo } from "../../indexController";
 
 export default class IncDec extends Instruccion {
     private expresion: Instruccion;
@@ -81,7 +82,7 @@ export default class IncDec extends Instruccion {
                             if (i == 0) valorAux = valorAux + "[" + aux.toString() + "]";
                             else valorAux = valorAux + ",[" + aux.toString() + "]";
                         }
-                        valorAux+="]";
+                        valorAux += "]";
                         arbol.updateSimbolo(this.expresion.id, tabla.getNombre(), valorAux)
                     } catch (err) {
                         return new Errores("Semantico", "Index fuera del rango", this.linea, this.col);
@@ -95,6 +96,39 @@ export default class IncDec extends Instruccion {
     }
 
     generarDot(anterior: string) {
-        
+        let cadena = "";
+        let nodo1 = "n" + (numeroNodo.no + 1);
+        let nodo2 = "n" + (numeroNodo.no + 2);
+        let nodo3 = "n" + (numeroNodo.no + 3);
+        let nodo4 = "n" + (numeroNodo.no + 4);
+        let nodo5 = "n" + (numeroNodo.no + 5);
+        numeroNodo.no += 5;
+
+        if (this.operacion == 0) {
+            cadena += nodo1 + "[label=\"DECREMENTO\"];\n";
+            cadena += nodo2 + "[label=\"EXP\"];\n";
+            cadena += nodo3 + "[label=\"DECREMENT\"];\n";
+            cadena += nodo4 + "[label=\";\"];\n";
+            cadena += nodo5 + "[label=\"--\"];\n";
+        } else {
+            cadena += nodo1 + "[label=\"INCREMENTO\"];\n";
+            cadena += nodo2 + "[label=\"EXP\"];\n";
+            cadena += nodo3 + "[label=\"INCREMENT\"];\n";
+            cadena += nodo4 + "[label=\";\"];\n";
+            cadena += nodo5 + "[label=\"++\"];\n";
+
+        }
+
+        cadena += anterior + "->" + nodo1 + ";\n";
+        cadena += nodo1 + "->" + nodo2 + ";\n";
+        cadena += nodo1 + "->" + nodo3 + ";\n";
+        cadena += nodo1 + "->" + nodo4 + ";\n";
+        cadena += nodo3 + "->" + nodo5 + ";\n";
+        cadena += this.expresion.generarDot(nodo2);
+        return cadena;
     }
 }
+/*
+operacion 0 es --
+operacion 1 es -++
+*/

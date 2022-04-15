@@ -63,6 +63,44 @@ class DoWhile extends Instruccion_1.Instruccion {
         } while (this.condicion.interpretar(arbol, NewTabla));
     }
     generarDot(anterior) {
+        let cadena = "";
+        let nodo1 = "n" + (indexController_1.numeroNodo.no + 1);
+        let nodo2 = "n" + (indexController_1.numeroNodo.no + 2);
+        let nodo3 = "n" + (indexController_1.numeroNodo.no + 3);
+        let nodo4 = "n" + (indexController_1.numeroNodo.no + 4);
+        let nodo5 = "n" + (indexController_1.numeroNodo.no + 5);
+        let nodo6 = "n" + (indexController_1.numeroNodo.no + 6);
+        let nodo7 = "n" + (indexController_1.numeroNodo.no + 7);
+        let nodo8 = "n" + (indexController_1.numeroNodo.no + 8);
+        let nodo9 = "n" + (indexController_1.numeroNodo.no + 9);
+        let nodo10 = "n" + (indexController_1.numeroNodo.no + 10);
+        indexController_1.numeroNodo.no += 10;
+        cadena += nodo1 + "[label=\"CDOW\"];\n";
+        cadena += nodo2 + "[label=\"do\"];\n";
+        cadena += nodo3 + "[label=\"{\"];\n";
+        cadena += nodo4 + "[label=\"INSTRUCCIONES\"];\n";
+        cadena += nodo5 + "[label=\"}\"];\n";
+        cadena += nodo6 + "[label=\"while\"];\n";
+        cadena += nodo7 + "[label=\"(\"];\n";
+        cadena += nodo8 + "[label=\"EXP\"];\n";
+        cadena += nodo9 + "[label=\")\"];\n";
+        cadena += nodo10 + "[label=\";\"];\n";
+        cadena += anterior + "->" + nodo1 + ";\n";
+        cadena += nodo1 + "->" + nodo2 + ";\n";
+        cadena += nodo1 + "->" + nodo3 + ";\n";
+        cadena += nodo1 + "->" + nodo4 + ";\n";
+        cadena += nodo1 + "->" + nodo5 + ";\n";
+        cadena += nodo1 + "->" + nodo6 + ";\n";
+        cadena += nodo1 + "->" + nodo7 + ";\n";
+        cadena += nodo1 + "->" + nodo8 + ";\n";
+        cadena += nodo1 + "->" + nodo9 + ";\n";
+        cadena += nodo1 + "->" + nodo10 + ";\n";
+        for (let i of this.expresiones) {
+            if (!(i instanceof Errores_1.default))
+                cadena += i.generarDot(nodo4);
+        }
+        cadena += this.condicion.generarDot(nodo8);
+        return cadena;
     }
 }
 exports.default = DoWhile;
