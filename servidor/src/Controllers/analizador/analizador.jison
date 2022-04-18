@@ -134,8 +134,9 @@ const Switch=require('./instrucciones/Switch')
 %right 'NOT'
 %left 'EQUALS' 'NOTEQUAL' 'MENOR' 'MENOREQ' 'MAYOR' 'MAYOREQ'
 %left 'MAS' 'MENOS'
-%left 'MULT' 'DIV'
+%left 'MULT' 'DIV' 'MOD'
 %nonassoc 'POW'
+%nonassoc 'INCRE' 'DECRE'
 %right 'UMENOS'
 
 //Simbolo Inicial
@@ -189,6 +190,8 @@ EXP : EXP MAS EXP                           {$$=new Aritmeticas.default(Aritmeti
     | EXP MAYOREQ EXP                       {$$=new Relacionales.default(Relacionales.Relacional.MAYOREQ,@1.first_line,@1.first_column,$1,$3);}
     | EXP OR EXP                            {$$=new Logicas.default(Logicas.Logica.OR,@1.first_line,@1.first_column,$1,$3);}
     | EXP AND EXP                           {$$=new Logicas.default(Logicas.Logica.AND,@1.first_line,@1.first_column,$1,$3);}
+    | EXP INCREMENT      %prec INCRE        {$$=new IncDec.default($1,1,@1.first_line,@1.first_column);}
+    | EXP DECREMENT      %prec DECRE        {$$=new IncDec.default($1,0,@1.first_line,@1.first_column);}
     | NOT EXP                               {$$=new Logicas.default(Logicas.Logica.NOT,@1.first_line,@1.first_column,$2);}
     | PAR1 TIPOS PAR2 EXP                   {$$=new Casteo.default($4,$2,@1.first_line,@1.first_column);}
     | PAR1 EXP PAR2                         {$$=$2;}

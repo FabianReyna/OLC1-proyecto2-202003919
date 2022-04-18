@@ -7,6 +7,8 @@ exports.indexController = exports.numeroNodo = exports.listaErrores = void 0;
 const Errores_1 = __importDefault(require("./analizador/excepciones/Errores"));
 const Arbol_1 = __importDefault(require("./analizador/simbolo/Arbol"));
 const tablaSimbolos_1 = __importDefault(require("./analizador/simbolo/tablaSimbolos"));
+var fs = require('fs');
+const child_process_1 = require("child_process");
 exports.numeroNodo = { no: 10 };
 let tree;
 let graphAST;
@@ -42,17 +44,21 @@ class IndexController {
                 if (i instanceof Errores_1.default)
                     continue;
                 else {
-                    cadena += i.generarDot("nINSTRUCCIONES");
+                    let nodo1 = "n" + (exports.numeroNodo.no + 1);
+                    exports.numeroNodo.no += 1;
+                    cadena += nodo1 + "[label=\"INSTRUCCION\"];\n";
+                    cadena += "nINSTRUCCIONES" + "->" + nodo1 + ";\n";
+                    cadena += i.generarDot(nodo1);
                 }
             }
             cadena += "\n}";
             graphAST = cadena;
-            //console.log(graphAST)
+            console.log(graphAST);
             for (let i of exports.listaErrores) {
                 ast.Println(i.toString());
             }
             tree = ast;
-            console.log(ast.getTablaGlobal().getTabla());
+            //console.log(ast.getTablaGlobal().getTabla())
             //console.log(ast.getSimbolos())
             res.json({ consola: ast.getConsola() });
         }
@@ -61,6 +67,15 @@ class IndexController {
         }
     }
     ast(req, res) {
+        fs.writeFile('AST.dot', graphAST, () => { });
+        (0, child_process_1.exec)("dot -Tsvg AST.dot -o ../cliente/src/assets/AST.svg", (error, stdout, stderr) => { if (error) {
+            res.json({ ast: false });
+            return;
+        }
+        else {
+            res.json({ ast: true });
+            return;
+        } });
     }
     errores(req, res) {
         res.json({ Errores: exports.listaErrores });
