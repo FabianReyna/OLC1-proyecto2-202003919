@@ -35,7 +35,7 @@ export default class IncDec extends Instruccion {
             }
             variable.setValor(valor);
             arbol.updateSimbolo(this.expresion.id, tabla.getNombre(), "" + valor)
-
+            return valor;
         } else if (this.expresion instanceof AccesoVec) {
             let variable = tabla.getVariable(this.expresion.id);
             if (variable == null) return new Errores("Semantico", "La variable " + this.expresion + " no existe", this.linea, this.col);
@@ -54,6 +54,7 @@ export default class IncDec extends Instruccion {
                 }
                 variable.setValor(valor);
                 arbol.updateSimbolo(this.expresion.id, tabla.getNombre(), "[" + valor.toString() + "]")
+                return valor[parseInt(indice1)];
             } else {
                 if (!this.expresion.index2) return new Errores("Semantico", "Index Invalido", this.linea, this.col);
                 else {
@@ -84,6 +85,7 @@ export default class IncDec extends Instruccion {
                         }
                         valorAux += "]";
                         arbol.updateSimbolo(this.expresion.id, tabla.getNombre(), valorAux)
+                        return valor[parseInt(indice1)][parseInt(indice2)];
                     } catch (err) {
                         return new Errores("Semantico", "Index fuera del rango", this.linea, this.col);
                     }

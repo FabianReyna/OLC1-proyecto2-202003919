@@ -1,3 +1,4 @@
+import { numeroNodo } from '../../indexController'
 import { Instruccion } from '../abstracto/Instruccion'
 import Errores from '../excepciones/Errores'
 import Arbol from '../simbolo/Arbol'
@@ -34,12 +35,35 @@ export default class Ternario extends Instruccion {
             this.tipoDato = this.exp2.tipoDato;
             return valor2;
         }
-
-
-
     }
 
     generarDot(anterior: string) {
-        
+        let cadena = "";
+        let nodo1 = "n" + (numeroNodo.no + 1);
+        let nodo2 = "n" + (numeroNodo.no + 2);
+        let nodo3 = "n" + (numeroNodo.no + 3);
+        let nodo4 = "n" + (numeroNodo.no + 4);
+        let nodo5 = "n" + (numeroNodo.no + 5);
+        let nodo6 = "n" + (numeroNodo.no + 6);
+        numeroNodo.no += 6;
+
+        cadena += nodo1 + "[label=\"TERNAR\"];\n";
+        cadena += nodo2 + "[label=\"EXP\"];\n";
+        cadena += nodo3 + "[label=\"?\"];\n";
+        cadena += nodo4 + "[label=\"EXP\"];\n";
+        cadena += nodo5 + "[label=\":\"];\n";
+        cadena += nodo6 + "[label=\"EXP\"];\n";
+
+        cadena += anterior + "->" + nodo1 + ";\n";
+        cadena += nodo1 + "->" + nodo2 + ";\n";
+        cadena += nodo1 + "->" + nodo3 + ";\n";
+        cadena += nodo1 + "->" + nodo4 + ";\n";
+        cadena += nodo1 + "->" + nodo5 + ";\n";
+        cadena += nodo1 + "->" + nodo6 + ";\n";
+
+        cadena += this.cond.generarDot(nodo2);
+        cadena += this.exp1.generarDot(nodo4);
+        cadena += this.exp2.generarDot(nodo6);
+        return cadena;
     }
 }

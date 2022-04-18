@@ -13,8 +13,7 @@ export default class BreakContinue extends Instruccion {
     }
 
     interpretar(arbol: Arbol, tabla: tablaSimbolo) {
-        if (this.opcion == Opcion.BREAK) return;
-        if (this.opcion == Opcion.CONTINUE) return;
+        return;
     }
 
     generarDot(anterior: string) {

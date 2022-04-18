@@ -62,6 +62,38 @@ class While extends Instruccion_1.Instruccion {
         }
     }
     generarDot(anterior) {
+        let cadena = "";
+        let nodo1 = "n" + (indexController_1.numeroNodo.no + 1);
+        let nodo2 = "n" + (indexController_1.numeroNodo.no + 2);
+        let nodo3 = "n" + (indexController_1.numeroNodo.no + 3);
+        let nodo4 = "n" + (indexController_1.numeroNodo.no + 4);
+        let nodo5 = "n" + (indexController_1.numeroNodo.no + 5);
+        let nodo6 = "n" + (indexController_1.numeroNodo.no + 6);
+        let nodo7 = "n" + (indexController_1.numeroNodo.no + 7);
+        let nodo8 = "n" + (indexController_1.numeroNodo.no + 8);
+        indexController_1.numeroNodo.no += 8;
+        cadena += nodo1 + "[label=\"CWHILE\"];\n";
+        cadena += nodo2 + "[label=\"while\"];\n";
+        cadena += nodo3 + "[label=\"(\"];\n";
+        cadena += nodo4 + "[label=\"EXP\"];\n";
+        cadena += nodo5 + "[label=\")\"];\n";
+        cadena += nodo6 + "[label=\"{\"];\n";
+        cadena += nodo7 + "[label=\"INSTRUCCIONES\"];\n";
+        cadena += nodo8 + "[label=\"}\"];\n";
+        cadena += anterior + "->" + nodo1 + ";\n";
+        cadena += nodo1 + "->" + nodo2 + ";\n";
+        cadena += nodo1 + "->" + nodo3 + ";\n";
+        cadena += nodo1 + "->" + nodo4 + ";\n";
+        cadena += nodo1 + "->" + nodo5 + ";\n";
+        cadena += nodo1 + "->" + nodo6 + ";\n";
+        cadena += nodo1 + "->" + nodo7 + ";\n";
+        cadena += nodo1 + "->" + nodo8 + ";\n";
+        cadena += this.condicion.generarDot(nodo4);
+        for (let i of this.expresiones) {
+            if (!(i instanceof Errores_1.default))
+                cadena += i.generarDot(nodo7);
+        }
+        return cadena;
     }
 }
 exports.default = While;

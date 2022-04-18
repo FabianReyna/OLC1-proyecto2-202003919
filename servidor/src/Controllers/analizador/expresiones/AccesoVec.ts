@@ -23,7 +23,7 @@ export default class AccesoVec extends Instruccion {
     interpretar(arbol: Arbol, tabla: tablaSimbolo) {
         let arreglo = tabla.getVariable(this.id);
         if (arreglo == null) return new Errores("Semantico", "Variable no existente", this.linea, this.col);
-        this.tipoDato = arreglo.getTipo();
+        this.tipoDato.setTipo(arreglo.getTipo().getTipo());
         if (this.dimension == 1) {
             let indice1 = this.index1.interpretar(arbol, tabla);
             if (indice1 instanceof Errores) return indice1;

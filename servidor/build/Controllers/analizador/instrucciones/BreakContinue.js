@@ -33,10 +33,7 @@ class BreakContinue extends Instruccion_1.Instruccion {
         this.opcion = option;
     }
     interpretar(arbol, tabla) {
-        if (this.opcion == Opcion.BREAK)
-            return;
-        if (this.opcion == Opcion.CONTINUE)
-            return;
+        return;
     }
     generarDot(anterior) {
         let cadena = "";

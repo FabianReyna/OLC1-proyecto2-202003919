@@ -56,6 +56,7 @@ class IncDec extends Instruccion_1.Instruccion {
             }
             variable.setValor(valor);
             arbol.updateSimbolo(this.expresion.id, tabla.getNombre(), "" + valor);
+            return valor;
         }
         else if (this.expresion instanceof AccesoVec_1.default) {
             let variable = tabla.getVariable(this.expresion.id);
@@ -80,6 +81,7 @@ class IncDec extends Instruccion_1.Instruccion {
                 }
                 variable.setValor(valor);
                 arbol.updateSimbolo(this.expresion.id, tabla.getNombre(), "[" + valor.toString() + "]");
+                return valor[parseInt(indice1)];
             }
             else {
                 if (!this.expresion.index2)
@@ -119,6 +121,7 @@ class IncDec extends Instruccion_1.Instruccion {
                         }
                         valorAux += "]";
                         arbol.updateSimbolo(this.expresion.id, tabla.getNombre(), valorAux);
+                        return valor[parseInt(indice1)][parseInt(indice2)];
                     }
                     catch (err) {
                         return new Errores_1.default("Semantico", "Index fuera del rango", this.linea, this.col);

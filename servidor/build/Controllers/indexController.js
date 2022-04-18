@@ -47,12 +47,12 @@ class IndexController {
             }
             cadena += "\n}";
             graphAST = cadena;
-            console.log(graphAST);
+            //console.log(graphAST)
             for (let i of exports.listaErrores) {
                 ast.Println(i.toString());
             }
             tree = ast;
-            //console.log(ast.getTablaGlobal().getTabla())
+            console.log(ast.getTablaGlobal().getTabla());
             //console.log(ast.getSimbolos())
             res.json({ consola: ast.getConsola() });
         }

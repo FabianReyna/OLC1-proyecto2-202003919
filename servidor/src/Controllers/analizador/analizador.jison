@@ -27,6 +27,10 @@ const Ternario=require('./instrucciones/Ternario')
 const While=require('./instrucciones/While')
 const For=require('./instrucciones/For')
 const DoWhile=require('./instrucciones/DoWhile')
+const CaseDef=require('./instrucciones/CaseDef')
+const Switch=require('./instrucciones/Switch')
+
+
 %}
 
 %lex
@@ -153,7 +157,7 @@ INSTRUCCION : DECLARACION                       {$$=$1;}
             | INCREMENTO                        {$$=$1;}
             | DECREMENTO                        {$$=$1;}
             | SIF                               {$$=$1;}
-            | SSWITCH                           
+            | SSWITCH                           {$$=$1;}
             | CWHILE                            {$$=$1;}
             | CFOR                              {$$=$1;}
             | CDOW                              {$$=$1;}
@@ -270,16 +274,19 @@ SIF : IF PAR1 EXP PAR2 LLAVE1 INSTRUCCIONES LLAVE2 ELSE LLAVE1 INSTRUCCIONES LLA
 ;
 
 //switch
-SSWITCH : SWITCH PAR1 EXP PAR2 LLAVE1 LISTCASE SDEF LLAVE2
-        | SWITCH PAR1 EXP PAR2 LLAVE1 LISTCASE LLAVE2
-        | SWITCH PAR1 EXP PAR2 LLAVE1 SDEF LLAVE2
+SSWITCH : SWITCH PAR1 EXP PAR2 LLAVE1 LISTCASE SDEF LLAVE2      {$$=new Switch.default($3,$6,@1.first_line,@1.first_column,$7);}
+        | SWITCH PAR1 EXP PAR2 LLAVE1 LISTCASE LLAVE2           {$$=new Switch.default($3,$6,@1.first_line,@1.first_column);}
+        | SWITCH PAR1 EXP PAR2 LLAVE1 SDEF LLAVE2               {$$=new Switch.default($3,undefined,@1.first_line,@1.first_column,$6);}
 ;
 
-LISTCASE : LISTCASE CASE EXP DOSPUNTOS INSTRUCCIONES
-        | CASE EXP DOSPUNTOS INSTRUCCIONES
+LISTCASE : LISTCASE SCASE       {$1.push($2);$$=$1;}
+        | SCASE                 {$$=[$1];}
 ;
 
-SDEF : DEFAULT DOSPUNTOS INSTRUCCIONES
+SCASE : CASE EXP DOSPUNTOS INSTRUCCIONES        {$$=new CaseDef.default(false,$4,@1.first_line,@1.first_column,$2);}
+;
+
+SDEF : DEFAULT DOSPUNTOS INSTRUCCIONES          {$$=new CaseDef.default(true,$3,@1.first_line,@1.first_column);}
 ;
 
 //while

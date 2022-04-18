@@ -42,7 +42,7 @@ class AccesoVec extends Instruccion_1.Instruccion {
         let arreglo = tabla.getVariable(this.id);
         if (arreglo == null)
             return new Errores_1.default("Semantico", "Variable no existente", this.linea, this.col);
-        this.tipoDato = arreglo.getTipo();
+        this.tipoDato.setTipo(arreglo.getTipo().getTipo());
         if (this.dimension == 1) {
             let indice1 = this.index1.interpretar(arbol, tabla);
             if (indice1 instanceof Errores_1.default)
