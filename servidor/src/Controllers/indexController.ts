@@ -4,6 +4,14 @@ import Arbol from './analizador/simbolo/Arbol';
 import tablaSimbolo from './analizador/simbolo/tablaSimbolos';
 var fs = require('fs');
 import { exec } from 'child_process';
+import Metodo from './analizador/instrucciones/Metodo';
+import Funcion from './analizador/instrucciones/Funcion';
+import Run from './analizador/instrucciones/Run';
+import DeclaracionArray1 from './analizador/instrucciones/DeclaracionArray1';
+import DeclaracionArray2 from './analizador/instrucciones/DeclaracionArray2';
+import DeclaracionVar from './analizador/instrucciones/DeclaracionVar';
+import ModVar from './analizador/instrucciones/ModVar';
+import ModVec from './analizador/instrucciones/ModVec';
 export let listaErrores: Array<Errores>;
 export let numeroNodo = { no: 10 as number };
 let tree: Arbol;
@@ -21,24 +29,38 @@ class IndexController {
 
         try {
             let ast = new Arbol(parser.parse(req.body.consola));
-            var tabla = new tablaSimbolo();
+            var tabla = new tablaSimbolo(false);
             tabla.setNombre("")
             ast.setTablaGlobal(tabla);
             for (let i of ast.getInstrucciones()) {
-                if (i instanceof Errores) {
-                    listaErrores.push(i)
-                } else {
+                if (i instanceof Errores) listaErrores.push(i)
+                if (i instanceof Metodo || i instanceof Funcion) {
+                    i.id = i.id.toLowerCase();
+                    ast.addFunciones(i);
+                }
+            }
+
+
+            for (let i of ast.getInstrucciones()) {
+                if (i instanceof Run || i instanceof DeclaracionArray1 || i instanceof DeclaracionArray2 || i instanceof DeclaracionVar || i instanceof ModVar || i instanceof ModVec) {
                     var resultado = i.interpretar(ast, tabla);
                     if (resultado instanceof Errores) {
                         listaErrores.push(resultado);
                     }
+                } else if (i instanceof Metodo || i instanceof Funcion) {
+                    continue;
                 }
+                else {
+                    listaErrores.push(new Errores("Semantico", "Sentencia fuera de rango", i.linea, i.col));
+                }
+
+
             }
             let cadena = "digraph ast {\n";
             cadena += "nINICIO [label=\"INICIO\"];\n";
             cadena += "nINSTRUCCIONES [label=\"INSTRUCCIONES\"];\n"
             cadena += "nINICIO->nINSTRUCCIONES;\n";
-            
+
             for (let i of ast.getInstrucciones()) {
                 if (i instanceof Errores) continue;
                 else {
@@ -50,7 +72,7 @@ class IndexController {
                     cadena += i.generarDot(nodo1);
 
                 }
-                
+
             }
             cadena += "\n}"
             graphAST = cadena;

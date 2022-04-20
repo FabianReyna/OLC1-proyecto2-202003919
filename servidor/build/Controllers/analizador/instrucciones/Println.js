@@ -30,7 +30,7 @@ const Instruccion_1 = require("../abstracto/Instruccion");
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
 const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const indexController_1 = require("../../indexController");
-class Print extends Instruccion_1.Instruccion {
+class PrintLn extends Instruccion_1.Instruccion {
     constructor(expresion, linea, col) {
         super(new Tipo_1.default(Tipo_1.tipoDato.CADENA), linea, col);
         this.expresion = expresion;
@@ -66,4 +66,4 @@ class Print extends Instruccion_1.Instruccion {
         return cadena;
     }
 }
-exports.default = Print;
+exports.default = PrintLn;

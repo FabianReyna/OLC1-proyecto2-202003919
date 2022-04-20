@@ -24,7 +24,7 @@ export default class While extends Instruccion {
 
 
         while (this.condicion.interpretar(arbol, tabla)) {
-            let NewTabla = new tablaSimbolo(tabla);
+            let NewTabla = new tablaSimbolo(false,tabla);
             NewTabla.setNombre(tabla.getNombre() + "WHILE-")
             let resultado;
             for (let i of this.expresiones) {

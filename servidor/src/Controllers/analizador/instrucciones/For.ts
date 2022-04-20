@@ -22,7 +22,7 @@ export default class For extends Instruccion {
     }
 
     interpretar(arbol: Arbol, tabla: tablaSimbolo) {
-        let NewTabla = new tablaSimbolo(tabla);
+        let NewTabla = new tablaSimbolo(false,tabla);
         NewTabla.setNombre(tabla.getNombre() + "FOR-")
         let declaracion = this.variable.interpretar(arbol, NewTabla);
         if (declaracion instanceof Errores) return declaracion;

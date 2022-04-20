@@ -17,7 +17,7 @@ export default class DoWhile extends Instruccion {
     }
 
     interpretar(arbol: Arbol, tabla: tablaSimbolo) {
-        let NewTabla = new tablaSimbolo(tabla);
+        let NewTabla = new tablaSimbolo(false,tabla);
         NewTabla.setNombre(tabla.getNombre() + "DO_WHILE-");
         let cond = this.condicion.interpretar(arbol, NewTabla);
         if (cond instanceof Errores) return cond;

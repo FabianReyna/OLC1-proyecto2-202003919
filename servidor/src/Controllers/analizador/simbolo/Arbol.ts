@@ -2,6 +2,8 @@ import tablaSimbolo from "./tablaSimbolos";
 import { Instruccion } from "../abstracto/Instruccion";
 import Errores from "../excepciones/Errores";
 import RepSimbolos from "../reportes/RepSimbolo";
+import Metodo from "../instrucciones/Metodo";
+import Funcion from "../instrucciones/Funcion";
 
 export default class Arbol {
     private instrucciones: Array<Instruccion>
@@ -15,7 +17,7 @@ export default class Arbol {
         this.instrucciones = instrucciones;
         this.funciones = new Array<Instruccion>();
         this.consola = "";
-        this.tablaGlobal = new tablaSimbolo();
+        this.tablaGlobal = new tablaSimbolo(false);
         this.errores = new Array<Errores>();
         this.simbolos = new Array<RepSimbolos>();
     }
@@ -68,6 +70,19 @@ export default class Arbol {
         this.funciones.push(ins)
     }
 
+    public getFuncion(id: string) {
+        id = id.toLowerCase();
+        for (let i of this.getFunciones()) {
+            if (i instanceof Metodo) {
+                if (i.id == id) return i;
+            }
+            if (i instanceof Funcion) {
+                if (i.id == id) return i;
+            }
+        }
+        return null;
+    }
+
     public addSimbolo(id: string, tipo: string, entorno: string, linea: number, col: number, val: any) {
         this.simbolos.push(new RepSimbolos(id, tipo, entorno, linea, col, val));
     }
@@ -81,7 +96,7 @@ export default class Arbol {
         }
     }
 
-    public getSimbolos(){
+    public getSimbolos() {
         return this.simbolos;
     }
 

@@ -29,7 +29,8 @@ const For=require('./instrucciones/For')
 const DoWhile=require('./instrucciones/DoWhile')
 const CaseDef=require('./instrucciones/CaseDef')
 const Switch=require('./instrucciones/Switch')
-
+const Metodo=require('./instrucciones/Metodo')
+const Run=require('./instrucciones/Run')
 
 %}
 
@@ -166,11 +167,11 @@ INSTRUCCION : DECLARACION                       {$$=$1;}
             | TCONTINUE                         {$$=$1;}
             | TRETURN
             | FUNCS
-            | METODS
-            | LLAMADA
+            | METODS                            {$$=$1;}
+            | LLAMADA PUNTOCOMA
             | PRINTT                            {$$=$1;}
             | PRINTLNN                          {$$=$1;}
-            | RUNN            
+            | RUNN                              {$$=$1;}
 ;
 
 //Expresiones
@@ -331,18 +332,18 @@ FUNCS : ID PAR1 PARAMS PAR2 DOSPUNTOS TIPOS LLAVE1 INSTRUCCIONES LLAVE2
     |   ID PAR1  PAR2 DOSPUNTOS TIPOS LLAVE1 INSTRUCCIONES LLAVE2
 ;
 
-PARAMS : PARAMS COMA TIPOS ID
-        | TIPOS ID
+PARAMS : PARAMS COMA TIPOS ID               {$1.push({tipo:$3,id:$4});$$=$1;}
+        | TIPOS ID                          {$$=[{tipo:$1,id:$2}];}
 ;
 
-//Metodos
-METODS : ID PAR1 PARAMS PAR2 DOSPUNTOS VOID LLAVE1 INSTRUCCIONES LLAVE2
-    |   ID PAR1 PAR2 DOSPUNTOS VOID LLAVE1 INSTRUCCIONES LLAVE2
+//Metodos                                                                           constructor(id: string, tipo: Tipo, expresiones: Instruccion[], linea: number, col: number, params: any[])
+METODS : ID PAR1 PARAMS PAR2 DOSPUNTOS VOID LLAVE1 INSTRUCCIONES LLAVE2     {$$=new Metodo.default($1,new Tipo.default(Tipo.tipoDato.VOID),$8,@1.first_line,@1.first_column,$3);}
+    |   ID PAR1 PAR2 DOSPUNTOS VOID LLAVE1 INSTRUCCIONES LLAVE2             {$$=new Metodo.default($1,new Tipo.default(Tipo.tipoDato.VOID),$7,@1.first_line,@1.first_column,[]);}
 ;
 
 // llamadas
-LLAMADA : ID PAR1 PARAMSCALL PAR2 PUNTOCOMA
-        | ID PAR1 PAR2 PUNTOCOMA
+LLAMADA : ID PAR1 PARAMSCALL PAR2 
+        | ID PAR1 PAR2 
 ;
 
 PARAMSCALL : PARAMSCALL COMA EXP
@@ -386,10 +387,10 @@ TOCHARARRAYY : TOCHARARRAY PAR1 EXP PAR2        {$$=new FuncNativas.default($3,F
 ;
 
 // RUN
-RUNN : RUN ID PAR1 PAR2 PUNTOCOMA
-    | RUN ID PAR1 LISTRUN PAR2 PUNTOCOMA
+RUNN : RUN ID PAR1 PAR2 PUNTOCOMA               {$$=new Run.default($2,@1.first_line,@1.first_column,[]);}
+    | RUN ID PAR1 LISTRUN PAR2 PUNTOCOMA        {$$=new Run.default($2,@1.first_line,@1.first_column,$4);}
 ;
 
-LISTRUN : LISTRUN COMA EXP
-        | EXP
+LISTRUN : LISTRUN COMA EXP      {$1.push($3);$$=$1;}
+        | EXP                   {$$=[$1];}
 ;

@@ -9,6 +9,14 @@ const Arbol_1 = __importDefault(require("./analizador/simbolo/Arbol"));
 const tablaSimbolos_1 = __importDefault(require("./analizador/simbolo/tablaSimbolos"));
 var fs = require('fs');
 const child_process_1 = require("child_process");
+const Metodo_1 = __importDefault(require("./analizador/instrucciones/Metodo"));
+const Funcion_1 = __importDefault(require("./analizador/instrucciones/Funcion"));
+const Run_1 = __importDefault(require("./analizador/instrucciones/Run"));
+const DeclaracionArray1_1 = __importDefault(require("./analizador/instrucciones/DeclaracionArray1"));
+const DeclaracionArray2_1 = __importDefault(require("./analizador/instrucciones/DeclaracionArray2"));
+const DeclaracionVar_1 = __importDefault(require("./analizador/instrucciones/DeclaracionVar"));
+const ModVar_1 = __importDefault(require("./analizador/instrucciones/ModVar"));
+const ModVec_1 = __importDefault(require("./analizador/instrucciones/ModVec"));
 exports.numeroNodo = { no: 10 };
 let tree;
 let graphAST;
@@ -22,18 +30,29 @@ class IndexController {
         let parser = require("./analizador/analizador");
         try {
             let ast = new Arbol_1.default(parser.parse(req.body.consola));
-            var tabla = new tablaSimbolos_1.default();
+            var tabla = new tablaSimbolos_1.default(false);
             tabla.setNombre("");
             ast.setTablaGlobal(tabla);
             for (let i of ast.getInstrucciones()) {
-                if (i instanceof Errores_1.default) {
+                if (i instanceof Errores_1.default)
                     exports.listaErrores.push(i);
+                if (i instanceof Metodo_1.default || i instanceof Funcion_1.default) {
+                    i.id = i.id.toLowerCase();
+                    ast.addFunciones(i);
                 }
-                else {
+            }
+            for (let i of ast.getInstrucciones()) {
+                if (i instanceof Run_1.default || i instanceof DeclaracionArray1_1.default || i instanceof DeclaracionArray2_1.default || i instanceof DeclaracionVar_1.default || i instanceof ModVar_1.default || i instanceof ModVec_1.default) {
                     var resultado = i.interpretar(ast, tabla);
                     if (resultado instanceof Errores_1.default) {
                         exports.listaErrores.push(resultado);
                     }
+                }
+                else if (i instanceof Metodo_1.default || i instanceof Funcion_1.default) {
+                    continue;
+                }
+                else {
+                    exports.listaErrores.push(new Errores_1.default("Semantico", "Sentencia fuera de rango", i.linea, i.col));
                 }
             }
             let cadena = "digraph ast {\n";

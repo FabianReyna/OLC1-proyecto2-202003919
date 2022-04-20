@@ -5,7 +5,7 @@ import Tipo, {tipoDato} from '../simbolo/Tipo'
 import Errores from '../excepciones/Errores'
 import { numeroNodo } from '../../indexController'
 
-export default class Print extends Instruccion{
+export default class PrintLn extends Instruccion{
     private expresion:Instruccion
     constructor(expresion:Instruccion, linea:number,col:number){
         super(new Tipo(tipoDato.CADENA),linea,col)

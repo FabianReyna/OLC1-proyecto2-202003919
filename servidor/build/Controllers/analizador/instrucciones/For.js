@@ -41,7 +41,7 @@ class For extends Instruccion_1.Instruccion {
         this.expresiones = expresiones;
     }
     interpretar(arbol, tabla) {
-        let NewTabla = new tablaSimbolos_1.default(tabla);
+        let NewTabla = new tablaSimbolos_1.default(false, tabla);
         NewTabla.setNombre(tabla.getNombre() + "FOR-");
         let declaracion = this.variable.interpretar(arbol, NewTabla);
         if (declaracion instanceof Errores_1.default)

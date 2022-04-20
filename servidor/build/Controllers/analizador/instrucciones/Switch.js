@@ -56,7 +56,7 @@ class Switch extends Instruccion_1.Instruccion {
                 if (i instanceof CaseDef_1.default) {
                     if (condCase == cond) {
                         let listaInstrucciones = i.getExpresiones();
-                        let NewTabla = new tablaSimbolos_1.default(tabla);
+                        let NewTabla = new tablaSimbolos_1.default(false, tabla);
                         NewTabla.setNombre(tabla.getNombre() + "CASE " + condCase + "-");
                         for (let j of listaInstrucciones) {
                             let resultado = j.interpretar(arbol, NewTabla);
@@ -83,7 +83,7 @@ class Switch extends Instruccion_1.Instruccion {
         }
         if (bandera == true && this.def instanceof CaseDef_1.default) {
             let listaInstrucciones = this.def.getExpresiones();
-            let NewTabla = new tablaSimbolos_1.default(tabla);
+            let NewTabla = new tablaSimbolos_1.default(false, tabla);
             NewTabla.setNombre(tabla.getNombre() + "DEFAULT- ");
             for (let i of listaInstrucciones) {
                 let resultado = i.interpretar(arbol, NewTabla);
