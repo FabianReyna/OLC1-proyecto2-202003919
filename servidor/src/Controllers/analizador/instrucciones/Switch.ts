@@ -12,7 +12,7 @@ export default class Switch extends Instruccion {
     private cases: Instruccion[] | undefined;
     private def: Instruccion | undefined;
 
-    constructor(cond: Instruccion, cases: Instruccion[] | undefined, linea: number, col: number, def: Instruccion | undefined) {
+    constructor(cond: Instruccion, cases: Instruccion[] | undefined, linea: number, col: number, def?: Instruccion | undefined) {
         super(new Tipo(tipoDato.VOID), linea, col);
         this.condicion = cond;
         this.cases = cases;
@@ -31,8 +31,6 @@ export default class Switch extends Instruccion {
                 let condCase = i.interpretar(arbol, tabla);
                 if (condCase instanceof Errores) return condCase;
 
-
-                console.log(condCase, cond)
                 if (i.tipoDato.getTipo() != this.condicion.tipoDato.getTipo()) return new Errores("Semantico", "Comparacion entre tipos de datos no iguales", this.linea, this.col);
 
                 if (i instanceof CaseDef) {
@@ -43,8 +41,8 @@ export default class Switch extends Instruccion {
                         for (let j of listaInstrucciones) {
                             let resultado = j.interpretar(arbol, NewTabla);
                             if (resultado instanceof Errores) listaErrores.push(resultado);
-                            if (resultado instanceof BreakContinue) {
-                                if (resultado.opcion == Opcion.BREAK) {
+                            if (j instanceof BreakContinue) {
+                                if (j.opcion == Opcion.BREAK) {
                                     bandera = false;
                                     break;
                                 } else return new Errores("Semantico", "Sentencia continue no valida para switch", this.linea, this.col);
@@ -53,19 +51,18 @@ export default class Switch extends Instruccion {
                     }
 
                 } else return new Errores("Semantico", "Se esperaba un case", this.linea, this.col);
-                if (!bandera) break;
+                if (bandera == false) { break };
             }
         }
-
-        if (bandera && this.def instanceof CaseDef) {
+        if (bandera==true && this.def instanceof CaseDef) {
             let listaInstrucciones = this.def.getExpresiones();
             let NewTabla = new tablaSimbolo(tabla);
             NewTabla.setNombre(tabla.getNombre() + "DEFAULT- ")
             for (let i of listaInstrucciones) {
                 let resultado = i.interpretar(arbol, NewTabla);
                 if (resultado instanceof Errores) listaErrores.push(resultado);
-                if (resultado instanceof BreakContinue) {
-                    if (resultado.opcion == Opcion.BREAK) {
+                if (i instanceof BreakContinue) {
+                    if (i.opcion == Opcion.BREAK) {
                         break;
                     } else return new Errores("Semantico", "Sentencia continue no valida para switch", this.linea, this.col);
                 }

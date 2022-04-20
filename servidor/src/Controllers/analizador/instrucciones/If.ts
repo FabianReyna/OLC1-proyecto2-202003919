@@ -31,6 +31,7 @@ export default class If extends Instruccion {
                     let resultado = i.interpretar(arbol, NewTabla);
                     if (resultado instanceof Errores) listaErrores.push(resultado);
                     if (i instanceof BreakContinue) return i;
+                    if(resultado instanceof BreakContinue) return resultado;
                 }
             }
         } else {
@@ -55,6 +56,7 @@ export default class If extends Instruccion {
                         let resultado = i.interpretar(arbol, NewTabla1);
                         if (resultado instanceof Errores) listaErrores.push(resultado);
                         if (i instanceof BreakContinue) return i;
+                        if(resultado instanceof BreakContinue) return resultado;   
                     }
                 }
             }
@@ -90,6 +92,10 @@ export default class If extends Instruccion {
         cadena += nodo1 + "->" + nodo6 + ";\n";
         cadena += nodo1 + "->" + nodo7 + ";\n";
         cadena += nodo1 + "->" + nodo8 + ";\n";
+        cadena += this.condicion1.generarDot(nodo4);
+        for (let i of this.InsIf) {
+            if (!(i instanceof Errores)) cadena += i.generarDot(nodo7);
+        }
 
         if (!this.InsElse) {
             return cadena;

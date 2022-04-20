@@ -34,6 +34,10 @@ export default class While extends Instruccion {
                     if (resultado.opcion == Opcion.BREAK) return;
                     if (resultado.opcion == Opcion.CONTINUE) break;
                 }
+                if (i instanceof BreakContinue) {
+                    if (i.opcion == Opcion.BREAK) return;
+                    if (i.opcion == Opcion.CONTINUE) break;
+                }
             }
         }
     }

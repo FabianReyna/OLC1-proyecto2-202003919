@@ -1,17 +1,14 @@
-import Errores from "../excepciones/Errores";
 import Simbolo from "./simbolo";
 import Tipo, { tipoDato } from "./Tipo";
 
 export default class tablaSimbolo {
     private tablaAnterior: tablaSimbolo | any;
-    private tipoDato: Tipo;
     private tablaActual: Map<String, Simbolo>;
     private nombreDato: string;
 
     constructor(anterior?: tablaSimbolo) {
         this.tablaAnterior = anterior
         this.tablaActual = new Map<String, Simbolo>()
-        this.tipoDato = new Tipo(tipoDato.ENTERO);
         this.nombreDato = ""
     }
 
@@ -56,6 +53,16 @@ export default class tablaSimbolo {
 
     public setNombre(nombre: string): void {
         this.nombreDato = nombre
+    }
+
+    public getEntorno(id:String){
+        for (let i: tablaSimbolo = this; i != null; i = i.getAnterior()) {
+            let busqueda: Simbolo = <Simbolo>i.getTabla().get(id.toLowerCase())
+            if (busqueda != null) {
+                return i.getNombre();
+            }
+        }
+        return "";
     }
 
 }

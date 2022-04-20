@@ -51,7 +51,6 @@ class Switch extends Instruccion_1.Instruccion {
                 let condCase = i.interpretar(arbol, tabla);
                 if (condCase instanceof Errores_1.default)
                     return condCase;
-                console.log(condCase, cond);
                 if (i.tipoDato.getTipo() != this.condicion.tipoDato.getTipo())
                     return new Errores_1.default("Semantico", "Comparacion entre tipos de datos no iguales", this.linea, this.col);
                 if (i instanceof CaseDef_1.default) {
@@ -63,8 +62,8 @@ class Switch extends Instruccion_1.Instruccion {
                             let resultado = j.interpretar(arbol, NewTabla);
                             if (resultado instanceof Errores_1.default)
                                 indexController_1.listaErrores.push(resultado);
-                            if (resultado instanceof BreakContinue_1.default) {
-                                if (resultado.opcion == BreakContinue_1.Opcion.BREAK) {
+                            if (j instanceof BreakContinue_1.default) {
+                                if (j.opcion == BreakContinue_1.Opcion.BREAK) {
                                     bandera = false;
                                     break;
                                 }
@@ -76,11 +75,13 @@ class Switch extends Instruccion_1.Instruccion {
                 }
                 else
                     return new Errores_1.default("Semantico", "Se esperaba un case", this.linea, this.col);
-                if (!bandera)
+                if (bandera == false) {
                     break;
+                }
+                ;
             }
         }
-        if (bandera && this.def instanceof CaseDef_1.default) {
+        if (bandera == true && this.def instanceof CaseDef_1.default) {
             let listaInstrucciones = this.def.getExpresiones();
             let NewTabla = new tablaSimbolos_1.default(tabla);
             NewTabla.setNombre(tabla.getNombre() + "DEFAULT- ");
@@ -88,8 +89,8 @@ class Switch extends Instruccion_1.Instruccion {
                 let resultado = i.interpretar(arbol, NewTabla);
                 if (resultado instanceof Errores_1.default)
                     indexController_1.listaErrores.push(resultado);
-                if (resultado instanceof BreakContinue_1.default) {
-                    if (resultado.opcion == BreakContinue_1.Opcion.BREAK) {
+                if (i instanceof BreakContinue_1.default) {
+                    if (i.opcion == BreakContinue_1.Opcion.BREAK) {
                         break;
                     }
                     else

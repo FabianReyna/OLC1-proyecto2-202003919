@@ -54,7 +54,7 @@ class IndexController {
             }
             cadena += "\n}"
             graphAST = cadena;
-            console.log(graphAST)
+            //console.log(graphAST)
             for (let i of listaErrores) {
                 ast.Println(i.toString());
             }

@@ -57,7 +57,7 @@ export default class ModVec extends Instruccion {
                     return new Errores("Semantico", "Tipo de dato invalido", this.linea, this.col);
             }
             arreglo.setValor(valor)
-            arbol.updateSimbolo(this.id, tabla.getNombre(), "[" + valor.toString() + "]")
+            arbol.updateSimbolo(this.id, tabla.getEntorno(this.id), "[" + valor.toString() + "]")
         } else {
             if (!this.index2) return new Errores("Semantico", "Index Invalido", this.linea, this.col);
             else {
@@ -101,7 +101,7 @@ export default class ModVec extends Instruccion {
                         else valorAux = valorAux + ",[" + aux.toString() + "]";
                     }
                     valorAux += "]";
-                    arbol.updateSimbolo(this.id, tabla.getNombre(), valorAux)
+                    arbol.updateSimbolo(this.id, tabla.getEntorno(this.id), valorAux)
                 } catch (err) {
                     return new Errores("Semantico", "Index fuera del rango", this.linea, this.col);
                 }

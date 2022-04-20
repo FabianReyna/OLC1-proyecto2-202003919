@@ -63,6 +63,12 @@ class For extends Instruccion_1.Instruccion {
                     if (resultado.opcion == BreakContinue_1.Opcion.CONTINUE)
                         break;
                 }
+                if (i instanceof BreakContinue_1.default) {
+                    if (i.opcion == BreakContinue_1.Opcion.BREAK)
+                        return;
+                    if (i.opcion == BreakContinue_1.Opcion.CONTINUE)
+                        break;
+                }
             }
             let actualiza = this.actualizacion.interpretar(arbol, NewTabla);
             if (actualiza instanceof Errores_1.default)

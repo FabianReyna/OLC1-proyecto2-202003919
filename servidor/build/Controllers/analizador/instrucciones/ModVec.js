@@ -76,7 +76,7 @@ class ModVec extends Instruccion_1.Instruccion {
                     return new Errores_1.default("Semantico", "Tipo de dato invalido", this.linea, this.col);
             }
             arreglo.setValor(valor);
-            arbol.updateSimbolo(this.id, tabla.getNombre(), "[" + valor.toString() + "]");
+            arbol.updateSimbolo(this.id, tabla.getEntorno(this.id), "[" + valor.toString() + "]");
         }
         else {
             if (!this.index2)
@@ -128,7 +128,7 @@ class ModVec extends Instruccion_1.Instruccion {
                             valorAux = valorAux + ",[" + aux.toString() + "]";
                     }
                     valorAux += "]";
-                    arbol.updateSimbolo(this.id, tabla.getNombre(), valorAux);
+                    arbol.updateSimbolo(this.id, tabla.getEntorno(this.id), valorAux);
                 }
                 catch (err) {
                     return new Errores_1.default("Semantico", "Index fuera del rango", this.linea, this.col);

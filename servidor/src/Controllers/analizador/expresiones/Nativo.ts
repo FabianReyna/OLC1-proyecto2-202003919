@@ -28,8 +28,13 @@ export default class Nativo extends Instruccion {
         let nodoNativo2 = "n" + (numeroNodo.no + 2);
         let cadena = "";
         cadena += nodoNativo + "[label=\"NATIVO\"];\n";
-        cadena += anterior + "->" + nodoNativo+";\n";
-        cadena += nodoNativo2 + "[label=\"" + this.valor + "\"]\n";
+        cadena += anterior + "->" + nodoNativo + ";\n";
+        let value = this.valor;
+        if (this.tipoDato.getTipo() == tipoDato.CADENA) {
+            let val = this.valor.toString();
+            value = val.replace('\n', '\\n').replace('\t', '\\t').replace('\r', '\\r').replace('\\', '\\\\').replace("'", "\\'").replace('"', '\\"');
+        }
+        cadena += nodoNativo2 + "[label=\"" + value + "\"]\n";
         cadena += nodoNativo + "->" + nodoNativo2 + ";\n";
         numeroNodo.no += 2;
         return cadena;

@@ -26,7 +26,7 @@ export default class ModVar extends Instruccion {
         if (this.expresion.tipoDato.getTipo() != valor.getTipo().getTipo()) return new Errores("Semantico", "Tipo de dato no compartible en la asignacion", this.linea, this.col);
         this.tipoDato = valor.getTipo();
         valor.setValor(NewValor);
-        arbol.updateSimbolo(this.id, tabla.getNombre(), "" + NewValor);
+        arbol.updateSimbolo(this.id, tabla.getEntorno(this.id), "" + NewValor);
     }
 
     generarDot(anterior: string) {

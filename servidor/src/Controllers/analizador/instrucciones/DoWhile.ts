@@ -23,7 +23,6 @@ export default class DoWhile extends Instruccion {
         if (cond instanceof Errores) return cond;
         if (this.condicion.tipoDato.getTipo() != tipoDato.BOOL) return new Errores("Semantico", "La condicion debe de ser de tipo boolean", this.linea, this.col);
         do {
-            console.log(this.condicion.interpretar(arbol, NewTabla))
             let resultado;
             for (let i of this.expresiones) {
                 resultado = i.interpretar(arbol, NewTabla);
@@ -32,6 +31,10 @@ export default class DoWhile extends Instruccion {
                 if (resultado instanceof BreakContinue) {
                     if (resultado.opcion == Opcion.BREAK) return;
                     if (resultado.opcion == Opcion.CONTINUE) break;
+                }
+                if (i instanceof BreakContinue) {
+                    if (i.opcion == Opcion.BREAK) return;
+                    if (i.opcion == Opcion.CONTINUE) break;
                 }
             }
         } while (this.condicion.interpretar(arbol, NewTabla));

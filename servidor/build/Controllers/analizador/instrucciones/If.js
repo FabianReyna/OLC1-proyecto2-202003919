@@ -55,6 +55,8 @@ class If extends Instruccion_1.Instruccion {
                         indexController_1.listaErrores.push(resultado);
                     if (i instanceof BreakContinue_1.default)
                         return i;
+                    if (resultado instanceof BreakContinue_1.default)
+                        return resultado;
                 }
             }
         }
@@ -85,6 +87,8 @@ class If extends Instruccion_1.Instruccion {
                             indexController_1.listaErrores.push(resultado);
                         if (i instanceof BreakContinue_1.default)
                             return i;
+                        if (resultado instanceof BreakContinue_1.default)
+                            return resultado;
                     }
                 }
             }
@@ -117,6 +121,11 @@ class If extends Instruccion_1.Instruccion {
         cadena += nodo1 + "->" + nodo6 + ";\n";
         cadena += nodo1 + "->" + nodo7 + ";\n";
         cadena += nodo1 + "->" + nodo8 + ";\n";
+        cadena += this.condicion1.generarDot(nodo4);
+        for (let i of this.InsIf) {
+            if (!(i instanceof Errores_1.default))
+                cadena += i.generarDot(nodo7);
+        }
         if (!this.InsElse) {
             return cadena;
         }

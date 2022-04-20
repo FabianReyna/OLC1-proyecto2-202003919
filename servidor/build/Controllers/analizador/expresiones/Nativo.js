@@ -24,7 +24,12 @@ class Nativo extends Instruccion_1.Instruccion {
         let cadena = "";
         cadena += nodoNativo + "[label=\"NATIVO\"];\n";
         cadena += anterior + "->" + nodoNativo + ";\n";
-        cadena += nodoNativo2 + "[label=\"" + this.valor + "\"]\n";
+        let value = this.valor;
+        if (this.tipoDato.getTipo() == Tipo_1.tipoDato.CADENA) {
+            let val = this.valor.toString();
+            value = val.replace('\n', '\\n').replace('\t', '\\t').replace('\r', '\\r').replace('\\', '\\\\').replace("'", "\\'").replace('"', '\\"');
+        }
+        cadena += nodoNativo2 + "[label=\"" + value + "\"]\n";
         cadena += nodoNativo + "->" + nodoNativo2 + ";\n";
         indexController_1.numeroNodo.no += 2;
         return cadena;

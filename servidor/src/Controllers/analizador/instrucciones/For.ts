@@ -40,6 +40,10 @@ export default class For extends Instruccion {
                     if (resultado.opcion == Opcion.BREAK) return;
                     if (resultado.opcion == Opcion.CONTINUE) break;
                 }
+                if (i instanceof BreakContinue) {
+                    if (i.opcion == Opcion.BREAK) return;
+                    if (i.opcion == Opcion.CONTINUE) break;
+                }
             }
 
             let actualiza = this.actualizacion.interpretar(arbol, NewTabla);
