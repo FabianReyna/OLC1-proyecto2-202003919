@@ -33,6 +33,7 @@ const Tipo_1 = __importStar(require("../simbolo/Tipo"));
 const indexController_1 = require("../../indexController");
 const CaseDef_1 = __importDefault(require("./CaseDef"));
 const BreakContinue_1 = __importStar(require("./BreakContinue"));
+const Return_1 = __importDefault(require("./Return"));
 class Switch extends Instruccion_1.Instruccion {
     constructor(cond, cases, linea, col, def) {
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, col);
@@ -62,6 +63,8 @@ class Switch extends Instruccion_1.Instruccion {
                             let resultado = j.interpretar(arbol, NewTabla);
                             if (resultado instanceof Errores_1.default)
                                 indexController_1.listaErrores.push(resultado);
+                            if (resultado instanceof Return_1.default)
+                                return resultado;
                             if (j instanceof BreakContinue_1.default) {
                                 if (j.opcion == BreakContinue_1.Opcion.BREAK) {
                                     bandera = false;
@@ -89,6 +92,8 @@ class Switch extends Instruccion_1.Instruccion {
                 let resultado = i.interpretar(arbol, NewTabla);
                 if (resultado instanceof Errores_1.default)
                     indexController_1.listaErrores.push(resultado);
+                if (resultado instanceof Return_1.default)
+                    return resultado;
                 if (i instanceof BreakContinue_1.default) {
                     if (i.opcion == BreakContinue_1.Opcion.BREAK) {
                         break;

@@ -35,12 +35,9 @@ class Return extends Instruccion_1.Instruccion {
     interpretar(arbol, tabla) {
         if (this.valor) {
             this.value = this.valor.interpretar(arbol, tabla);
-            this.tipoDato.setTipo(this.valor.tipoDato.getTipo());
-            return this;
+            this.tipoDato = this.valor.tipoDato;
         }
-        else {
-            return;
-        }
+        return this;
     }
     generarDot(anterior) {
         var _a;

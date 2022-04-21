@@ -18,12 +18,9 @@ export default class Return extends Instruccion {
     interpretar(arbol: Arbol, tabla: tablaSimbolo) {
         if (this.valor) {
             this.value = this.valor.interpretar(arbol, tabla);
-            this.tipoDato.setTipo(this.valor.tipoDato.getTipo());
-            return this;
-        } else {
-            return;
+            this.tipoDato = this.valor.tipoDato;
         }
-
+        return this;
     }
 
     generarDot(anterior: string) {

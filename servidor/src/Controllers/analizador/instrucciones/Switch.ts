@@ -6,6 +6,7 @@ import Tipo, { tipoDato } from '../simbolo/Tipo'
 import { listaErrores, numeroNodo } from '../../indexController'
 import CaseDef from './CaseDef'
 import BreakContinue, { Opcion } from './BreakContinue'
+import Return from './Return'
 
 export default class Switch extends Instruccion {
     private condicion: Instruccion;
@@ -41,6 +42,7 @@ export default class Switch extends Instruccion {
                         for (let j of listaInstrucciones) {
                             let resultado = j.interpretar(arbol, NewTabla);
                             if (resultado instanceof Errores) listaErrores.push(resultado);
+                            if (resultado instanceof Return) return resultado;
                             if (j instanceof BreakContinue) {
                                 if (j.opcion == Opcion.BREAK) {
                                     bandera = false;
@@ -61,6 +63,7 @@ export default class Switch extends Instruccion {
             for (let i of listaInstrucciones) {
                 let resultado = i.interpretar(arbol, NewTabla);
                 if (resultado instanceof Errores) listaErrores.push(resultado);
+                if (resultado instanceof Return) return resultado;
                 if (i instanceof BreakContinue) {
                     if (i.opcion == Opcion.BREAK) {
                         break;

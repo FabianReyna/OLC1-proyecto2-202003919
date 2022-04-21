@@ -30,10 +30,6 @@ export default class Funcion extends Instruccion {
                     else return new Errores("Semantico", "Tipo de retorno y de funcion diferentes", this.linea, this.col);
                 }else return new Errores("Semantico", "Return invalido", this.linea, this.col);
             }
-            if(resultado instanceof Return){
-                console.log("Existio caso indevido")
-            }
-            
         }
     }
 

@@ -30,9 +30,6 @@ class Funcion extends Instruccion_1.Instruccion {
                 else
                     return new Errores_1.default("Semantico", "Return invalido", this.linea, this.col);
             }
-            if (resultado instanceof Return_1.default) {
-                console.log("Existio caso indevido");
-            }
         }
     }
     generarDot(anterior) {

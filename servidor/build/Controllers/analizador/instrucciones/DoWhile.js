@@ -32,6 +32,7 @@ const tablaSimbolos_1 = __importDefault(require("../simbolo/tablaSimbolos"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
 const indexController_1 = require("../../indexController");
 const BreakContinue_1 = __importStar(require("./BreakContinue"));
+const Return_1 = __importDefault(require("./Return"));
 class DoWhile extends Instruccion_1.Instruccion {
     constructor(condicion, expresiones, linea, col) {
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, col);
@@ -52,6 +53,8 @@ class DoWhile extends Instruccion_1.Instruccion {
                 resultado = i.interpretar(arbol, NewTabla);
                 if (resultado instanceof Errores_1.default)
                     indexController_1.listaErrores.push(resultado);
+                if (resultado instanceof Return_1.default)
+                    return resultado;
                 if (resultado instanceof BreakContinue_1.default) {
                     if (resultado.opcion == BreakContinue_1.Opcion.BREAK)
                         return;

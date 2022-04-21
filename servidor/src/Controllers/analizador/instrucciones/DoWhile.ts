@@ -5,6 +5,7 @@ import tablaSimbolo from '../simbolo/tablaSimbolos'
 import Tipo, { tipoDato } from '../simbolo/Tipo'
 import { listaErrores, numeroNodo } from '../../indexController'
 import BreakContinue, { Opcion } from './BreakContinue'
+import Return from './Return'
 
 export default class DoWhile extends Instruccion {
     private condicion: Instruccion;
@@ -28,6 +29,7 @@ export default class DoWhile extends Instruccion {
                 resultado = i.interpretar(arbol, NewTabla);
 
                 if (resultado instanceof Errores) listaErrores.push(resultado)
+                if (resultado instanceof Return) return resultado;
                 if (resultado instanceof BreakContinue) {
                     if (resultado.opcion == Opcion.BREAK) return;
                     if (resultado.opcion == Opcion.CONTINUE) break;

@@ -37,7 +37,6 @@ class Print extends Instruccion_1.Instruccion {
     }
     interpretar(arbol, tabla) {
         let valor = this.expresion.interpretar(arbol, tabla);
-        console.log("Print ", this.expresion, "Value", valor);
         if (valor instanceof Errores_1.default)
             return valor;
         arbol.Print(valor);

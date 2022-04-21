@@ -23,9 +23,11 @@ export default class Metodo extends Instruccion {
         for (let i of this.expresiones) {
             let resultado = i.interpretar(arbol, tabla);
             if (resultado instanceof Errores) return resultado;
-            if (i instanceof Return) {
-                if (this.tipoDato.getTipo() == i.tipoDato.getTipo()) return resultado;
-                else return new Errores("Semantico", "Tipo de retorno y de funcion diferentes", this.linea, this.col);
+            if (resultado instanceof Return) {
+                if(resultado.value==null){
+                    if (this.tipoDato.getTipo() == resultado.tipoDato.getTipo()) return resultado.value;
+                    else return new Errores("Semantico", "Tipo de retorno y de funcion diferentes", this.linea, this.col);
+                }else return new Errores("Semantico", "Return invalido", this.linea, this.col);
             }
         }
     }

@@ -53,7 +53,8 @@ export default class Llamada extends Instruccion {
                 if (resultado instanceof Errores) return resultado;
                 if (busqueda.parametros[i].tipo.getTipo() != this.parametros[i].tipoDato.getTipo()) return new Errores("Semantico", "Discrepancia entre tipo de dato del parametro", this.linea, this.col);
                 let native=new Nativo(this.parametros[i].tipoDato,resultado,this.parametros[i].linea,this.parametros[i].col);
-                let decla = new DeclaracionVar(busqueda.parametros[i].tipo, this.linea, this.col, [busqueda.parametros[i].id], native);                let resultado2 = decla.interpretar(arbol, NewTabla);
+                let decla = new DeclaracionVar(busqueda.parametros[i].tipo, this.linea, this.col, [busqueda.parametros[i].id], native);                
+                let resultado2 = decla.interpretar(arbol, NewTabla);
                 if (resultado2 instanceof Errores) return resultado2;
             }
 

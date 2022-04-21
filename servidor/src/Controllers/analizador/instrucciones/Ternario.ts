@@ -23,16 +23,15 @@ export default class Ternario extends Instruccion {
 
         if (this.cond.tipoDato.getTipo() != tipoDato.BOOL) return new Errores("Semantico", "La condicion debe de ser de tipo boolean", this.linea, this.col);
 
-        let valor1 = this.exp1.interpretar(arbol, tabla);
-        if (valor1 instanceof Errores) return valor1;
-
-        let valor2 = this.exp1.interpretar(arbol, tabla);
-        if (valor2 instanceof Errores) return valor2;
-        if (condicion) {
-            this.tipoDato = this.exp1.tipoDato;
+        if (Boolean(condicion)) {
+            let valor1 = this.exp1.interpretar(arbol, tabla);
+            if (valor1 instanceof Errores) return valor1;
+            this.tipoDato.setTipo(this.exp1.tipoDato.getTipo())
             return valor1;
         } else {
-            this.tipoDato = this.exp2.tipoDato;
+            let valor2 = this.exp2.interpretar(arbol, tabla);
+            if (valor2 instanceof Errores) return valor2;
+            this.tipoDato.setTipo(this.exp2.tipoDato.getTipo())
             return valor2;
         }
     }
