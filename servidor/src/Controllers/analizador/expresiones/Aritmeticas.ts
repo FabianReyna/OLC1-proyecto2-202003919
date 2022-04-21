@@ -22,6 +22,7 @@ export default class Aritmeticas extends Instruccion {
     }
 
     interpretar(arbol: Arbol, tabla: tablaSimbolo) {
+        
         let opIzq, opDer, Unico = null;
 
         if (this.opU != null) {

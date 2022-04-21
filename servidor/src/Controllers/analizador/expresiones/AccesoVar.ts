@@ -17,7 +17,7 @@ export default class AccesoVar extends Instruccion {
 
     interpretar(arbol: Arbol, tabla: tablaSimbolo) {
         let valor = tabla.getVariable(this.id);
-        if (valor == null) return new Errores("Semantico", "Variable no existente", this.linea, this.col);
+        if (valor == null) return new Errores("Semantico", "Variable no existente AccesoVar "+this.id, this.linea, this.col);
         this.tipoDato = valor.getTipo();
         return valor.getValor();
     }

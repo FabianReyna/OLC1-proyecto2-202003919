@@ -8,6 +8,7 @@ import BreakContinue, { Opcion } from './BreakContinue'
 
 export default class Return extends Instruccion {
     public valor: Instruccion | undefined;
+    public value = null;
 
     constructor(linea: number, col: number, valor?: Instruccion) {
         super(new Tipo(tipoDato.VOID), linea, col);
@@ -16,10 +17,9 @@ export default class Return extends Instruccion {
 
     interpretar(arbol: Arbol, tabla: tablaSimbolo) {
         if (this.valor) {
-            let resultado = this.valor.interpretar(arbol, tabla);
-            if (resultado instanceof Errores) return Errores;
+            this.value = this.valor.interpretar(arbol, tabla);
             this.tipoDato.setTipo(this.valor.tipoDato.getTipo());
-            return this.valor;
+            return this;
         } else {
             return;
         }
@@ -57,7 +57,7 @@ export default class Return extends Instruccion {
             cadena += nodo1 + "->" + nodo2 + ";\n";
             cadena += nodo1 + "->" + nodo3 + ";\n";
             cadena += nodo1 + "->" + nodo4 + ";\n";
-            cadena+=this.valor?.generarDot(nodo3);
+            cadena += this.valor?.generarDot(nodo3);
 
             return cadena;
         }

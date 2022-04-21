@@ -32,6 +32,7 @@ const tablaSimbolos_1 = __importDefault(require("../simbolo/tablaSimbolos"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
 const indexController_1 = require("../../indexController");
 const BreakContinue_1 = __importDefault(require("./BreakContinue"));
+const Return_1 = __importDefault(require("./Return"));
 class If extends Instruccion_1.Instruccion {
     constructor(cond1, ins1, linea, col, ins2) {
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, col);
@@ -57,6 +58,8 @@ class If extends Instruccion_1.Instruccion {
                         return i;
                     if (resultado instanceof BreakContinue_1.default)
                         return resultado;
+                    if (resultado instanceof Return_1.default)
+                        return resultado;
                 }
             }
         }
@@ -70,25 +73,33 @@ class If extends Instruccion_1.Instruccion {
                         indexController_1.listaErrores.push(resultado);
                     if (i instanceof BreakContinue_1.default)
                         return i;
+                    if (resultado instanceof Return_1.default)
+                        return resultado;
                 }
             }
             else {
-                if (this.InsElse instanceof If) {
-                    let resultado = this.InsElse.interpretar(arbol, tabla);
-                    if (resultado instanceof Errores_1.default)
-                        indexController_1.listaErrores.push(resultado);
-                }
-                else {
-                    let NewTabla2 = new tablaSimbolos_1.default(false, tabla);
-                    NewTabla2.setNombre(tabla.getNombre() + "ELSE-");
-                    for (let i of this.InsElse) {
-                        let resultado = i.interpretar(arbol, NewTabla1);
+                if (this.InsElse) {
+                    if (!Array.isArray(this.InsElse)) {
+                        let resultado = this.InsElse.interpretar(arbol, tabla);
                         if (resultado instanceof Errores_1.default)
                             indexController_1.listaErrores.push(resultado);
-                        if (i instanceof BreakContinue_1.default)
-                            return i;
-                        if (resultado instanceof BreakContinue_1.default)
+                        if (resultado instanceof Return_1.default)
                             return resultado;
+                    }
+                    else {
+                        let NewTabla2 = new tablaSimbolos_1.default(false, tabla);
+                        NewTabla2.setNombre(tabla.getNombre() + "ELSE-");
+                        for (let i of this.InsElse) {
+                            let resultado = i.interpretar(arbol, NewTabla1);
+                            if (resultado instanceof Errores_1.default)
+                                indexController_1.listaErrores.push(resultado);
+                            if (i instanceof BreakContinue_1.default)
+                                return i;
+                            if (resultado instanceof BreakContinue_1.default)
+                                return resultado;
+                            if (resultado instanceof Return_1.default)
+                                return resultado;
+                        }
                     }
                 }
             }
@@ -129,7 +140,7 @@ class If extends Instruccion_1.Instruccion {
         if (!this.InsElse) {
             return cadena;
         }
-        else if (this.InsElse instanceof If) {
+        else if (!Array.isArray(this.InsElse)) {
             let nodo9 = "n" + (indexController_1.numeroNodo.no + 1);
             let nodo10 = "n" + (indexController_1.numeroNodo.no + 2);
             indexController_1.numeroNodo.no += 2;

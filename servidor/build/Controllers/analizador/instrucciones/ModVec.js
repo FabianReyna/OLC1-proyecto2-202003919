@@ -45,7 +45,7 @@ class ModVec extends Instruccion_1.Instruccion {
             return Newvalor;
         let arreglo = tabla.getVariable(this.id);
         if (arreglo == null)
-            return new Errores_1.default("Semantico", "Variable no existente", this.linea, this.col);
+            return new Errores_1.default("Semantico", "Variable no existente ModVec", this.linea, this.col);
         this.tipoDato = arreglo.getTipo();
         if (this.dimension == 1) {
             let indice1 = this.index1.interpretar(arbol, tabla);

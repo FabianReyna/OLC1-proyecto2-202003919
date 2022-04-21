@@ -42,7 +42,7 @@ class ModVar extends Instruccion_1.Instruccion {
             return NewValor;
         let valor = tabla.getVariable(this.id.toLowerCase());
         if (valor == null)
-            return new Errores_1.default("Semantico", "Variable no existente", this.linea, this.col);
+            return new Errores_1.default("Semantico", "Variable no existente MODVAR", this.linea, this.col);
         if (this.expresion.tipoDato.getTipo() != valor.getTipo().getTipo())
             return new Errores_1.default("Semantico", "Tipo de dato no compartible en la asignacion", this.linea, this.col);
         this.tipoDato = valor.getTipo();

@@ -52,9 +52,11 @@ class For extends Instruccion_1.Instruccion {
         if (this.condicion.tipoDato.getTipo() != Tipo_1.tipoDato.BOOL)
             return new Errores_1.default("Semantico", "La condicion debe de ser de tipo boolean", this.linea, this.col);
         while (this.condicion.interpretar(arbol, NewTabla)) {
+            let NewTabla2 = new tablaSimbolos_1.default(false, NewTabla);
+            NewTabla2.setNombre(NewTabla.getNombre() + "FOR_INSIDE-");
             let resultado;
             for (let i of this.expresiones) {
-                resultado = i.interpretar(arbol, NewTabla);
+                resultado = i.interpretar(arbol, NewTabla2);
                 if (resultado instanceof Errores_1.default)
                     indexController_1.listaErrores.push(resultado);
                 if (resultado instanceof BreakContinue_1.default) {

@@ -35,7 +35,7 @@ const DeclaracionVar_1 = __importDefault(require("./DeclaracionVar"));
 const Metodo_1 = __importDefault(require("./Metodo"));
 const Funcion_1 = __importDefault(require("./Funcion"));
 const Nativo_1 = __importDefault(require("../expresiones/Nativo"));
-class Run extends Instruccion_1.Instruccion {
+class Llamada extends Instruccion_1.Instruccion {
     constructor(id, linea, col, params) {
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, col);
         this.id = id;
@@ -62,6 +62,7 @@ class Run extends Instruccion_1.Instruccion {
                 if (resultado2 instanceof Errores_1.default)
                     return resultado2;
             }
+            //id vector
             let FuncionI = busqueda.interpretar(arbol, NewTabla);
             if (FuncionI instanceof Errores_1.default)
                 return FuncionI;
@@ -84,8 +85,8 @@ class Run extends Instruccion_1.Instruccion {
                     return resultado2;
             }
             let FuncionI = busqueda.interpretar(arbol, NewTabla);
-            if (FuncionI instanceof Errores_1.default)
-                return FuncionI;
+            this.tipoDato = busqueda.tipoDato;
+            return FuncionI;
         }
         else
             return new Errores_1.default("Semantico", "Cantidad de parametros invalida", this.linea, this.col);
@@ -99,32 +100,26 @@ class Run extends Instruccion_1.Instruccion {
             let nodo4 = "n" + (indexController_1.numeroNodo.no + 4);
             let nodo5 = "n" + (indexController_1.numeroNodo.no + 5);
             let nodo6 = "n" + (indexController_1.numeroNodo.no + 6);
-            let nodo7 = "n" + (indexController_1.numeroNodo.no + 7);
-            let nodo8 = "n" + (indexController_1.numeroNodo.no + 8);
-            indexController_1.numeroNodo.no += 8;
-            cadena += nodo1 + "[label=\"RUNN\"];\n";
-            cadena += nodo2 + "[label=\"run\"];\n";
-            cadena += nodo3 + "[label=\"ID\"];\n";
-            cadena += nodo4 + "[label=\"(\"];\n";
-            cadena += nodo5 + "[label=\"LISTRUN\"];\n";
-            cadena += nodo6 + "[label=\")\"];\n";
-            cadena += nodo7 + "[label=\";\"];\n";
-            cadena += nodo8 + "[label=\"" + this.id + "\"];\n";
+            indexController_1.numeroNodo.no += 6;
+            cadena += nodo1 + "[label=\"LLAMADA\"];\n";
+            cadena += nodo2 + "[label=\"ID\"];\n";
+            cadena += nodo3 + "[label=\"(\"];\n";
+            cadena += nodo4 + "[label=\"PARAMSCALL\"];\n";
+            cadena += nodo5 + "[label=\")\"];\n";
+            cadena += nodo6 + "[label=\"" + this.id + "\"];\n";
             cadena += anterior + "->" + nodo1 + ";\n";
             cadena += nodo1 + "->" + nodo2 + ";\n";
             cadena += nodo1 + "->" + nodo3 + ";\n";
             cadena += nodo1 + "->" + nodo4 + ";\n";
             cadena += nodo1 + "->" + nodo5 + ";\n";
-            cadena += nodo1 + "->" + nodo6 + ";\n";
-            cadena += nodo1 + "->" + nodo7 + ";\n";
-            cadena += nodo3 + "->" + nodo8 + ";\n";
+            cadena += nodo2 + "->" + nodo6 + ";\n";
             let index = 0;
             for (let i of this.parametros) {
                 if (index == 0) {
                     let nodo9 = "n" + (indexController_1.numeroNodo.no + 1);
                     indexController_1.numeroNodo.no += 1;
                     cadena += nodo9 + "[label=\"EXP\"];\n";
-                    cadena += nodo5 + "->" + nodo9 + ";\n";
+                    cadena += nodo4 + "->" + nodo9 + ";\n";
                     cadena += i.generarDot(nodo9);
                 }
                 else {
@@ -133,8 +128,8 @@ class Run extends Instruccion_1.Instruccion {
                     indexController_1.numeroNodo.no += 2;
                     cadena += nodo9 + "[label=\",\"];\n";
                     cadena += nodo9 + "[label=\"EXP\"];\n";
-                    cadena += nodo5 + "->" + nodo10 + ";\n";
-                    cadena += nodo5 + "->" + nodo9 + ";\n";
+                    cadena += nodo4 + "->" + nodo10 + ";\n";
+                    cadena += nodo4 + "->" + nodo9 + ";\n";
                     cadena += i.generarDot(nodo9);
                 }
                 index++;
@@ -148,25 +143,19 @@ class Run extends Instruccion_1.Instruccion {
             let nodo4 = "n" + (indexController_1.numeroNodo.no + 4);
             let nodo5 = "n" + (indexController_1.numeroNodo.no + 5);
             let nodo6 = "n" + (indexController_1.numeroNodo.no + 6);
-            let nodo7 = "n" + (indexController_1.numeroNodo.no + 7);
-            let nodo8 = "n" + (indexController_1.numeroNodo.no + 8);
-            indexController_1.numeroNodo.no += 8;
-            cadena += nodo1 + "[label=\"RUNN\"];\n";
-            cadena += nodo2 + "[label=\"run\"];\n";
-            cadena += nodo3 + "[label=\"ID\"];\n";
-            cadena += nodo4 + "[label=\"(\"];\n";
-            cadena += nodo6 + "[label=\")\"];\n";
-            cadena += nodo7 + "[label=\";\"];\n";
-            cadena += nodo8 + "[label=\"" + this.id + "\"];\n";
+            indexController_1.numeroNodo.no += 6;
+            cadena += nodo1 + "[label=\"LLAMADA\"];\n";
+            cadena += nodo2 + "[label=\"ID\"];\n";
+            cadena += nodo3 + "[label=\"(\"];\n";
+            cadena += nodo5 + "[label=\")\"];\n";
+            cadena += nodo6 + "[label=\"" + this.id + "\"];\n";
             cadena += anterior + "->" + nodo1 + ";\n";
             cadena += nodo1 + "->" + nodo2 + ";\n";
             cadena += nodo1 + "->" + nodo3 + ";\n";
-            cadena += nodo1 + "->" + nodo4 + ";\n";
-            cadena += nodo1 + "->" + nodo6 + ";\n";
-            cadena += nodo1 + "->" + nodo7 + ";\n";
-            cadena += nodo3 + "->" + nodo8 + ";\n";
+            cadena += nodo1 + "->" + nodo5 + ";\n";
+            cadena += nodo2 + "->" + nodo6 + ";\n";
             return cadena;
         }
     }
 }
-exports.default = Run;
+exports.default = Llamada;

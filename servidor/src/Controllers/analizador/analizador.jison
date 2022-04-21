@@ -30,7 +30,12 @@ const DoWhile=require('./instrucciones/DoWhile')
 const CaseDef=require('./instrucciones/CaseDef')
 const Switch=require('./instrucciones/Switch')
 const Metodo=require('./instrucciones/Metodo')
+const Funcion=require('./instrucciones/Funcion')
+const Return=require('./instrucciones/Return')
 const Run=require('./instrucciones/Run')
+const Llamada=require('./instrucciones/Llamada')
+
+
 
 %}
 
@@ -165,10 +170,10 @@ INSTRUCCION : DECLARACION                       {$$=$1;}
             | CDOW                              {$$=$1;}
             | TBREAK                            {$$=$1;}
             | TCONTINUE                         {$$=$1;}
-            | TRETURN
-            | FUNCS
+            | TRETURN                           {$$=$1;}
+            | FUNCS                             {$$=$1;}
             | METODS                            {$$=$1;}
-            | LLAMADA PUNTOCOMA
+            | LLAMADAINS                        {$$=$1;}
             | PRINTT                            {$$=$1;}
             | PRINTLNN                          {$$=$1;}
             | RUNN                              {$$=$1;}
@@ -198,7 +203,7 @@ EXP : EXP MAS EXP                           {$$=new Aritmeticas.default(Aritmeti
     | PAR1 EXP PAR2                         {$$=$2;}
     | ID COR1 EXP COR2 COR1 EXP COR2        {$$=new AccesoVec.default($1,2,$3,@1.first_line,@1.first_column,$6);}
     | ID COR1 EXP COR2                      {$$=new AccesoVec.default($1,1,$3,@1.first_line,@1.first_column);}
-    | LLAMADA
+    | LLAMADA                               {$$=$1;}
     | TOLOW                                 {$$=$1;}
     | TOUP                                  {$$=$1;}
     | ROUNDD                                {$$=$1;}
@@ -323,13 +328,13 @@ TCONTINUE : CONTINUE PUNTOCOMA  {$$=new BreakContinue.default(BreakContinue.Opci
 ;
 
 // return
-TRETURN : RETURN PUNTOCOMA
-        | RETURN EXP PUNTOCOMA
+TRETURN : RETURN PUNTOCOMA              {$$=new Return.default(@1.first_line,@1.first_column);}
+        | RETURN EXP PUNTOCOMA          {$$=new Return.default(@1.first_line,@1.first_column,$2);}
 ;
 
 // Funciones
-FUNCS : ID PAR1 PARAMS PAR2 DOSPUNTOS TIPOS LLAVE1 INSTRUCCIONES LLAVE2
-    |   ID PAR1  PAR2 DOSPUNTOS TIPOS LLAVE1 INSTRUCCIONES LLAVE2
+FUNCS : ID PAR1 PARAMS PAR2 DOSPUNTOS TIPOS LLAVE1 INSTRUCCIONES LLAVE2         {$$=new Funcion.default($1,$6,$8,@1.first_line,@1.first_column,$3);}
+    |   ID PAR1 PAR2 DOSPUNTOS TIPOS LLAVE1 INSTRUCCIONES LLAVE2               {$$=new Funcion.default($1,$5,$7,@1.first_line,@1.first_column,[]);}
 ;
 
 PARAMS : PARAMS COMA TIPOS ID               {$1.push({tipo:$3,id:$4});$$=$1;}
@@ -342,12 +347,16 @@ METODS : ID PAR1 PARAMS PAR2 DOSPUNTOS VOID LLAVE1 INSTRUCCIONES LLAVE2     {$$=
 ;
 
 // llamadas
-LLAMADA : ID PAR1 PARAMSCALL PAR2 
-        | ID PAR1 PAR2 
+LLAMADAINS : ID PAR1 PARAMSCALL PAR2 PUNTOCOMA       {$$=new Llamada.default($1,@1.first_line,@1.first_column,$3);} 
+        | ID PAR1 PAR2 PUNTOCOMA                 {$$=new Llamada.default($1,@1.first_line,@1.first_column,[]);}
 ;
 
-PARAMSCALL : PARAMSCALL COMA EXP
-            | EXP
+LLAMADA : ID PAR1 PARAMSCALL PAR2       {$$=new Llamada.default($1,@1.first_line,@1.first_column,$3);} 
+        | ID PAR1 PAR2                  {$$=new Llamada.default($1,@1.first_line,@1.first_column,[]);}
+;
+
+PARAMSCALL : PARAMSCALL COMA EXP        {$1.push($3);$$=$1;}
+            | EXP                       {$$=[$1];}
 ;
 
 // print

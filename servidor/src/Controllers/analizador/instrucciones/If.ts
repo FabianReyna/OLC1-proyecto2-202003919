@@ -5,13 +5,14 @@ import tablaSimbolo from '../simbolo/tablaSimbolos'
 import Tipo, { tipoDato } from '../simbolo/Tipo'
 import { listaErrores, numeroNodo } from '../../indexController'
 import BreakContinue from './BreakContinue'
+import Return from './Return'
 
 export default class If extends Instruccion {
     private condicion1: Instruccion;
     private InsIf: Instruccion[];
-    private InsElse: Instruccion[] | If | undefined;
+    private InsElse: Instruccion[] | Instruccion | undefined;
 
-    constructor(cond1: Instruccion, ins1: Instruccion[], linea: number, col: number, ins2?: Instruccion[] | If) {
+    constructor(cond1: Instruccion, ins1: Instruccion[], linea: number, col: number, ins2?: Instruccion[] | Instruccion) {
         super(new Tipo(tipoDato.VOID), linea, col);
         this.condicion1 = cond1;
         this.InsIf = ins1;
@@ -24,18 +25,19 @@ export default class If extends Instruccion {
         if (this.condicion1.tipoDato.getTipo() != tipoDato.BOOL) return new Errores("Semantico", "La condicion debe de ser de tipo boolean", this.linea, this.col);
 
         if (!this.InsElse) {
-            let NewTabla = new tablaSimbolo(false,tabla);
+            let NewTabla = new tablaSimbolo(false, tabla);
             NewTabla.setNombre(tabla.getNombre() + "IF-")
             if (cond1) {
                 for (let i of this.InsIf) {
                     let resultado = i.interpretar(arbol, NewTabla);
                     if (resultado instanceof Errores) listaErrores.push(resultado);
                     if (i instanceof BreakContinue) return i;
-                    if(resultado instanceof BreakContinue) return resultado;
+                    if (resultado instanceof BreakContinue) return resultado;
+                    if (resultado instanceof Return) return resultado;
                 }
             }
         } else {
-            let NewTabla1 = new tablaSimbolo(false,tabla);
+            let NewTabla1 = new tablaSimbolo(false, tabla);
             NewTabla1.setNombre(tabla.getNombre() + "IF-");
 
             if (cond1) {
@@ -43,22 +45,28 @@ export default class If extends Instruccion {
                     let resultado = i.interpretar(arbol, NewTabla1);
                     if (resultado instanceof Errores) listaErrores.push(resultado);
                     if (i instanceof BreakContinue) return i;
+                    if (resultado instanceof Return) return resultado;
                 }
             } else {
-                if (this.InsElse instanceof If) {
+                if(this.InsElse){
+                    if (!Array.isArray(this.InsElse)) {
                     let resultado = this.InsElse.interpretar(arbol, tabla);
                     if (resultado instanceof Errores) listaErrores.push(resultado);
+                    if (resultado instanceof Return) return resultado;
                 }
                 else {
-                    let NewTabla2 = new tablaSimbolo(false,tabla);
+                    let NewTabla2 = new tablaSimbolo(false, tabla);
                     NewTabla2.setNombre(tabla.getNombre() + "ELSE-");
                     for (let i of this.InsElse) {
                         let resultado = i.interpretar(arbol, NewTabla1);
                         if (resultado instanceof Errores) listaErrores.push(resultado);
                         if (i instanceof BreakContinue) return i;
-                        if(resultado instanceof BreakContinue) return resultado;   
+                        if (resultado instanceof BreakContinue) return resultado;
+                        if (resultado instanceof Return) return resultado;
                     }
                 }
+                }
+                
             }
         }
     }
@@ -99,7 +107,7 @@ export default class If extends Instruccion {
 
         if (!this.InsElse) {
             return cadena;
-        } else if (this.InsElse instanceof If) {
+        } else if (!Array.isArray(this.InsElse)) {
             let nodo9 = "n" + (numeroNodo.no + 1);
             let nodo10 = "n" + (numeroNodo.no + 2);
             numeroNodo.no += 2;

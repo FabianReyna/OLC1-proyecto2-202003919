@@ -33,6 +33,7 @@ class IndexController {
             var tabla = new tablaSimbolos_1.default(false);
             tabla.setNombre("");
             ast.setTablaGlobal(tabla);
+            ast.setConsola("");
             for (let i of ast.getInstrucciones()) {
                 if (i instanceof Errores_1.default)
                     exports.listaErrores.push(i);
@@ -40,15 +41,21 @@ class IndexController {
                     i.id = i.id.toLowerCase();
                     ast.addFunciones(i);
                 }
-            }
-            for (let i of ast.getInstrucciones()) {
-                if (i instanceof Run_1.default || i instanceof DeclaracionArray1_1.default || i instanceof DeclaracionArray2_1.default || i instanceof DeclaracionVar_1.default || i instanceof ModVar_1.default || i instanceof ModVec_1.default) {
+                if (i instanceof DeclaracionArray1_1.default || i instanceof DeclaracionArray2_1.default || i instanceof DeclaracionVar_1.default || i instanceof ModVar_1.default || i instanceof ModVec_1.default) {
                     var resultado = i.interpretar(ast, tabla);
                     if (resultado instanceof Errores_1.default) {
                         exports.listaErrores.push(resultado);
                     }
                 }
-                else if (i instanceof Metodo_1.default || i instanceof Funcion_1.default) {
+            }
+            for (let i of ast.getInstrucciones()) {
+                if (i instanceof Run_1.default) {
+                    var resultado = i.interpretar(ast, tabla);
+                    if (resultado instanceof Errores_1.default) {
+                        exports.listaErrores.push(resultado);
+                    }
+                }
+                else if (i instanceof Metodo_1.default || i instanceof Funcion_1.default || i instanceof DeclaracionArray1_1.default || i instanceof DeclaracionArray2_1.default || i instanceof DeclaracionVar_1.default || i instanceof ModVar_1.default || i instanceof ModVec_1.default) {
                     continue;
                 }
                 else {

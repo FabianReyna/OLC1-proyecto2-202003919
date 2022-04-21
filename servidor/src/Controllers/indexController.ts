@@ -32,22 +32,29 @@ class IndexController {
             var tabla = new tablaSimbolo(false);
             tabla.setNombre("")
             ast.setTablaGlobal(tabla);
+            ast.setConsola("")
             for (let i of ast.getInstrucciones()) {
                 if (i instanceof Errores) listaErrores.push(i)
                 if (i instanceof Metodo || i instanceof Funcion) {
                     i.id = i.id.toLowerCase();
                     ast.addFunciones(i);
                 }
-            }
-
-
-            for (let i of ast.getInstrucciones()) {
-                if (i instanceof Run || i instanceof DeclaracionArray1 || i instanceof DeclaracionArray2 || i instanceof DeclaracionVar || i instanceof ModVar || i instanceof ModVec) {
+                if (i instanceof DeclaracionArray1 || i instanceof DeclaracionArray2 || i instanceof DeclaracionVar || i instanceof ModVar || i instanceof ModVec) {
                     var resultado = i.interpretar(ast, tabla);
                     if (resultado instanceof Errores) {
                         listaErrores.push(resultado);
                     }
-                } else if (i instanceof Metodo || i instanceof Funcion) {
+                }
+                
+            }
+            
+            for (let i of ast.getInstrucciones()) {
+                if (i instanceof Run ) {
+                    var resultado = i.interpretar(ast, tabla);
+                    if (resultado instanceof Errores) {
+                        listaErrores.push(resultado);
+                    }
+                } else if (i instanceof Metodo || i instanceof Funcion || i instanceof DeclaracionArray1 || i instanceof DeclaracionArray2 || i instanceof DeclaracionVar || i instanceof ModVar || i instanceof ModVec) {
                     continue;
                 }
                 else {

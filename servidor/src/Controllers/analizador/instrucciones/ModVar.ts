@@ -21,7 +21,7 @@ export default class ModVar extends Instruccion {
         if (NewValor instanceof Errores) return NewValor;
 
         let valor = tabla.getVariable(this.id.toLowerCase());
-        if (valor == null) return new Errores("Semantico", "Variable no existente", this.linea, this.col);
+        if (valor == null) return new Errores("Semantico", "Variable no existente MODVAR", this.linea, this.col);
 
         if (this.expresion.tipoDato.getTipo() != valor.getTipo().getTipo()) return new Errores("Semantico", "Tipo de dato no compartible en la asignacion", this.linea, this.col);
         this.tipoDato = valor.getTipo();

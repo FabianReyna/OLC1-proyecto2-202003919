@@ -27,7 +27,7 @@ export default class ModVec extends Instruccion {
         if (Newvalor instanceof Errores) return Newvalor;
 
         let arreglo = tabla.getVariable(this.id);
-        if (arreglo == null) return new Errores("Semantico", "Variable no existente", this.linea, this.col);
+        if (arreglo == null) return new Errores("Semantico", "Variable no existente ModVec", this.linea, this.col);
 
         this.tipoDato = arreglo.getTipo();
 

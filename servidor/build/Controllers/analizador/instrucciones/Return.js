@@ -22,26 +22,21 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Instruccion_1 = require("../abstracto/Instruccion");
-const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
 const indexController_1 = require("../../indexController");
 class Return extends Instruccion_1.Instruccion {
     constructor(linea, col, valor) {
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, col);
+        this.value = null;
         this.valor = valor;
     }
     interpretar(arbol, tabla) {
         if (this.valor) {
-            let resultado = this.valor.interpretar(arbol, tabla);
-            if (resultado instanceof Errores_1.default)
-                return Errores_1.default;
+            this.value = this.valor.interpretar(arbol, tabla);
             this.tipoDato.setTipo(this.valor.tipoDato.getTipo());
-            return this.valor;
+            return this;
         }
         else {
             return;

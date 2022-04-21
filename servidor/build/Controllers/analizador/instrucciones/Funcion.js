@@ -20,11 +20,18 @@ class Funcion extends Instruccion_1.Instruccion {
             let resultado = i.interpretar(arbol, tabla);
             if (resultado instanceof Errores_1.default)
                 return resultado;
-            if (i instanceof Return_1.default) {
-                if (this.tipoDato.getTipo() == i.tipoDato.getTipo())
-                    return resultado;
+            if (resultado instanceof Return_1.default) {
+                if (resultado.value != null) {
+                    if (this.tipoDato.getTipo() == resultado.tipoDato.getTipo())
+                        return resultado.value;
+                    else
+                        return new Errores_1.default("Semantico", "Tipo de retorno y de funcion diferentes", this.linea, this.col);
+                }
                 else
-                    return new Errores_1.default("Semantico", "Tipo de retorno y de funcion diferentes", this.linea, this.col);
+                    return new Errores_1.default("Semantico", "Return invalido", this.linea, this.col);
+            }
+            if (resultado instanceof Return_1.default) {
+                console.log("Existio caso indevido");
             }
         }
     }

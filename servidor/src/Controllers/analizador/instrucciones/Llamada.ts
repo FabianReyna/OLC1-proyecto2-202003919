@@ -9,7 +9,7 @@ import Metodo from './Metodo'
 import Funcion from './Funcion'
 import Nativo from '../expresiones/Nativo'
 
-export default class Run extends Instruccion {
+export default class Llamada extends Instruccion {
     private id: string;
     private parametros: Instruccion[];
 
@@ -26,7 +26,7 @@ export default class Run extends Instruccion {
 
         if (busqueda instanceof Metodo) {
             let NewTabla = new tablaSimbolo(true, arbol.getTablaGlobal());
-            NewTabla.setNombre(arbol.getTablaGlobal().getNombre() + "METODO-" + this.id+"-")
+            NewTabla.setNombre(arbol.getTablaGlobal().getNombre() + "METODO-" + this.id + "-")
 
             if (busqueda.parametros.length != this.parametros.length) return new Errores("Semantico", "Cantidad de parametros invalida", this.linea, this.col);
 
@@ -35,15 +35,16 @@ export default class Run extends Instruccion {
                 if (resultado instanceof Errores) return resultado;
                 if (busqueda.parametros[i].tipo.getTipo() != this.parametros[i].tipoDato.getTipo()) return new Errores("Semantico", "Discrepancia entre tipo de dato del parametro", this.linea, this.col);
                 let native=new Nativo(this.parametros[i].tipoDato,resultado,this.parametros[i].linea,this.parametros[i].col);
-                let decla = new DeclaracionVar(busqueda.parametros[i].tipo, this.linea, this.col, [busqueda.parametros[i].id], native);                let resultado2 = decla.interpretar(arbol, NewTabla);
+                let decla = new DeclaracionVar(busqueda.parametros[i].tipo, this.linea, this.col, [busqueda.parametros[i].id], native);
+                let resultado2 = decla.interpretar(arbol, NewTabla);
                 if (resultado2 instanceof Errores) return resultado2;
             }
-
+//id vector
             let FuncionI = busqueda.interpretar(arbol, NewTabla);
             if (FuncionI instanceof Errores) return FuncionI;
         } else if (busqueda instanceof Funcion) {
             let NewTabla = new tablaSimbolo(true, arbol.getTablaGlobal());
-            NewTabla.setNombre(arbol.getTablaGlobal().getNombre() + "FUNCION-" + this.id+"-")
+            NewTabla.setNombre(arbol.getTablaGlobal().getNombre() + "FUNCION-" + this.id + "-")
 
             if (busqueda.parametros.length != this.parametros.length) return new Errores("Semantico", "Cantidad de parametros invalida", this.linea, this.col);
 
@@ -57,7 +58,9 @@ export default class Run extends Instruccion {
             }
 
             let FuncionI = busqueda.interpretar(arbol, NewTabla);
-            if (FuncionI instanceof Errores) return FuncionI;
+            this.tipoDato=busqueda.tipoDato;
+            return FuncionI
+            
         } else return new Errores("Semantico", "Cantidad de parametros invalida", this.linea, this.col);
     }
 
@@ -70,27 +73,22 @@ export default class Run extends Instruccion {
             let nodo4 = "n" + (numeroNodo.no + 4);
             let nodo5 = "n" + (numeroNodo.no + 5);
             let nodo6 = "n" + (numeroNodo.no + 6);
-            let nodo7 = "n" + (numeroNodo.no + 7);
-            let nodo8 = "n" + (numeroNodo.no + 8);
-            numeroNodo.no += 8;
+            numeroNodo.no += 6;
 
-            cadena += nodo1 + "[label=\"RUNN\"];\n";
-            cadena += nodo2 + "[label=\"run\"];\n";
-            cadena += nodo3 + "[label=\"ID\"];\n";
-            cadena += nodo4 + "[label=\"(\"];\n";
-            cadena += nodo5 + "[label=\"LISTRUN\"];\n";
-            cadena += nodo6 + "[label=\")\"];\n";
-            cadena += nodo7 + "[label=\";\"];\n";
-            cadena += nodo8 + "[label=\"" + this.id + "\"];\n";
+            cadena += nodo1 + "[label=\"LLAMADA\"];\n";
+            cadena += nodo2 + "[label=\"ID\"];\n";
+            cadena += nodo3 + "[label=\"(\"];\n";
+            cadena += nodo4 + "[label=\"PARAMSCALL\"];\n";
+            cadena += nodo5 + "[label=\")\"];\n";
+            cadena += nodo6 + "[label=\"" + this.id + "\"];\n";
 
             cadena += anterior + "->" + nodo1 + ";\n";
             cadena += nodo1 + "->" + nodo2 + ";\n";
             cadena += nodo1 + "->" + nodo3 + ";\n";
             cadena += nodo1 + "->" + nodo4 + ";\n";
             cadena += nodo1 + "->" + nodo5 + ";\n";
-            cadena += nodo1 + "->" + nodo6 + ";\n";
-            cadena += nodo1 + "->" + nodo7 + ";\n";
-            cadena += nodo3 + "->" + nodo8 + ";\n";
+            cadena += nodo2 + "->" + nodo6 + ";\n";
+
 
             let index = 0;
             for (let i of this.parametros) {
@@ -99,7 +97,7 @@ export default class Run extends Instruccion {
                     numeroNodo.no += 1;
 
                     cadena += nodo9 + "[label=\"EXP\"];\n";
-                    cadena += nodo5 + "->" + nodo9 + ";\n";
+                    cadena += nodo4 + "->" + nodo9 + ";\n";
                     cadena += i.generarDot(nodo9);
                 } else {
                     let nodo9 = "n" + (numeroNodo.no + 1);
@@ -108,8 +106,8 @@ export default class Run extends Instruccion {
 
                     cadena += nodo9 + "[label=\",\"];\n";
                     cadena += nodo9 + "[label=\"EXP\"];\n";
-                    cadena += nodo5 + "->" + nodo10 + ";\n";
-                    cadena += nodo5 + "->" + nodo9 + ";\n";
+                    cadena += nodo4 + "->" + nodo10 + ";\n";
+                    cadena += nodo4 + "->" + nodo9 + ";\n";
                     cadena += i.generarDot(nodo9);
                 }
                 index++;
@@ -122,27 +120,22 @@ export default class Run extends Instruccion {
             let nodo4 = "n" + (numeroNodo.no + 4);
             let nodo5 = "n" + (numeroNodo.no + 5);
             let nodo6 = "n" + (numeroNodo.no + 6);
-            let nodo7 = "n" + (numeroNodo.no + 7);
-            let nodo8 = "n" + (numeroNodo.no + 8);
-            numeroNodo.no += 8;
+            numeroNodo.no += 6;
 
-            cadena += nodo1 + "[label=\"RUNN\"];\n";
-            cadena += nodo2 + "[label=\"run\"];\n";
-            cadena += nodo3 + "[label=\"ID\"];\n";
-            cadena += nodo4 + "[label=\"(\"];\n";
-            cadena += nodo6 + "[label=\")\"];\n";
-            cadena += nodo7 + "[label=\";\"];\n";
-            cadena += nodo8 + "[label=\"" + this.id + "\"];\n";
+            cadena += nodo1 + "[label=\"LLAMADA\"];\n";
+            cadena += nodo2 + "[label=\"ID\"];\n";
+            cadena += nodo3 + "[label=\"(\"];\n";
+            cadena += nodo5 + "[label=\")\"];\n";
+            cadena += nodo6 + "[label=\"" + this.id + "\"];\n";
 
             cadena += anterior + "->" + nodo1 + ";\n";
             cadena += nodo1 + "->" + nodo2 + ";\n";
             cadena += nodo1 + "->" + nodo3 + ";\n";
-            cadena += nodo1 + "->" + nodo4 + ";\n";
-            cadena += nodo1 + "->" + nodo6 + ";\n";
-            cadena += nodo1 + "->" + nodo7 + ";\n";
-            cadena += nodo3 + "->" + nodo8 + ";\n";
-
+            cadena += nodo1 + "->" + nodo5 + ";\n";
+            cadena += nodo2 + "->" + nodo6 + ";\n";
             return cadena;
         }
+
     }
+
 }
