@@ -41,7 +41,7 @@ class AccesoVec extends Instruccion_1.Instruccion {
     interpretar(arbol, tabla) {
         let arreglo = tabla.getVariable(this.id);
         if (arreglo == null)
-            return new Errores_1.default("Semantico", "Variable no existente AccesoVec", this.linea, this.col);
+            return new Errores_1.default("Semantico", "Variable no existente ", this.linea, this.col);
         this.tipoDato.setTipo(arreglo.getTipo().getTipo());
         if (this.dimension == 1) {
             let indice1 = this.index1.interpretar(arbol, tabla);

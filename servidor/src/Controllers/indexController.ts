@@ -23,6 +23,7 @@ class IndexController {
     }
 
     public escaneo(req: Request, res: Response) {
+        graphAST = "";
         numeroNodo.no = 0;
         listaErrores = new Array<Errores>();
         let parser = require("./analizador/analizador");
@@ -45,11 +46,10 @@ class IndexController {
                         listaErrores.push(resultado);
                     }
                 }
-                
             }
-            
+
             for (let i of ast.getInstrucciones()) {
-                if (i instanceof Run ) {
+                if (i instanceof Run) {
                     var resultado = i.interpretar(ast, tabla);
                     if (resultado instanceof Errores) {
                         listaErrores.push(resultado);
@@ -98,8 +98,10 @@ class IndexController {
     }
 
     public ast(req: Request, res: Response) {
-        fs.writeFile('AST.dot', graphAST, () => { });
-        exec("dot -Tsvg AST.dot -o ../cliente/src/assets/AST.svg", (error, stdout, stderr) => { if (error) { res.json({ ast: false }); return; } else { res.json({ ast: true }); return; } });
+        if (graphAST != "") {
+            fs.writeFile('AST.dot', graphAST, () => { });
+            exec("dot -Tsvg AST.dot -o ../cliente/src/assets/AST.svg", (error, stdout, stderr) => { if (error) { res.json({ ast: false }); return; } else { res.json({ ast: true }); return; } });
+        }else  res.json({ast:false});
     }
 
     public errores(req: Request, res: Response) {

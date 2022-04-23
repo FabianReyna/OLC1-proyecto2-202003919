@@ -34,7 +34,6 @@ const indexController_1 = require("../../indexController");
 const DeclaracionVar_1 = __importDefault(require("./DeclaracionVar"));
 const Metodo_1 = __importDefault(require("./Metodo"));
 const Funcion_1 = __importDefault(require("./Funcion"));
-const Nativo_1 = __importDefault(require("../expresiones/Nativo"));
 class Run extends Instruccion_1.Instruccion {
     constructor(id, linea, col, params) {
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, col);
@@ -56,11 +55,17 @@ class Run extends Instruccion_1.Instruccion {
                     return resultado;
                 if (busqueda.parametros[i].tipo.getTipo() != this.parametros[i].tipoDato.getTipo())
                     return new Errores_1.default("Semantico", "Discrepancia entre tipo de dato del parametro", this.linea, this.col);
-                let native = new Nativo_1.default(this.parametros[i].tipoDato, resultado, this.parametros[i].linea, this.parametros[i].col);
-                let decla = new DeclaracionVar_1.default(busqueda.parametros[i].tipo, this.linea, this.col, [busqueda.parametros[i].id], native);
+                let decla = new DeclaracionVar_1.default(busqueda.parametros[i].tipo, this.linea, this.col, [busqueda.parametros[i].id], undefined);
                 let resultado2 = decla.interpretar(arbol, NewTabla);
                 if (resultado2 instanceof Errores_1.default)
                     return resultado2;
+                let variable = NewTabla.getVariable(busqueda.parametros[i].id);
+                if (variable == null)
+                    return new Errores_1.default("Semantico", "Variable no existente " + busqueda.parametros[i].id, this.linea, this.col);
+                if (variable.getTipo().getTipo() != busqueda.parametros[i].tipo.getTipo())
+                    return new Errores_1.default("Semantico", "Discrepancia entre tipo de dato del parametro", this.linea, this.col);
+                variable.setValor(resultado);
+                arbol.addSimbolo(busqueda.parametros[i].id, "PARAMETRO", NewTabla.getNombre(), this.linea, this.col, resultado);
             }
             let FuncionI = busqueda.interpretar(arbol, NewTabla);
             if (FuncionI instanceof Errores_1.default)
@@ -77,11 +82,17 @@ class Run extends Instruccion_1.Instruccion {
                     return resultado;
                 if (busqueda.parametros[i].tipo.getTipo() != this.parametros[i].tipoDato.getTipo())
                     return new Errores_1.default("Semantico", "Discrepancia entre tipo de dato del parametro", this.linea, this.col);
-                let native = new Nativo_1.default(this.parametros[i].tipoDato, resultado, this.parametros[i].linea, this.parametros[i].col);
-                let decla = new DeclaracionVar_1.default(busqueda.parametros[i].tipo, this.linea, this.col, [busqueda.parametros[i].id], native);
+                let decla = new DeclaracionVar_1.default(busqueda.parametros[i].tipo, this.linea, this.col, [busqueda.parametros[i].id], undefined);
                 let resultado2 = decla.interpretar(arbol, NewTabla);
                 if (resultado2 instanceof Errores_1.default)
                     return resultado2;
+                let variable = NewTabla.getVariable(busqueda.parametros[i].id);
+                if (variable == null)
+                    return new Errores_1.default("Semantico", "Variable no existente " + busqueda.parametros[i].id, this.linea, this.col);
+                if (variable.getTipo().getTipo() != busqueda.parametros[i].tipo.getTipo())
+                    return new Errores_1.default("Semantico", "Discrepancia entre tipo de dato del parametro", this.linea, this.col);
+                variable.setValor(resultado);
+                arbol.addSimbolo(busqueda.parametros[i].id, "PARAMETRO", NewTabla.getNombre(), this.linea, this.col, resultado);
             }
             let FuncionI = busqueda.interpretar(arbol, NewTabla);
             if (FuncionI instanceof Errores_1.default)

@@ -9,6 +9,8 @@ import { AstComponent } from './components/ast/ast.component';
 import { ErroresComponent } from './components/errores/errores.component';
 import { SimbolosComponent } from './components/simbolos/simbolos.component';
 import { FormsModule } from '@angular/forms';
+import { PrincipalComponent } from './components/principal/principal.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -17,13 +19,15 @@ import { FormsModule } from '@angular/forms';
     InicioComponent,
     AstComponent,
     ErroresComponent,
-    SimbolosComponent
+    SimbolosComponent,
+    PrincipalComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

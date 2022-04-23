@@ -25,6 +25,7 @@ class IndexController {
         res.json({ "funciona": "la api" });
     }
     escaneo(req, res) {
+        graphAST = "";
         exports.numeroNodo.no = 0;
         exports.listaErrores = new Array();
         let parser = require("./analizador/analizador");
@@ -93,15 +94,19 @@ class IndexController {
         }
     }
     ast(req, res) {
-        fs.writeFile('AST.dot', graphAST, () => { });
-        (0, child_process_1.exec)("dot -Tsvg AST.dot -o ../cliente/src/assets/AST.svg", (error, stdout, stderr) => { if (error) {
-            res.json({ ast: false });
-            return;
+        if (graphAST != "") {
+            fs.writeFile('AST.dot', graphAST, () => { });
+            (0, child_process_1.exec)("dot -Tsvg AST.dot -o ../cliente/src/assets/AST.svg", (error, stdout, stderr) => { if (error) {
+                res.json({ ast: false });
+                return;
+            }
+            else {
+                res.json({ ast: true });
+                return;
+            } });
         }
-        else {
-            res.json({ ast: true });
-            return;
-        } });
+        else
+            res.json({ ast: false });
     }
     errores(req, res) {
         res.json({ Errores: exports.listaErrores });

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AstComponent } from './components/ast/ast.component';
 import { ErroresComponent } from './components/errores/errores.component';
 import { InicioComponent } from './components/inicio/inicio.component';
+import { PrincipalComponent } from './components/principal/principal.component';
 import { SimbolosComponent } from './components/simbolos/simbolos.component';
 
 
@@ -14,7 +15,7 @@ const routes: Routes = [
   },
   {
     path:'inicio',
-    component:InicioComponent
+    component:PrincipalComponent
   },
   {
     path:'ast',
