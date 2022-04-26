@@ -40,7 +40,7 @@ class DoWhile extends Instruccion_1.Instruccion {
         this.expresiones = expresiones;
     }
     interpretar(arbol, tabla) {
-        let NewTabla = new tablaSimbolos_1.default(false, tabla);
+        let NewTabla = new tablaSimbolos_1.default(tabla);
         NewTabla.setNombre(tabla.getNombre() + "DO_WHILE-");
         let cond = this.condicion.interpretar(arbol, NewTabla);
         if (cond instanceof Errores_1.default)

@@ -17,7 +17,7 @@ export default class Arbol {
         this.instrucciones = instrucciones;
         this.funciones = new Array<Instruccion>();
         this.consola = "";
-        this.tablaGlobal = new tablaSimbolo(false);
+        this.tablaGlobal = new tablaSimbolo();
         this.errores = new Array<Errores>();
         this.simbolos = new Array<RepSimbolos>();
     }

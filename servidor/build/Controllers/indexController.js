@@ -31,7 +31,7 @@ class IndexController {
         let parser = require("./analizador/analizador");
         try {
             let ast = new Arbol_1.default(parser.parse(req.body.consola));
-            var tabla = new tablaSimbolos_1.default(false);
+            var tabla = new tablaSimbolos_1.default();
             tabla.setNombre("");
             ast.setTablaGlobal(tabla);
             ast.setConsola("");

@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class tablaSimbolo {
-    constructor(bandera, anterior) {
-        this.esFuncion = bandera;
+    constructor(anterior) {
         this.tablaAnterior = anterior;
         this.tablaActual = new Map();
         this.nombreDato = "";
@@ -28,20 +27,9 @@ class tablaSimbolo {
         }
         return null;
     }
-    getVariable2(id) {
-        for (let i = this; i != null; i = i.getAnterior()) {
-            let busqueda = i.getTabla().get(id.toLowerCase());
-            if (busqueda != null) {
-                return busqueda;
-            }
-            if (i.esFuncion)
-                return null;
-        }
-        return null;
-    }
     setVariable(simbolo) {
-        let verificacion = this.getVariable2(simbolo.getId());
-        if (verificacion == null) {
+        let busqueda = this.getTabla().get(simbolo.getId().toLowerCase());
+        if (busqueda == null) {
             this.tablaActual.set(simbolo.getId().toLowerCase(), simbolo);
             return true;
         }

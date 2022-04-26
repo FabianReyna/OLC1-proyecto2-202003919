@@ -22,7 +22,7 @@ export default class For extends Instruccion {
     }
 
     interpretar(arbol: Arbol, tabla: tablaSimbolo) {
-        let NewTabla = new tablaSimbolo(false, tabla);
+        let NewTabla = new tablaSimbolo(tabla);
         NewTabla.setNombre(tabla.getNombre() + "FOR-")
         let declaracion = this.variable.interpretar(arbol, NewTabla);
         if (declaracion instanceof Errores) return declaracion;
@@ -32,7 +32,7 @@ export default class For extends Instruccion {
         if (this.condicion.tipoDato.getTipo() != tipoDato.BOOL) return new Errores("Semantico", "La condicion debe de ser de tipo boolean", this.linea, this.col);
 
         while (this.condicion.interpretar(arbol, NewTabla)) {
-            let NewTabla2 = new tablaSimbolo(false, NewTabla);
+            let NewTabla2 = new tablaSimbolo(NewTabla);
             NewTabla2.setNombre(NewTabla.getNombre() + "FOR_INSIDE-")
             let resultado;
             for (let i of this.expresiones) {

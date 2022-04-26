@@ -45,7 +45,7 @@ class Llamada extends Instruccion_1.Instruccion {
         if (busqueda == null)
             return new Errores_1.default("Semantico", "Funcion No Existente", this.linea, this.col);
         if (busqueda instanceof Metodo_1.default) {
-            let NewTabla = new tablaSimbolos_1.default(true, arbol.getTablaGlobal());
+            let NewTabla = new tablaSimbolos_1.default(arbol.getTablaGlobal());
             NewTabla.setNombre(arbol.getTablaGlobal().getNombre() + "METODO-" + this.id + "-");
             if (busqueda.parametros.length != this.parametros.length)
                 return new Errores_1.default("Semantico", "Cantidad de parametros invalida", this.linea, this.col);
@@ -73,7 +73,7 @@ class Llamada extends Instruccion_1.Instruccion {
                 return FuncionI;
         }
         else if (busqueda instanceof Funcion_1.default) {
-            let NewTabla = new tablaSimbolos_1.default(true, arbol.getTablaGlobal());
+            let NewTabla = new tablaSimbolos_1.default(arbol.getTablaGlobal());
             NewTabla.setNombre(arbol.getTablaGlobal().getNombre() + "FUNCION-" + this.id + "-");
             if (busqueda.parametros.length != this.parametros.length)
                 return new Errores_1.default("Semantico", "Cantidad de parametros invalida", this.linea, this.col);

@@ -47,7 +47,7 @@ class If extends Instruccion_1.Instruccion {
         if (this.condicion1.tipoDato.getTipo() != Tipo_1.tipoDato.BOOL)
             return new Errores_1.default("Semantico", "La condicion debe de ser de tipo boolean", this.linea, this.col);
         if (!this.InsElse) {
-            let NewTabla = new tablaSimbolos_1.default(false, tabla);
+            let NewTabla = new tablaSimbolos_1.default(tabla);
             NewTabla.setNombre(tabla.getNombre() + "IF-");
             if (cond1) {
                 for (let i of this.InsIf) {
@@ -64,7 +64,7 @@ class If extends Instruccion_1.Instruccion {
             }
         }
         else {
-            let NewTabla1 = new tablaSimbolos_1.default(false, tabla);
+            let NewTabla1 = new tablaSimbolos_1.default(tabla);
             NewTabla1.setNombre(tabla.getNombre() + "IF-");
             if (cond1) {
                 for (let i of this.InsIf) {
@@ -87,7 +87,7 @@ class If extends Instruccion_1.Instruccion {
                             return resultado;
                     }
                     else {
-                        let NewTabla2 = new tablaSimbolos_1.default(false, tabla);
+                        let NewTabla2 = new tablaSimbolos_1.default(tabla);
                         NewTabla2.setNombre(tabla.getNombre() + "ELSE-");
                         for (let i of this.InsElse) {
                             let resultado = i.interpretar(arbol, NewTabla1);

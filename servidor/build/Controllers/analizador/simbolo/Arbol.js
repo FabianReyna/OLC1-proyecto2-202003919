@@ -12,7 +12,7 @@ class Arbol {
         this.instrucciones = instrucciones;
         this.funciones = new Array();
         this.consola = "";
-        this.tablaGlobal = new tablaSimbolos_1.default(false);
+        this.tablaGlobal = new tablaSimbolos_1.default();
         this.errores = new Array();
         this.simbolos = new Array();
     }

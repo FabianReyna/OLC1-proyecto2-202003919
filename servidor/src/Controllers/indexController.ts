@@ -30,7 +30,7 @@ class IndexController {
 
         try {
             let ast = new Arbol(parser.parse(req.body.consola));
-            var tabla = new tablaSimbolo(false);
+            var tabla = new tablaSimbolo();
             tabla.setNombre("")
             ast.setTablaGlobal(tabla);
             ast.setConsola("")

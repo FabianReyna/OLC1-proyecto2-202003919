@@ -46,7 +46,7 @@ class While extends Instruccion_1.Instruccion {
         if (this.condicion.tipoDato.getTipo() != Tipo_1.tipoDato.BOOL)
             return new Errores_1.default("Semantico", "La condicion debe de ser de tipo boolean", this.linea, this.col);
         while (this.condicion.interpretar(arbol, tabla)) {
-            let NewTabla = new tablaSimbolos_1.default(false, tabla);
+            let NewTabla = new tablaSimbolos_1.default(tabla);
             NewTabla.setNombre(tabla.getNombre() + "WHILE-");
             let resultado;
             for (let i of this.expresiones) {

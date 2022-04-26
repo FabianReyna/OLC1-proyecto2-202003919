@@ -25,7 +25,7 @@ export default class Run extends Instruccion {
         if (busqueda == null) return new Errores("Semantico", "Funcion No Existente", this.linea, this.col);
 
         if (busqueda instanceof Metodo) {
-            let NewTabla = new tablaSimbolo(true, arbol.getTablaGlobal());
+            let NewTabla = new tablaSimbolo(arbol.getTablaGlobal());
             NewTabla.setNombre(arbol.getTablaGlobal().getNombre() + "METODO-" + this.id + "-")
 
             if (busqueda.parametros.length != this.parametros.length) return new Errores("Semantico", "Cantidad de parametros invalida", this.linea, this.col);
@@ -48,7 +48,7 @@ export default class Run extends Instruccion {
             let FuncionI = busqueda.interpretar(arbol, NewTabla);
             if (FuncionI instanceof Errores) return FuncionI;
         } else if (busqueda instanceof Funcion) {
-            let NewTabla = new tablaSimbolo(true, arbol.getTablaGlobal());
+            let NewTabla = new tablaSimbolo(arbol.getTablaGlobal());
             NewTabla.setNombre(arbol.getTablaGlobal().getNombre() + "FUNCION-" + this.id + "-")
 
             if (busqueda.parametros.length != this.parametros.length) return new Errores("Semantico", "Cantidad de parametros invalida", this.linea, this.col);

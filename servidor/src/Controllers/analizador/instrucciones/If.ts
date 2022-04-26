@@ -25,7 +25,7 @@ export default class If extends Instruccion {
         if (this.condicion1.tipoDato.getTipo() != tipoDato.BOOL) return new Errores("Semantico", "La condicion debe de ser de tipo boolean", this.linea, this.col);
 
         if (!this.InsElse) {
-            let NewTabla = new tablaSimbolo(false, tabla);
+            let NewTabla = new tablaSimbolo(tabla);
             NewTabla.setNombre(tabla.getNombre() + "IF-")
             if (cond1) {
                 for (let i of this.InsIf) {
@@ -37,7 +37,7 @@ export default class If extends Instruccion {
                 }
             }
         } else {
-            let NewTabla1 = new tablaSimbolo(false, tabla);
+            let NewTabla1 = new tablaSimbolo(tabla);
             NewTabla1.setNombre(tabla.getNombre() + "IF-");
 
             if (cond1) {
@@ -55,7 +55,7 @@ export default class If extends Instruccion {
                     if (resultado instanceof Return) return resultado;
                 }
                 else {
-                    let NewTabla2 = new tablaSimbolo(false, tabla);
+                    let NewTabla2 = new tablaSimbolo(tabla);
                     NewTabla2.setNombre(tabla.getNombre() + "ELSE-");
                     for (let i of this.InsElse) {
                         let resultado = i.interpretar(arbol, NewTabla1);
