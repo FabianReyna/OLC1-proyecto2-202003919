@@ -342,8 +342,10 @@ PARAMS : PARAMS COMA TIPOS ID               {$1.push({tipo:$3,id:$4});$$=$1;}
 ;
 
 //Metodos                                                                           constructor(id: string, tipo: Tipo, expresiones: Instruccion[], linea: number, col: number, params: any[])
-METODS : ID PAR1 PARAMS PAR2 DOSPUNTOS VOID LLAVE1 INSTRUCCIONES LLAVE2     {$$=new Metodo.default($1,new Tipo.default(Tipo.tipoDato.VOID),$8,@1.first_line,@1.first_column,$3);}
-    |   ID PAR1 PAR2 DOSPUNTOS VOID LLAVE1 INSTRUCCIONES LLAVE2             {$$=new Metodo.default($1,new Tipo.default(Tipo.tipoDato.VOID),$7,@1.first_line,@1.first_column,[]);}
+METODS : ID PAR1 PARAMS PAR2 DOSPUNTOS VOID LLAVE1 INSTRUCCIONES LLAVE2             {$$=new Metodo.default($1,new Tipo.default(Tipo.tipoDato.VOID),$8,@1.first_line,@1.first_column,$3);}
+    |   ID PAR1 PARAMS PAR2 LLAVE1 INSTRUCCIONES LLAVE2                             {$$=new Metodo.default($1,new Tipo.default(Tipo.tipoDato.VOID),$6,@1.first_line,@1.first_column,$3);}
+    |   ID PAR1 PAR2 DOSPUNTOS VOID LLAVE1 INSTRUCCIONES LLAVE2                     {$$=new Metodo.default($1,new Tipo.default(Tipo.tipoDato.VOID),$7,@1.first_line,@1.first_column,[]);}
+    |   ID PAR1 PAR2 LLAVE1 INSTRUCCIONES LLAVE2                                    {$$=new Metodo.default($1,new Tipo.default(Tipo.tipoDato.VOID),$5,@1.first_line,@1.first_column,[]);}
 ;
 
 // llamadas

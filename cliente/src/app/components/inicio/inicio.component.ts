@@ -45,13 +45,8 @@ export class InicioComponent implements OnInit {
   }
 
   CrearArchivo() {
-    this.contenido = "";
-    const ver2 = document.getElementById("consolaa")
-    if (ver2) {
-      ver2.removeAttribute("readOnly");
-      ver2.innerHTML = "";
-      ver2.setAttribute("readOnly", "");
-    }
+    this.contenido = ""
+    this.cuerpo.console = ""
   }
 
   Escaneando() {
